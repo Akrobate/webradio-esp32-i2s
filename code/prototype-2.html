@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Stations</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        header, footer {
+            background-color: #f8f8f8;
+            text-align: center;
+            padding: 1em;
+            border-bottom: 1px solid #ddd;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #007BFF;
+        }
+        nav a {
+            color: white;
+            padding: 1em;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        nav a.active {
+            background-color: #0056b3;
+        }
+        main {
+            padding: 2em;
+            display: none;
+        }
+        main.active {
+            display: block;
+        }
+        .station-list, .form-container {
+            width: 100%;
+            margin-bottom: 2em;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        ul li {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5em 0;
+            border-bottom: 1px solid #ddd;
+        }
+        ul li button {
+            margin-left: 1em;
+        }
+        .form-section {
+            margin-bottom: 2em;
+        }
+        .form-section label {
+            display: block;
+            margin-bottom: 0.5em;
+        }
+        .form-section input {
+            width: 100%;
+            padding: 0.5em;
+            margin-bottom: 1em;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .form-section button {
+            padding: 0.5em 1em;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .form-section button:hover {
+            background-color: #0056b3;
+        }
+        @media (min-width: 768px) {
+            main {
+                display: flex;
+                justify-content: space-between;
+            }
+            .station-list, .form-container {
+                width: 45%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Gestion des Stations</h1>
+    </header>
+    <nav>
+        <a href="#" class="tab-link active" onclick="openTab(event, 'stations')">Stations</a>
+        <a href="#" class="tab-link" onclick="openTab(event, 'wifi')">Connexion Wi-Fi</a>
+    </nav>
+    <main id="stations" class="active">
+        <div class="station-list">
+            <h2>Liste des Stations</h2>
+            <ul id="stationList">
+                <li>Station 1 <button onclick="removeStation(this)">Supprimer</button></li>
+                <li>Station 2 <button onclick="removeStation(this)">Supprimer</button></li>
+                <li>Station 3 <button onclick="removeStation(this)">Supprimer</button></li>
+            </ul>
+        </div>
+        <div class="form-container">
+            <div class="form-section">
+                <h2>Ajouter Station</h2>
+                <label for="stationName">Nom:</label>
+                <input type="text" id="stationName" name="stationName">
+                <label for="stationIP">IP:</label>
+                <input type="text" id="stationIP" name="stationIP">
+                <button onclick="addStation()">Ajouter</button>
+            </div>
+        </div>
+    </main>
+    <main id="wifi">
+        <div class="form-container">
+            <div class="form-section">
+                <h2>Connexion Wi-Fi</h2>
+                <label for="wifiSSID">SSID:</label>
+                <input type="text" id="wifiSSID" name="wifiSSID">
+                <label for="wifiPass">Pass:</label>
+                <input type="password" id="wifiPass" name="wifiPass">
+                <button onclick="connectWifi()">Connecter</button>
+            </div>
+        </div>
+    </main>
+    <footer>
+        &copy; 2024 Gestion des Stations
+    </footer>
+    <script>
+        function addStation() {
+            const name = document.getElementById('stationName').value;
+            const ip = document.getElementById('stationIP').value;
+            if (name && ip) {
+                const ul = document.getElementById('stationList');
+                const li = document.createElement('li');
+                li.innerHTML = `${name} <button onclick="removeStation(this)">Supprimer</button>`;
+                ul.appendChild(li);
+                document.getElementById('stationName').value = '';
+                document.getElementById('stationIP').value = '';
+            } else {
+                alert('Veuillez remplir les deux champs.');
+            }
+        }
+
+        function removeStation(button) {
+            const li = button.parentElement;
+            li.parentElement.removeChild(li);
+        }
+
+        function connectWifi() {
+            const ssid = document.getElementById('wifiSSID').value;
+            const pass = document.getElementById('wifiPass').value;
+            if (ssid && pass) {
+                alert(`Tentative de connexion au Wi-Fi\nSSID: ${ssid}\nPass: ${pass}`);
+            } else {
+                alert('Veuillez remplir les deux champs.');
+            }
+        }
+
+        function openTab(event, tabId) {
+            const tabs = document.querySelectorAll('main');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            const tabLinks = document.querySelectorAll('.tab-link');
+            tabLinks.forEach(link => link.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+    </script>
+</body>
+</html>

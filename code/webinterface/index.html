@@ -1,0 +1,77 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="index.js"></script>
+        <link rel="stylesheet" href="style.css">
+    </head>
+
+    <body>
+
+        <div class="container">
+
+            <h1>
+                WebRadio
+            </h1>
+            <div class="row">
+                <div class="col col-6 col-sm-12">
+                    <div class="card height-100 elevation">
+                        <h2>Lorem ipsum sic</h2>
+                        <p>Lorem ipsum sic test Lorem ipsum sic test Lorem ipsum sic test Lorem ipsum sic test Lorem ipsum sic test </p>
+                    </div>
+                </div>
+
+                <div class="col col-6 col-sm-12 ">
+                    <div class="card height-100 elevation">
+                        <h2>L</h2>
+                        <p>Lo</p>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+                    <div class="card mt-lg elevation" id="station-manager">
+                        <div class="mb-lg">
+                            <h3>
+                                Manage stations
+                            </h3>
+                            
+                            <input type="text" id="input-station-name" placeholder="Name">
+                            <input class="mt-md" id="input-station-host" type="text" placeholder="Hostname">
+
+                            <button class="mt-md" class="btn" onclick="addStation()">
+                                Add
+                            </button>
+                        </div>
+
+                        <div class="loader hidden center mt-lg mb-lg"></div>
+
+                        <ul class="list" id="radio-stations-list">
+                        </ul>
+                    </div>
+
+        </div>
+
+
+
+
+        <template id="template-radio-station-list-item">
+            <li class="list-item" data-index="{{ data_index}}">
+                <div class="content">
+                    <div class="title">{{ title }}</div>
+                    <div class="subtitle">{{ subtitle }}</div>
+                </div>
+                <div class="actions">
+                    <button class="btn accent" onclick="deleteStation(this)">
+                        delete
+                    </button>
+                    <button class="btn">
+                        edit
+                    </button>
+                </div>
+            </li>
+        </template>
+
+    </body>
+<body>
