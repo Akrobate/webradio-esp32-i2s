@@ -1,0 +1,15 @@
+{
+  "name": "webinterface",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "minify": "minify index.html > index.min.html"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "minify": "^11.4.0"
+  }
+}

@@ -183,14 +183,7 @@ ul.list .title {
     margin-bottom: var(--margin-sm);
 }
 
-ul.list .content {
-    
-    margin-bottom: var(--margin-sm);
-
-}
-
-ul.list .actions {
-    
+ul.list .actions {   
     display: flex;
     justify-content: flex-end;
     align-items: center;    
@@ -199,7 +192,6 @@ ul.list .actions {
 ul.list button {
     margin-left: var(--margin-sm);
 }
-
 
 .debug {
     border: 1px solid red;

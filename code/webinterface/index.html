@@ -29,31 +29,41 @@
             </div>
 
 
+            <div class="card mt-lg elevation" id="wifi-credentials-manager">
+                <div class="mb-lg">
+                    <h3>
+                        Manage Wifi credentials
+                    </h3>
+
+                </div>
+
+                <div class="loader hidden center mt-lg mb-lg"></div>
+
+                <ul class="list" id="available-networks-list">
+                </ul>
+            </div>
 
 
-                    <div class="card mt-lg elevation" id="station-manager">
-                        <div class="mb-lg">
-                            <h3>
-                                Manage stations
-                            </h3>
-                            
-                            <input type="text" id="input-station-name" placeholder="Name">
-                            <input class="mt-md" id="input-station-host" type="text" placeholder="Hostname">
+            <div class="card mt-lg elevation" id="station-manager">
+                <div class="mb-lg">
+                    <h3>
+                        Manage stations
+                    </h3>
+                    
+                    <input type="text" id="input-station-name" placeholder="Name">
+                    <input class="mt-md" id="input-station-host" type="text" placeholder="Hostname">
 
-                            <button class="mt-md" class="btn" onclick="addStation()">
-                                Add
-                            </button>
-                        </div>
+                    <button class="mt-md" class="btn" onclick="addStation()">
+                        Add
+                    </button>
+                </div>
 
-                        <div class="loader hidden center mt-lg mb-lg"></div>
+                <div class="loader hidden center mt-lg mb-lg"></div>
 
-                        <ul class="list" id="radio-stations-list">
-                        </ul>
-                    </div>
-
+                <ul class="list" id="radio-stations-list">
+                </ul>
+            </div>
         </div>
-
-
 
 
         <template id="template-radio-station-list-item">
@@ -73,5 +83,24 @@
             </li>
         </template>
 
+
+
+
+
+        <template id="template-available-networks-list-item">
+            <li class="list-item" data-index="{{ data_index}}">
+                <div class="content">
+                    <div class="title">{{ title }}</div>
+                </div>
+                <div class="actions">
+                    <button class="btn accent" onclick="deleteStation(this)">
+                        delete
+                    </button>
+                    <button class="btn">
+                        edit
+                    </button>
+                </div>
+            </li>
+        </template>
     </body>
 <body>
