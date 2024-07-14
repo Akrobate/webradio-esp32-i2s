@@ -52,10 +52,6 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--neutral-color-1);
 }
 
-h1 {
-    margin-bottom: var(--margin-lg);
-}
-
 h2 {
     margin-bottom: var(--margin-md);
 }
@@ -114,6 +110,15 @@ button.accent {
     border-radius: 4px;
 }
 
+.inner-card {
+    margin-bottom: var(--margin-md);
+    padding: var(--margin-md);
+    border: 1px solid var(--neutral-color-2);
+    background-color: var(--neutral-color-4);
+    border-radius: 4px;
+}
+
+
 .alert {
     background-color: var(--secondary-color-2);
     color: var(--neutral-color-3);
@@ -134,6 +139,16 @@ button.accent {
     padding-left: var(--margin-sm);
 }
 
+
+.display-flex {
+    display: flex;
+}
+
+.align-items-center {
+    align-items: center;
+}
+
+
 /* Optional: Specific column widths */
 .col-1 { flex: 0 0 8.33%; }
 .col-2 { flex: 0 0 16.66%; }
@@ -149,11 +164,15 @@ button.accent {
 .col-12 { flex: 0 0 100%; }
 
 @media (max-width: 767px) {
-    .col-sm-6 { flex: 0 0 50%; }
+    .col-sm-6 { flex: 0 0 50%;  }
     .col-sm-12 { flex: 0 0 100%; }
 
     .hide-mobile {
         display: none;
+    }
+
+    .mb-lg-mobile {
+        margin-bottom: var(--margin-lg);
     }
 }
 
@@ -239,32 +258,33 @@ input.error {
     display: none;
 }
 
-
-
-
-.icon {
-    width: 150px;
-    height: 150px;
-    fill: red;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12,21L15.6,16.2C14.6,15.45 13.35,15 12,15C10.65,15 9.4,15.45 8.4,16.2L12,21M12,3C7.95,3 4.21,4.34 1.2,6.6L3,9C5.5,7.12 8.62,6 12,6C15.38,6 18.5,7.12 21,9L22.8,6.6C19.79,4.34 16.05,3 12,3M12,9C9.3,9 6.81,9.89 4.8,11.4L6.6,13.8C8.1,12.67 9.97,12 12,12C14.03,12 15.9,12.67 17.4,13.8L19.2,11.4C17.19,9.89 14.7,9 12,9Z" fill="currentcolor" /></svg>');
-    background-size: cover; 
+.logo {
+    width: 60px;
+    height: 40px;
+    fill: var(--primary-color);
 }
 
 
-.icon2 {
-    width: 50px;
-    height: 50px;
-    color: blue;
-    
-    background-image: url('data:image/svg+xml;utf8,<svg role="presentation" viewBox="0 0 24 24" style="height: 3rem; width: 3rem;"><title>wifi</title><path d="M12,21L15.6,16.2C14.6,15.45 13.35,15 12,15C10.65,15 9.4,15.45 8.4,16.2L12,21M12,3C7.95,3 4.21,4.34 1.2,6.6L3,9C5.5,7.12 8.62,6 12,6C15.38,6 18.5,7.12 21,9L22.8,6.6C19.79,4.34 16.05,3 12,3M12,9C9.3,9 6.81,9.89 4.8,11.4L6.6,13.8C8.1,12.67 9.97,12 12,12C14.03,12 15.9,12.67 17.4,13.8L19.2,11.4C17.19,9.89 14.7,9 12,9Z" fill="black"></path></svg>');
-    background-size: cover;
-    margin-bottom: 20px;
+
+#available-networks-list {
+    overflow-y: scroll;
+    max-height: 200px;
+    padding-right: 10px;
 }
 
-.test {
-    width: 100px;
-    height: 50px;
-    fill: rgb(129, 153, 51);
+/* width */
+#available-networks-list::-webkit-scrollbar {
+    width: 7px;
 }
-
-
+  
+/* Track */
+#available-networks-list::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px var(--neutral-color-4);
+    border-radius: 10px;
+}
+  
+/* Handle */
+#available-networks-list::-webkit-scrollbar-thumb {
+    background: var(--neutral-color-2);
+    border-radius: 10px;
+}
