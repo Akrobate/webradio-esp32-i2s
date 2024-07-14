@@ -1,3 +1,5 @@
+let coucou = "coucou";
+
 let template_radio_station_list_item = null
 let template_available_networks_list_item = null
 
