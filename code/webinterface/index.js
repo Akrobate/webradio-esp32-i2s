@@ -1,168 +1,256 @@
-let template_radio_station_list_item = null
-let template_available_networks_list_item = null
-let template_saved_networks_list_item = null
-
-
 const STATION_NAME_MAX_LENGTH = 30
 const STATION_HOST_MAX_LENGTH = 1000
+
+function $(selector, element = document) {
+    return element.querySelector(selector)
+}
+
+function buttonSetLoadingState(btn, state) {
+    btn.disabled = state
+    if (state) {
+        btn.dataset.originalText = btn.textContent
+        btn.textContent = 'Loading...'
+    } else {
+        btn.textContent = btn.dataset.originalText
+    }
+}
+
+const addCls = (_el, _cls) => _el.classList.add(_cls)
 
 
 /**
  * INIT
  */
 document.addEventListener('DOMContentLoaded', async () => {
-    template_radio_station_list_item = document.getElementById('template-radio-station-list-item')
-    template_available_networks_list_item = document.getElementById('template-available-networks-list-item')
-    template_saved_networks_list_item = document.getElementById('template-saved-networks-list-item')
-    await loadStationList()
-    await loadSavedNetworksList()
-});
-
-
-async function loadStationList() {
-    const dom_radio_stations_list = document.getElementById("radio-stations-list")
-    dom_radio_stations_list.innerHTML = '';
-
-
-    const stations_list = await serverGetStationList();
-    stations_list.forEach((station, index) => {
-        const new_radio_station_list_item = template_radio_station_list_item.content.cloneNode(true);
-
-        new_radio_station_list_item.querySelector(".title").textContent = station.name;
-        new_radio_station_list_item.querySelector(".subtitle").textContent = station.host;
-        new_radio_station_list_item.querySelector(".list-item").dataset.index = index;
-
-        dom_radio_stations_list.appendChild(new_radio_station_list_item);
-    });
-}
-
+    loadStationList()
+    loadSavedNetworksList()
+})
 
 
 /**
  * Station management
- * @returns 
  */
-async function addStation() {
+async function _loadStationList() {
+    const _list_el = $('#radio-stations-list')
+    _list_el.innerHTML = $('#template-list-loader').innerHTML
+    const stations_list = await serverGetStationList()
+    _list_el.innerHTML = ''
+    stations_list.forEach((station, index) => {
+        const _new_el = $('#template-radio-station-list-item').content.cloneNode(true)
+        $('.title', _new_el).textContent = station.name
+        $('.subtitle', _new_el).textContent = station.host
+        $('.list-item', _new_el).dataset.index = index
+        _list_el.appendChild(_new_el)
+    })
+}
 
-    const station_name_input = document.getElementById("input-station-name");
-    const station_host_input = document.getElementById("input-station-host");
-        
-    const station_name = station_name_input.value;
-    const station_host = station_host_input.value;
-
-    if (station_name.length == 0) {
-        station_name_input.classList.add("error")
-        return;
-    } else {
-        station_name_input.classList.remove("error")
-    }
-
-    if (!isValidUrl(station_host)) {
-        station_host_input.classList.add("error")
-        return;
-    } else {
-        station_host_input.classList.remove("error")
-    }
-
-    if (station_name.length > STATION_NAME_MAX_LENGTH) {
-        station_name_input.classList.add("error")
-        return;
-    } else {
-        station_name_input.classList.remove("error")
-    }
-
-    if (station_host.length > STATION_HOST_MAX_LENGTH) {
-        station_host_input.classList.add("error")
-        return;
-    } else {
-        station_host_input.classList.remove("error")
-    }
-
-
-    document.getElementById('station-manager').querySelector('.loader').classList.remove('hidden');
-
-    station_host_input.value = "";
-    station_name_input.value = "";
-
-    const new_radio_station_list_item = template_radio_station_list_item.content.cloneNode(true);
-
-    new_radio_station_list_item.querySelector(".title").textContent = station_name;
-    new_radio_station_list_item.querySelector(".subtitle").textContent = station_host;
-
-    await serverAddStation({name: station_name, host: station_host});
-    await loadStationList();
-
-    document.getElementById('station-manager').querySelector('.loader').classList.add('hidden');
-
+/**
+ * Station management
+ */
+async function loadStationList() {
+    const _list_el = $('#radio-stations-list')
+    _list_el.innerHTML = $('#template-list-loader').innerHTML
+    const stations_list = await serverGetStationList()
+    _list_el.innerHTML = ''
+    stations_list.forEach((station, index) => {
+        let html = $('#template-radio-station-list-item').innerHTML;
+        Object.keys(station).forEach((key) => {
+            html = html.replaceAll(`{{ ${key} }}`, station[key]);
+        })
+        html = html.replaceAll('{{ index }}', index);
+        const placeholder = document.createElement("div")
+        placeholder.innerHTML = html
+        _list_el.appendChild(placeholder.firstElementChild)
+    })
 }
 
 
 
-async function deleteStation(elemnent) {
-    console.log(elemnent);
-    const index = elemnent.parentElement.parentElement.dataset.index;
-    await serverRemoveStation(index);
-    await loadStationList();
+async function addStation(btn) {
+
+    const _name_input = $('#input-station-name')
+    const _host_input = $('#input-station-host')
+        
+    const name = _name_input.value
+    const host = _host_input.value
+
+    if (name.length == 0) {
+        _name_input.classList.add('error')
+        return
+    }
+
+    if (!isValidUrl(host)) {
+        _host_input.classList.add('error')
+        return
+    }
+
+    if (name.length > STATION_NAME_MAX_LENGTH) {
+        _name_input.classList.add('error')
+        return
+    }
+
+    if (host.length > STATION_HOST_MAX_LENGTH) {
+        _host_input.classList.add('error')
+        return
+    }
+    
+    _name_input.classList.remove('error')
+    _host_input.classList.remove('error')
+
+    _name_input.disabled = true
+    _host_input.disabled = true
+
+    buttonSetLoadingState(btn, true)
+    await serverAddStation({name, host})
+    _host_input.value = ''
+    _name_input.value = ''
+    _name_input.disabled = false
+    _host_input.disabled = false
+    buttonSetLoadingState(btn, false)
+
+    await loadStationList()
+
+}
+
+
+async function deleteStation(btn) {
+    const index = btn.dataset.index
+
+    buttonSetLoadingState(btn, true)
+    await serverRemoveStation(index)
+    buttonSetLoadingState(btn, true)
+
+    await loadStationList()
 }
 
 
 function editStation(elemnent) {
-    console.log(elemnent);
-    elemnent.parentElement.parentElement.remove();
+    elemnent.parentElement.parentElement.remove()
 }
 
 
 function isValidUrl(string) {
     try {
-      new URL(string);
-      return true;
+      new URL(string)
+      return true
     } catch (_) {
-      return false;
+      return false
     }
 }
 
+
 /**
  * Wifi management
- * @returns 
  */
+
+let wifi_management_add_and_connect_state = false
+
+
 async function loadAvailableNetworksList() {
-    const dom_radio_stations_list = document.getElementById('available-networks-list')
-    dom_radio_stations_list.innerHTML = '';
-
-
-    const available_networks_list_list = await serverGetAvailableNetworksList();
-
+    const _list_el = $('#available-networks-list')
+    _list_el.innerHTML = $('#template-list-loader').innerHTML
+    const available_networks_list_list = await serverGetAvailableNetworksList()
+    _list_el.innerHTML = ''
     available_networks_list_list.forEach((station, index) => {
-        const new_available_networks_list_list_item = template_available_networks_list_item.content.cloneNode(true);
-
-        new_available_networks_list_list_item.querySelector(".title").textContent = station.ssid;
-        new_available_networks_list_list_item.querySelector(".list-item").dataset.index = index;
-
-        dom_radio_stations_list.appendChild(new_available_networks_list_list_item);
-    });
+        const _new_el = $('#template-available-networks-list-item').content.cloneNode(true)
+        $('.title', _new_el).textContent = station.ssid
+        $('.list-item', _new_el).dataset.index = index
+        $('button', _new_el).dataset.ssid = station.ssid
+        _list_el.appendChild(_new_el)
+    })
 }
-
-
 
 
 async function loadSavedNetworksList() {
-    const dom_saved_networks_list = document.getElementById('saved-networks-list')
-    dom_saved_networks_list.innerHTML = '';
+    const _list_el = $('#saved-networks-list')
+    _list_el.innerHTML = $('#template-list-loader').innerHTML
+    const saved_networks_list = await serverGetSavedNetworksList()
 
-    const saved_networks_list = await serverGetSavedNetworksList();
-
+    _list_el.innerHTML = ''
     saved_networks_list.forEach((station, index) => {
-        const new_saved_networks_list_list_item = template_saved_networks_list_item.content.cloneNode(true);
-
-        new_saved_networks_list_list_item.querySelector(".title").textContent = station.ssid;
-        new_saved_networks_list_list_item.querySelector(".list-item").dataset.index = index;
-
-        dom_saved_networks_list.appendChild(new_saved_networks_list_list_item);
-    });
+        const _new_el = $('#template-saved-networks-list-item').content.cloneNode(true)
+        $(".title", _new_el).textContent = station.ssid
+        $(".list-item", _new_el).dataset.index = index
+        _list_el.appendChild(_new_el)
+    })
 }
 
 
+async function addAndConnectNetwork() {
+    const _el = $('#wifi-credentials-manager')
+    $(".main-actions", _el).classList.add('hidden')
+    $(".available-networks-card", _el).classList.remove('hidden')
+    $(".available-networks-card .step-1", _el).classList.remove('hidden')
+    await loadAvailableNetworksList()
+}
 
 
+async function connectToNetwork(element) {
+    const _el = $('#wifi-credentials-manager')
+    $(".main-actions", _el).classList.add('hidden')
+    $(".available-networks-card", _el).classList.remove('hidden')
+    $(".available-networks-card .step-1", _el).classList.add('hidden')
+    $(".available-networks-card .step-2", _el).classList.remove('hidden')
+    $("#input-ssid-password", _el).value = ''
+    $("#input-ssid-name", _el).value = ''
+
+    if (element) {
+        $('#input-ssid-name', _el).value = element.dataset.ssid
+        $('#input-ssid-name', _el).disabled = true
+    } else {
+        $('#input-ssid-name', _el).value = ''
+        $('#input-ssid-name', _el).disabled = false    
+    }
+}
 
 
+async function resetCreatingSavedWifi() {
+    const _el = $('#wifi-credentials-manager')
+    $(".main-actions", _el).classList.remove('hidden')
+    $(".available-networks-card", _el).classList.add('hidden')
+    $(".available-networks-card .step-1", _el).classList.add('hidden')
+    $(".available-networks-card .step-2", _el).classList.add('hidden')
+}
+
+
+async function saveNetwork(btn) {
+    const _el = $('#wifi-credentials-manager')
+    const _name_input = $("#input-ssid-name", _el)
+    const _password_input = $("#input-ssid-password", _el)
+    const name = _name_input.value
+    const password = _password_input.value
+
+    if (name.length == 0) {
+        _name_input.classList.add('error')
+        return
+    }
+    
+    if (password.length == 0) {
+        _password_input.classList.add('error')
+        return
+    }
+    
+    _name_input.classList.remove('error')
+    _password_input.classList.remove('error')
+
+    buttonSetLoadingState(btn, true)
+    await serviceAddSavedNetwork({ssid: name, password})
+    buttonSetLoadingState(btn, false)
+
+    await loadSavedNetworksList()
+    await resetCreatingSavedWifi()
+}
+
+async function removeSavedNetwork(btn) {
+    const index = btn.dataset.index
+    buttonSetLoadingState(btn, true)
+    await serverRemoveSavedNetwork(index)
+    buttonSetLoadingState(btn, false)
+    await loadSavedNetworksList()
+}
+
+async function refreshAvailableNetworks(btn) {
+    buttonSetLoadingState(btn, true)
+    await loadAvailableNetworksList()
+    buttonSetLoadingState(btn, false)
+}

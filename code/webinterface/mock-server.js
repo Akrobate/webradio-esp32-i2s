@@ -42,7 +42,7 @@ async function serverEditStation(station_index, station) {
 }
 
 async function serverAddStation(station) {
-    await wait(SERVER_LAG_SHORT);
+    await wait(SERVER_LAG_SHORT + 3000);
     _stations_list.push(station);
     return Promise.resolve();
 }
@@ -164,4 +164,17 @@ async function serverGetAvailableNetworksList() {
 async function serverGetSavedNetworksList() {
     await wait(SERVER_LAG_SHORT)
     return _saved_networks_list
+}
+
+
+async function serverRemoveSavedNetwork(network_index) {
+    await wait(SERVER_LAG_SHORT)
+    _saved_networks_list.splice(network_index, 1)
+    return Promise.resolve()
+}
+
+async function serviceAddSavedNetwork(network) {
+    await wait(SERVER_LAG_SHORT)
+    _saved_networks_list.push(network)
+    return Promise.resolve()
 }

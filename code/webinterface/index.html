@@ -10,7 +10,6 @@
 
         <div class="container">
         
-
             <div class="mb-lg display-flex align-items-center">
                 <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12,21L15.6,16.2C14.6,15.45 13.35,15 12,15C10.65,15 9.4,15.45 8.4,16.2L12,21M12,3C7.95,3 4.21,4.34 1.2,6.6L3,9C5.5,7.12 8.62,6 12,6C15.38,6 18.5,7.12 21,9L22.8,6.6C19.79,4.34 16.05,3 12,3M12,9C9.3,9 6.81,9.89 4.8,11.4L6.6,13.8C8.1,12.67 9.97,12 12,12C14.03,12 15.9,12.67 17.4,13.8L19.2,11.4C17.19,9.89 14.7,9 12,9Z" /></svg>
                 <h1>
@@ -39,12 +38,9 @@
 
 
             <div class="card mt-lg elevation" id="wifi-credentials-manager">
-                <div class="mb-lg">
-                    <h3>
-                        Manage Wifi credentials
-                    </h3>
-                </div>
-
+                <h3 class="mb-lg">
+                    Manage Wifi credentials
+                </h3>
 
                 <h4 class="mb-lg">
                     Saved networks
@@ -52,27 +48,53 @@
 
                 <ul class="list" id="saved-networks-list">
                 </ul>
-                <div class="flex mb-lg main-actions">
-                    <button class="btn">
+                <div class="main-actions">
+                    <button class="" onclick="addAndConnectNetwork()">
                         Add and connect network
                     </button>
-                    <button class="btn">
+                    <button class="" onclick="connectToNetwork()">
                         Manually add network
                     </button>
                 </div>
 
 
-                <div class="inner-card elevation">
-                    <h4 class="mb-md">
-                        Available networks
-                    </h4>
-                    <div class="loader hidden center mt-lg mb-lg"></div>
+                <div class="inner-card elevation hidden available-networks-card mt-lg">
 
-                    <ul class="list" id="available-networks-list">
-                    </ul>
-                    <button class="btn secondary mt-lg">
-                        Cancel
-                    </button>
+                    <div class="step-1 hidden">
+                        <h4 class="mb-md">
+                            Available networks
+                        </h4>
+
+                        <div class="loader hidden center mt-lg mb-lg"></div>
+
+                        <ul class="list" id="available-networks-list">
+                        </ul>
+                        
+                        <button class="secondary mt-lg" onclick="resetCreatingSavedWifi()">
+                            Cancel
+                        </button>
+                        <button class="primary mt-lg" onclick="refreshAvailableNetworks(this)">
+                            Refresh
+                        </button>
+
+                        
+                    </div>
+                    <div class="step-2 hidden">
+                        <h4 class="mb-md">
+                            Please enter the SSID and password
+                        </h4>
+                        <input type="text" id="input-ssid-name" placeholder="SSID">
+                        <input class="mt-md" id="input-ssid-password" type="text" placeholder="Password">
+
+                        <button class="secondary mt-lg" onclick="resetCreatingSavedWifi()">
+                            Cancel
+                        </button>
+
+                        <button class="primary mt-lg" onclick="saveNetwork(this)">
+                            Save
+                        </button>
+                    </div>
+
                 </div>
             </div>
 
@@ -86,7 +108,7 @@
                     <input type="text" id="input-station-name" placeholder="Name">
                     <input class="mt-md" id="input-station-host" type="text" placeholder="Hostname">
 
-                    <button class="mt-md" class="btn" onclick="addStation()">
+                    <button class="mt-md" onclick="addStation(this)">
                         Add
                     </button>
                 </div>
@@ -100,16 +122,16 @@
 
 
         <template id="template-radio-station-list-item">
-            <li class="list-item" data-index="{{ data_index}}">
+            <li class="list-item">
                 <div class="content">
-                    <div class="title">{{ title }}</div>
-                    <div class="subtitle">{{ subtitle }}</div>
+                    <div class="title">{{ name }}</div>
+                    <div class="subtitle">{{ host }}</div>
                 </div>
                 <div class="actions">
-                    <button class="btn accent" onclick="deleteStation(this)">
+                    <button class="accent" onclick="deleteStation(this)" data-index="{{ index }}">
                         delete
                     </button>
-                    <button class="btn">
+                    <button class="">
                         edit
                     </button>
                 </div>
@@ -117,16 +139,13 @@
         </template>
 
 
-
-
-
         <template id="template-available-networks-list-item">
-            <li class="list-item" data-index="{{ data_index}}">
+            <li class="list-item" data-index="{{ data_index }}">
                 <div class="content">
                     <div class="title">{{ title }}</div>
                 </div>
                 <div class="actions">
-                    <button class="btn">
+                    <button class="" onclick="connectToNetwork(this)" data-ssid="{{ ssid }}">
                         Connect
                     </button>
                 </div>
@@ -140,11 +159,16 @@
                     <div class="title">{{ title }}</div>
                 </div>
                 <div class="actions">
-                    <button class="btn accent">
+                    <button class="accent" onclick="removeSavedNetwork(this)" data-index="{{ data_index }}">
                         Remove
                     </button>
                 </div>
             </li>
         </template>
+        
+        <template id="template-list-loader">
+            <div class="loader center mt-lg mb-lg"></div>
+        </template>
+
     </body>
 <body>

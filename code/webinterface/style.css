@@ -83,12 +83,21 @@ button {
     font-size: 16px;
 }
 
+
+
 button.secondary {
     background-color: var(--secondary-color-1);
 }
 
 button.accent {
     background-color: var(--accent-color);
+}
+
+button:disabled,
+button[disabled]{
+  border: 1px solid #cccccc;
+  background-color: #eeeeee;
+  color: #666666;
 }
 
 
@@ -111,9 +120,8 @@ button.accent {
 }
 
 .inner-card {
-    margin-bottom: var(--margin-md);
+    margin-bottom: 0;
     padding: var(--margin-md);
-    border: 1px solid var(--neutral-color-2);
     background-color: var(--neutral-color-4);
     border-radius: 4px;
 }
@@ -242,6 +250,17 @@ input.error {
     height: 50px;
     animation: spin 1s linear infinite;
 }
+
+
+.loader-small {
+    border: 1px solid #c5c2c2;
+    border-top: 1px solid #3498db;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    animation: spin 1s linear infinite;
+}
+
   
 @keyframes spin {
     0% { transform: rotate(0deg); }
@@ -263,8 +282,6 @@ input.error {
     height: 40px;
     fill: var(--primary-color);
 }
-
-
 
 #available-networks-list {
     overflow-y: scroll;
