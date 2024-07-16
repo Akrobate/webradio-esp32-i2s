@@ -142,7 +142,7 @@
         <template id="template-available-networks-list-item">
             <li class="list-item" data-index="{{ data_index }}">
                 <div class="content">
-                    <div class="title">{{ title }}</div>
+                    <div class="title">{{ ssid }}</div>
                 </div>
                 <div class="actions">
                     <button class="" onclick="connectToNetwork(this)" data-ssid="{{ ssid }}">
@@ -156,10 +156,10 @@
         <template id="template-saved-networks-list-item">
             <li class="list-item" data-index="{{ data_index}}">
                 <div class="content">
-                    <div class="title">{{ title }}</div>
+                    <div class="title">{{ ssid }}</div>
                 </div>
                 <div class="actions">
-                    <button class="accent" onclick="removeSavedNetwork(this)" data-index="{{ data_index }}">
+                    <button class="accent" onclick="removeSavedNetwork(this)" data-index="{{ index }}">
                         Remove
                     </button>
                 </div>
