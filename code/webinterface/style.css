@@ -1,8 +1,3 @@
-/*
-https://css-tricks.com/filling-space-last-row-flexbox/
-
-*/
-
 :root {
 
     --primary-color: #3498db;
@@ -21,7 +16,6 @@ https://css-tricks.com/filling-space-last-row-flexbox/
     --margin-md: 16px;
     --margin-lg: 32px;
     --margin-xl: 64px;
-    
 }
 * {
     margin: 0;
@@ -38,8 +32,6 @@ https://css-tricks.com/filling-space-last-row-flexbox/
 .mb-sm { margin-bottom: var(--margin-sm); }
 .mb-md { margin-bottom: var(--margin-md); }
 .mb-lg { margin-bottom: var(--margin-lg); }
-
-
 
 body {
     background-color: var(--neutral-color-4);
@@ -98,6 +90,24 @@ button[disabled]{
   color: #666666;
 }
 
+button.icon:disabled,
+button.icon[disabled]{
+  border: 1px solid #cccccc;
+  background-color: #eeeeee;
+  color: #adadad;
+}
+
+button.icon {
+    padding: 5px;
+    color: var(--neutral-color-4);
+}
+
+button.icon svg {
+    width: 27px;
+    height: 27px;
+}
+
+
 .container {
     margin: var(--margin-lg) auto;
     padding: var(--margin-md);
@@ -132,7 +142,7 @@ button[disabled]{
 
 .row {
     display: flex;
-    flex-wrap: wrap; /* Allow items to wrap to the next line */
+    flex-wrap: wrap;
     margin-right: calc(var(--margin-sm) * -1);
     margin-left: calc(var(--margin-sm) * -1);
 }

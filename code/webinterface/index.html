@@ -118,8 +118,23 @@
                 <ul class="list" id="radio-stations-list">
                 </ul>
             </div>
-        </div>
 
+
+            <div class="card mt-lg elevation" id="date-time-configuration-manager">
+                <div class="mb-lg">
+                    <h3>
+                        Date Time Configuration
+                    </h3>
+                    
+                    <input type="text" id="input-station-name" placeholder="Name">
+                    <input class="mt-md" id="input-station-host" type="text" placeholder="Hostname">
+
+                    <button class="mt-md" onclick="addStation(this)">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
 
         <template id="template-radio-station-list-item">
             <li class="list-item">
@@ -129,8 +144,16 @@
                 </div>
                 <div class="actions">
                     <button class="accent" onclick="deleteStation(this)" data-index="{{ index }}">
-                        delete
+                        remove
                     </button>
+                    <button class="icon button-up" onclick="stationMoveUp(this)" data-index="{{ index }}">
+                        <svg viewBox="0 0 24 24"><path d="M15,20H9V12H4.16L12,4.16L19.84,12H15V20Z" style="fill: currentcolor;"></path></svg>
+                    </button>
+
+                    <button class="icon button-down" onclick="stationMoveDown(this)" data-index="{{ index }}">
+                        <svg viewBox="0 0 24 24"><path d="M9,4H15V12H19.84L12,19.84L4.16,12H9V4Z" style="fill: currentcolor;"></path></svg>
+                    </button>
+
                     <button class="">
                         edit
                     </button>
@@ -160,7 +183,7 @@
                 </div>
                 <div class="actions">
                     <button class="accent" onclick="removeSavedNetwork(this)" data-index="{{ index }}">
-                        Remove
+                        remove
                     </button>
                 </div>
             </li>

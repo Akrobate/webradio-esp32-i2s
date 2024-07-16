@@ -47,6 +47,22 @@ async function serverAddStation(station) {
     return Promise.resolve();
 }
 
+async function serverStationMoveUp(index) {
+    await wait(SERVER_LAG_SHORT);
+    const tmp = _stations_list[index]
+    _stations_list[index] = _stations_list[index - 1]
+    _stations_list[index - 1] = tmp
+    return Promise.resolve();
+}
+
+
+async function serverStationMoveDown(index) {
+    await wait(SERVER_LAG_SHORT);
+    const tmp = _stations_list[index]
+    _stations_list[index] = _stations_list[index + 1]
+    _stations_list[index + 1] = tmp
+    return Promise.resolve();
+}
 
 const _available_networks_list = [
     {
@@ -152,9 +168,6 @@ const _saved_networks_list = [
     }
 ]
 
-
-
-
 async function serverGetAvailableNetworksList() {
     await wait(SERVER_LAG_SHORT)
     return _available_networks_list
@@ -178,3 +191,4 @@ async function serviceAddSavedNetwork(network) {
     _saved_networks_list.push(network)
     return Promise.resolve()
 }
+

@@ -18,6 +18,15 @@ function buttonSetLoadingState(btn, state) {
 const addCls = (_el, _cls) => _el.classList.add(_cls)
 const rmCls = (_el, _cls) => _el.classList.remove(_cls)
 
+function isValidUrl(string) {
+    try {
+      new URL(string)
+      return true
+    } catch (_) {
+      return false
+    }
+}
+
 
 /**
  * INIT
@@ -27,15 +36,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     loadSavedNetworksList()
 })
 
-
-async function loadStationList() {
-    await loadList(
-        $('#radio-stations-list'),
-        $('#template-radio-station-list-item'),
-        $('#template-list-loader'),
-        () => serverGetStationList()
-    )
-}
 
 async function loadList(
     _list_el,
@@ -57,6 +57,24 @@ async function loadList(
         _new_el.innerHTML = html
         _list_el.appendChild(_new_el.firstElementChild)
     })
+}
+
+
+async function loadStationList() {
+    const _el = $('#radio-stations-list')
+    await loadList(
+        _el,
+        $('#template-radio-station-list-item'),
+        $('#template-list-loader'),
+        () => serverGetStationList()
+    )
+
+    const _list = _el.querySelectorAll('.list-item')
+    if (_list.length == 0) {
+        return
+    }
+    _list[0].querySelector('.button-up').disabled = true
+    _list[_list.length - 1].querySelector('.button-down').disabled = true
 }
 
 
@@ -115,18 +133,20 @@ async function deleteStation(btn) {
 }
 
 
-function editStation(elemnent) {
+async function editStation(elemnent) {
     elemnent.parentElement.parentElement.remove()
 }
 
+async function stationMoveUp(_el) {
+    const index = Number(_el.dataset.index)
+    await serverStationMoveUp(index)
+    await loadStationList()
+}
 
-function isValidUrl(string) {
-    try {
-      new URL(string)
-      return true
-    } catch (_) {
-      return false
-    }
+async function stationMoveDown(_el) {
+    const index = Number(_el.dataset.index)
+    await serverStationMoveDown(index)
+    await loadStationList()
 }
 
 
