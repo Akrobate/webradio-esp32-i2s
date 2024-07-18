@@ -1,19 +1,18 @@
-#ifndef WebradioServer_h
-#define WebradioServer_h
-#include <LittleFS.h>
-
+#ifndef WebRadioServer_h
+#define WebRadioServer_h
 
 #include <ESPAsyncWebServer.h>
+#include <LittleFS.h>
+#include <ArduinoJson.h>
 
 // #include "AsyncJson.h"
-// #include "ArduinoJson.h"
 // #include <LittleFS.h>
 
-class WebradioServer {
+class WebRadioServer {
 
     public:
         AsyncWebServer * server;
-        WebradioServer();
+        WebRadioServer();
         void init();
         void begin();
 };

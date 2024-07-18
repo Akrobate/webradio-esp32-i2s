@@ -1,33 +1,26 @@
 #include <Arduino.h>
 #include <WiFi.h>
-
 #include <LittleFS.h>
+#include <WebRadioServer.h>
+#include <WifiNetworking.h>
 
-#include <WebradioServer.h>
-
-
-WebradioServer * server = new WebradioServer();
-
-
+WebRadioServer * server = new WebRadioServer();
+WifiNetworking * wifi_networking = new WifiNetworking();
 
 #define LED 4
 
-const char * ssid     = "ESP32-Access-Point";
-const char * password = "123456789";
-
 void setup() {
-  pinMode(LED, OUTPUT);
-  Serial.begin(115200);
 
-  delay(1000);
+    pinMode(LED, OUTPUT);
+    Serial.begin(115200);
 
-  WiFi.softAP(ssid);
+    delay(1000);
 
+    wifi_networking->startAP();
 
-  server->init();
-  server->begin();
+    server->init();
+    server->begin();
   
-
   /*
   LittleFS.begin();
 
@@ -63,10 +56,27 @@ void setup() {
 
 
 void loop() {
-  delay(500);
-  digitalWrite(LED, HIGH);
-  delay(500);
-  digitalWrite(LED, LOW);
 
+    delay(500);
+    digitalWrite(LED, HIGH);
+    delay(500);
+    digitalWrite(LED, LOW);
 
+    Serial.println("Scan start");
+ 
+    wifi_networking->scan();
+
+    // Wait a bit before scanning again.
+    delay(5000);
+
+    /*
+    bool status = wifi_networking->connect("dqdqsd", "dqfsqfqsdf");
+    if(status){
+        Serial.println("Connected to wifi");
+    } else {
+        Serial.println("Not connected to wifi");
+    }
+    delay(5000);
+    wifi_networking->disconnect();
+    */
 }
