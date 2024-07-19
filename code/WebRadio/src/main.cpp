@@ -3,11 +3,19 @@
 #include <LittleFS.h>
 #include <WebRadioServer.h>
 #include <WifiNetworking.h>
+#include <NetworkCredential.h>
+
+
+void showMemoryUsage();
 
 WebRadioServer * server = new WebRadioServer();
 WifiNetworking * wifi_networking = new WifiNetworking();
+NetworkCredential * network_credential = new NetworkCredential();
 
 #define LED 4
+
+int loops = 0;
+
 
 void setup() {
 
@@ -20,54 +28,63 @@ void setup() {
 
     server->init();
     server->begin();
+    
+    network_credential->load();
   
-  /*
-  LittleFS.begin();
 
-  // Print files in data LittleFS
-  File dir = LittleFS.open("/");
 
-  if(!dir){
-      Serial.println("- failed to open directory");
-      return;
-  }
-  if(!dir.isDirectory()){
-      Serial.println(" - not a directory");
-      return;
-  }
+    Serial.println("--------------start-------------");
+    serializeJsonPretty(*network_credential->network_credential_list, Serial);
 
-  File file = dir.openNextFile();
+    (*network_credential->network_credential_list).printTo(Serial);
 
-  while (file) {
-      if(file.isDirectory()){
-          Serial.print("  DIR : ");
-          Serial.println(file.name());
-      } else {
-          Serial.print("  FILE: ");
-          Serial.print(file.name());
-          Serial.print("\tSIZE: ");
-          Serial.println(file.size());
-      }
-      file = dir.openNextFile();
-  }
 
-  */
+    Serial.println("          ");
+    Serial.println("--------------end-------------");
+
+
+
+    Serial.println("-------------- ITEM -------------");
+
+    Serial.println("Network 2");
+    int index = network_credential->getCredentialIndexBySSID("Network 2");
+    if (index == -1) {
+        Serial.println("SSID not found");
+    } else {
+        JsonObject obj = network_credential->getCredentialByIndex(index);
+        serializeJsonPretty(obj, Serial);
+
+    }
+    Serial.println("-------------- / ITEM -------------");
 }
 
 
 void loop() {
 
-    delay(500);
+
+
+    showMemoryUsage();
+
+    network_credential->load();
+
+
+
+    delay(1);
     digitalWrite(LED, HIGH);
-    delay(500);
+    delay(1);
     digitalWrite(LED, LOW);
 
     Serial.println("Scan start");
  
-    wifi_networking->scan();
+    DynamicJsonDocument * scan_list = wifi_networking->scan();
+    serializeJsonPretty(*scan_list, Serial);
+    delete scan_list;
+
+    // wifi_networking->scanDebug();
+
 
     // Wait a bit before scanning again.
-    delay(5000);
+    delay(1);
 
     /*
     bool status = wifi_networking->connect("dqdqsd", "dqfsqfqsdf");
@@ -79,4 +96,31 @@ void loop() {
     delay(5000);
     wifi_networking->disconnect();
     */
+   loops++;
+   Serial.print("loops " );
+   Serial.println(loops);
+}
+
+
+
+
+void showMemoryUsage() {
+    multi_heap_info_t info;
+
+    heap_caps_get_info(&info, MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT); // internal RAM, memory capable to store data or to create new task
+    // info.total_free_bytes;   // total currently free in all non-continues blocks
+    // info.minimum_free_bytes;  // minimum free ever
+    // info.largest_free_block;   // largest continues block to allocate big array
+    // 153
+
+    Serial.println("========================================================");
+    Serial.print("Total Free: ");
+    Serial.println(info.total_free_bytes);
+
+    Serial.print("Minimum free: ");
+    Serial.println(info.minimum_free_bytes);
+
+    Serial.print("Largest free block: ");
+    Serial.println(info.largest_free_block);
+    Serial.println("========================================================");
 }
