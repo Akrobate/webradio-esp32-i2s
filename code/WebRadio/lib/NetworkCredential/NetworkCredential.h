@@ -21,7 +21,7 @@ class NetworkCredential {
     public:
         NetworkCredential();
 
-        DynamicJsonDocument * network_credential_list;
+        DynamicJsonDocument * network_credential_list = nullptr;
 
         boolean load();
         boolean save();

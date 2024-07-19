@@ -13,6 +13,8 @@ boolean NetworkCredential::load() {
         Serial.println("Failed to open file for reading");
         return false;
     }
+
+    delete this->network_credential_list;
     this->network_credential_list = new DynamicJsonDocument(1024);
     DeserializationError error = deserializeJson(*this->network_credential_list, file);
 
