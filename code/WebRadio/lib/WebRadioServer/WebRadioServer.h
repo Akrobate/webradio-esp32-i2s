@@ -10,6 +10,9 @@
 
 class WebRadioServer {
 
+    private:
+        int port = 80;
+
     public:
         AsyncWebServer * server;
         WebRadioServer();

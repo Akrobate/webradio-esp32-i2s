@@ -1,10 +1,11 @@
 #include "WebRadioServer.h"
 
 WebRadioServer::WebRadioServer() {
-    this->server = new AsyncWebServer(80);
 }
 
 void WebRadioServer::init() {
+
+  this->server = new AsyncWebServer(port);
 
   LittleFS.begin();
   this->server->serveStatic("/", LittleFS, "/webinterface").setDefaultFile("index.html");
