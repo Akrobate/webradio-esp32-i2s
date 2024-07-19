@@ -16,7 +16,7 @@ class WifiNetworking {
         WifiNetworking();
 
         void scanDebug();
-        DynamicJsonDocument scan();
+        DynamicJsonDocument * scan();
 
         void startAP();
         bool connect(char * ssid, char * password);

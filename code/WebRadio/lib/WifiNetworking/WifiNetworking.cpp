@@ -48,7 +48,6 @@ void WifiNetworking::scanDebug() {
         Serial.println(" networks found");
         Serial.println("Nr | SSID                             | RSSI | CH | Encryption");
         for (int i = 0; i < n; ++i) {
-            // Print SSID and RSSI for each network found
             Serial.printf("%2d",i + 1);
             Serial.print(" | ");
             Serial.printf("%-32.32s", this->wifi->SSID(i).c_str());
@@ -95,21 +94,20 @@ void WifiNetworking::scanDebug() {
     }
     Serial.println("");
  
-    // Delete the scan result to free memory for code below.
     this->wifi->scanDelete();
 }
 
 
-
-DynamicJsonDocument WifiNetworking::scan() {
+DynamicJsonDocument * WifiNetworking::scan() {
     int n = this->wifi->scanNetworks();
-    DynamicJsonDocument json(1024);
-    JsonArray networks = json.createArray();
-    
+    DynamicJsonDocument * json = new DynamicJsonDocument(1024);
+    JsonArray networks = json->to<JsonArray>();
+   
     for (int i = 0; i < n; ++i) {
+
         JsonObject network = networks.createNestedObject();
         network["nr"] = i + 1;
-        network["ssid"] = this->wifi->SSID(i).c_str();
+        network["ssid"] = this->wifi->SSID(i);
         network["rssi"] = this->wifi->RSSI(i) * -1;
         network["channel"] = this->wifi->channel(i);
         
@@ -145,8 +143,7 @@ DynamicJsonDocument WifiNetworking::scan() {
                 network["encryption"] = "unknown";
         }
     }
-    
     this->wifi->scanDelete();
-    
     return json;
 }
+
