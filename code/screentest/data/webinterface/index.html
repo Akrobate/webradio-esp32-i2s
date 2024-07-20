@@ -1,0 +1,197 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="index.js"></script>
+        <script src="mock-server.js"></script>
+        <link rel="stylesheet" href="style.css">
+    </head>
+
+    <body>
+
+        <div class="container">
+        
+            <div class="mb-lg display-flex align-items-center">
+                <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12,21L15.6,16.2C14.6,15.45 13.35,15 12,15C10.65,15 9.4,15.45 8.4,16.2L12,21M12,3C7.95,3 4.21,4.34 1.2,6.6L3,9C5.5,7.12 8.62,6 12,6C15.38,6 18.5,7.12 21,9L22.8,6.6C19.79,4.34 16.05,3 12,3M12,9C9.3,9 6.81,9.89 4.8,11.4L6.6,13.8C8.1,12.67 9.97,12 12,12C14.03,12 15.9,12.67 17.4,13.8L19.2,11.4C17.19,9.89 14.7,9 12,9Z" /></svg>
+                <h1>
+                    WebRadio
+                </h1>
+            </div>
+
+            
+            <div class="row">
+                <div class="col col-6 col-sm-12 mb-lg-mobile">
+                    <div class="card height-100 elevation">
+                        <h2>Lorem ipsum sic</h2>
+                        <p>Lorem ipsum sic test Lorem ipsum sic test Lorem ipsum sic test Lorem ipsum sic test Lorem ipsum sic test </p>
+                    </div>
+                </div>
+
+                <div class="col col-6 col-sm-12">
+                    <div class="card height-100 elevation">
+                        <h2>Status informations</h2>
+                        <p>Wifi status: <strong>connected</strong></p>
+                        <p>Wifi SSID: <strong>SSID 1</strong></p>
+                        <p>Local IP: <strong>192.168.1.10</strong></p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="card mt-lg elevation" id="wifi-credentials-manager">
+                <h3 class="mb-lg">
+                    Manage Wifi credentials
+                </h3>
+
+                <h4 class="mb-lg">
+                    Saved networks
+                </h4>
+
+                <ul class="list" id="saved-networks-list">
+                </ul>
+                <div class="main-actions">
+                    <button class="" onclick="addAndConnectNetwork()">
+                        Add and connect network
+                    </button>
+                    <button class="" onclick="connectToNetwork()">
+                        Manually add network
+                    </button>
+                </div>
+
+
+                <div class="inner-card elevation hidden available-networks-card mt-lg">
+
+                    <div class="step-1 hidden">
+                        <h4 class="mb-md">
+                            Available networks
+                        </h4>
+
+                        <div class="loader hidden center mt-lg mb-lg"></div>
+
+                        <ul class="list" id="available-networks-list">
+                        </ul>
+                        
+                        <button class="secondary mt-lg" onclick="resetCreatingSavedWifi()">
+                            Cancel
+                        </button>
+                        <button class="primary mt-lg" onclick="refreshAvailableNetworks(this)">
+                            Refresh
+                        </button>
+
+                        
+                    </div>
+                    <div class="step-2 hidden">
+                        <h4 class="mb-md">
+                            Please enter the SSID and password
+                        </h4>
+                        <input type="text" id="input-ssid-name" placeholder="SSID">
+                        <input class="mt-md" id="input-ssid-password" type="text" placeholder="Password">
+
+                        <button class="secondary mt-lg" onclick="resetCreatingSavedWifi()">
+                            Cancel
+                        </button>
+
+                        <button class="primary mt-lg" onclick="saveNetwork(this)">
+                            Save
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="card mt-lg elevation" id="station-manager">
+                <div class="mb-lg">
+                    <h3>
+                        Manage stations
+                    </h3>
+                    
+                    <input type="text" id="input-station-name" placeholder="Name">
+                    <input class="mt-md" id="input-station-host" type="text" placeholder="Hostname">
+
+                    <button class="mt-md" onclick="addStation(this)">
+                        Add
+                    </button>
+                </div>
+
+                <div class="loader hidden center mt-lg mb-lg"></div>
+
+                <ul class="list" id="radio-stations-list">
+                </ul>
+            </div>
+
+
+            <div class="card mt-lg elevation" id="date-time-configuration-manager">
+                <div class="mb-lg">
+                    <h3>
+                        Date Time Configuration
+                    </h3>
+                    
+                    <input type="text" id="input-station-name" placeholder="Name">
+                    <input class="mt-md" id="input-station-host" type="text" placeholder="Hostname">
+
+                    <button class="mt-md" onclick="addStation(this)">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <template id="template-radio-station-list-item">
+            <li class="list-item">
+                <div class="content">
+                    <div class="title">{{ name }}</div>
+                    <div class="subtitle">{{ host }}</div>
+                </div>
+                <div class="actions">
+                    <button class="accent" onclick="deleteStation(this)" data-index="{{ index }}">
+                        remove
+                    </button>
+                    <button class="icon button-up" onclick="stationMoveUp(this)" data-index="{{ index }}">
+                        <svg viewBox="0 0 24 24"><path d="M15,20H9V12H4.16L12,4.16L19.84,12H15V20Z" style="fill: currentcolor;"></path></svg>
+                    </button>
+
+                    <button class="icon button-down" onclick="stationMoveDown(this)" data-index="{{ index }}">
+                        <svg viewBox="0 0 24 24"><path d="M9,4H15V12H19.84L12,19.84L4.16,12H9V4Z" style="fill: currentcolor;"></path></svg>
+                    </button>
+
+                    <button class="">
+                        edit
+                    </button>
+                </div>
+            </li>
+        </template>
+
+
+        <template id="template-available-networks-list-item">
+            <li class="list-item" data-index="{{ data_index }}">
+                <div class="content">
+                    <div class="title">{{ ssid }}</div>
+                </div>
+                <div class="actions">
+                    <button class="" onclick="connectToNetwork(this)" data-ssid="{{ ssid }}">
+                        Connect
+                    </button>
+                </div>
+            </li>
+        </template>
+
+
+        <template id="template-saved-networks-list-item">
+            <li class="list-item" data-index="{{ data_index}}">
+                <div class="content">
+                    <div class="title">{{ ssid }}</div>
+                </div>
+                <div class="actions">
+                    <button class="accent" onclick="removeSavedNetwork(this)" data-index="{{ index }}">
+                        remove
+                    </button>
+                </div>
+            </li>
+        </template>
+        
+        <template id="template-list-loader">
+            <div class="loader center mt-lg mb-lg"></div>
+        </template>
+
+    </body>
+<body>

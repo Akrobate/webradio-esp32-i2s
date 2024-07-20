@@ -98,10 +98,12 @@ void WifiNetworking::scanDebug() {
 }
 
 
-DynamicJsonDocument * WifiNetworking::scan() {
+void WifiNetworking::scan() {
     int n = this->wifi->scanNetworks();
-    DynamicJsonDocument * json = new DynamicJsonDocument(1024);
-    JsonArray networks = json->to<JsonArray>();
+
+    delete this->available_networks;
+    this->available_networks = new DynamicJsonDocument(1024);
+    JsonArray networks = this->available_networks->to<JsonArray>();
    
     for (int i = 0; i < n; ++i) {
 
@@ -144,6 +146,9 @@ DynamicJsonDocument * WifiNetworking::scan() {
         }
     }
     this->wifi->scanDelete();
-    return json;
 }
 
+
+DynamicJsonDocument * WifiNetworking::getAvailableNetworks() {
+    return this->available_networks;
+}

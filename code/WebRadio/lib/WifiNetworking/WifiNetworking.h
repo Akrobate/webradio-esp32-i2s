@@ -12,11 +12,15 @@ class WifiNetworking {
 
     public:
         WiFiClass * wifi;
+        DynamicJsonDocument * available_networks = nullptr;
 
         WifiNetworking();
 
         void scanDebug();
-        DynamicJsonDocument * scan();
+        void scan();
+
+
+        DynamicJsonDocument * getAvailableNetworks();
 
         void startAP();
         bool connect(char * ssid, char * password);

@@ -5,6 +5,12 @@
 #include <WifiNetworking.h>
 #include <NetworkCredential.h>
 
+#include <SPI.h>
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+Adafruit_SSD1306 ecranOLED(128, 64, &Wire, -1);
 
 void showMemoryUsage();
 
@@ -32,16 +38,15 @@ void setup() {
     network_credential->load();
   
 
+    server->injectWifiNetworking(wifi_networking);
+    server->injectNetworkCredential(network_credential);
+
 
     Serial.println("--------------start-------------");
     serializeJsonPretty(*network_credential->network_credential_list, Serial);
 
-    (*network_credential->network_credential_list).printTo(Serial);
-
-
     Serial.println("          ");
     Serial.println("--------------end-------------");
-
 
 
     Serial.println("-------------- ITEM -------------");
@@ -56,35 +61,71 @@ void setup() {
 
     }
     Serial.println("-------------- / ITEM -------------");
+
+
+
+
+
+
+
+    Wire.begin();
+
+    Serial.println(F("!!!!!!!!!!!!!!!!!!!!!!!!!!BEFORE BEGIN"));
+    Serial.print("Wire.getClock()  ");
+    Serial.println(Wire.getClock());
+    Wire.setClock(10000);
+    
+    Serial.print("Wire.getClock()  ");
+    Serial.println(Wire.getClock());
+
+    if (!ecranOLED.begin(SSD1306_SWITCHCAPVCC, 0x3C)) { // 0x3C    0x3D
+        Serial.println(F("!!!!!!!!!!!!!!!!!!!!!!!!!!SSD1306 initialization failed"));
+        for (;;);
+    }
+    Serial.println(F("!!!!!!!!!!!!!!!!!!!!!!!!!!After begin"));
+
+    delay(2000);
+
+    // ecranOLED.clearDisplay(); 
+    // int valeurTemperature = 25;
+    // ecranOLED.print("Temperature = ");
+    // ecranOLED.print(valeurTemperature);
+    // ecranOLED.print((char)247);
+    // ecranOLED.println("C");
+    ecranOLED.display();
+
+
+    wifi_networking->scan();
+
+    delay(2000);
+    
+
 }
 
 
+
+
 void loop() {
-
-
-
     showMemoryUsage();
 
-    network_credential->load();
-
-
+    // network_credential->load();
 
     delay(1);
     digitalWrite(LED, HIGH);
-    delay(1);
+    delay(100);
     digitalWrite(LED, LOW);
 
     Serial.println("Scan start");
  
-    DynamicJsonDocument * scan_list = wifi_networking->scan();
-    serializeJsonPretty(*scan_list, Serial);
-    delete scan_list;
+    // wifi_networking->scan();
+    // DynamicJsonDocument * scan_list = wifi_networking->getAvailableNetworks();
+    // serializeJsonPretty(*scan_list, Serial);
+    // delete scan_list;
 
     // wifi_networking->scanDebug();
 
-
     // Wait a bit before scanning again.
-    delay(1);
+    
 
     /*
     bool status = wifi_networking->connect("dqdqsd", "dqfsqfqsdf");
@@ -99,28 +140,27 @@ void loop() {
    loops++;
    Serial.print("loops " );
    Serial.println(loops);
+
+
+
+    delay(15000);
+
 }
-
-
 
 
 void showMemoryUsage() {
     multi_heap_info_t info;
 
     heap_caps_get_info(&info, MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT); // internal RAM, memory capable to store data or to create new task
-    // info.total_free_bytes;   // total currently free in all non-continues blocks
-    // info.minimum_free_bytes;  // minimum free ever
-    // info.largest_free_block;   // largest continues block to allocate big array
-    // 153
 
     Serial.println("========================================================");
     Serial.print("Total Free: ");
-    Serial.println(info.total_free_bytes);
+    Serial.println(info.total_free_bytes); // total currently free in all non-continues blocks
 
     Serial.print("Minimum free: ");
-    Serial.println(info.minimum_free_bytes);
+    Serial.println(info.minimum_free_bytes); // minimum free ever
 
     Serial.print("Largest free block: ");
-    Serial.println(info.largest_free_block);
+    Serial.println(info.largest_free_block); // largest continues block to allocate big array
     Serial.println("========================================================");
 }
