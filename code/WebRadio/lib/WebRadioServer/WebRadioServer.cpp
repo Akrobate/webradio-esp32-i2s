@@ -1,5 +1,11 @@
 #include "WebRadioServer.h"
 
+struct TaskTwoParameters {
+  void * param_1;
+  void * param_2;
+};
+
+
 WebRadioServer::WebRadioServer() {
 }
 
@@ -29,6 +35,78 @@ void WebRadioServer::init() {
     "/api/available-networks",
     HTTP_GET,
     [&](AsyncWebServerRequest *request) {
+
+      TaskTwoParameters * task_two_parameters = new TaskTwoParameters();
+      task_two_parameters->param_1 = (void*)request;
+      task_two_parameters->param_2 = (void*)this;
+
+      xTaskCreate(
+        [](void *arg){
+          TaskTwoParameters* params = (TaskTwoParameters*)arg;
+          AsyncWebServerRequest * request = (AsyncWebServerRequest *)params->param_1;
+          WebRadioServer * web_radio_server = (WebRadioServer *)params->param_2;
+
+          request->client()->setRxTimeout(50);
+          String response;
+          web_radio_server->wifi_networking->scan();
+          DynamicJsonDocument * available_networks = web_radio_server->wifi_networking->getAvailableNetworks();
+          serializeJson(*available_networks, response);
+
+          request->send(200, "application/json", response);
+
+          delete params;
+          vTaskDelete(NULL);
+        },
+        "handler",
+        5000,
+        (void*)task_two_parameters,
+        1,
+        NULL
+      );
+    }
+  );
+
+
+  this->server->on(
+    "/api/available-networks-debug",
+    HTTP_GET,
+    [&](AsyncWebServerRequest *request) {
+      // AsyncResponseStream *response = request->beginResponseStream("application/json");
+
+      xTaskCreate(
+        [](void *arg){
+          AsyncWebServerRequest * request = (AsyncWebServerRequest *)arg;
+          request->client()->setRxTimeout(50);
+          Serial.println("xTaskCreate /api/available-networks-2");
+          delay(1);
+          // Serial.println("Response in xTaskCreate ends after 5S");
+          request->send(200, "text/plain", "some result for the client to read");
+
+          vTaskDelete(NULL);
+
+        },
+        "handler",
+        5000,
+        (void*)request,
+        1,
+        NULL
+      );
+
+
+
+    }
+  );
+
+
+
+
+
+  /*
+
+  this->server->on(
+    "/api/available-networks",
+    HTTP_GET,
+    [&](AsyncWebServerRequest *request) {
       // AsyncResponseStream *response = request->beginResponseStream("application/json");
       
       String response;
@@ -46,6 +124,16 @@ void WebRadioServer::init() {
       request->send(200, "application/json", response);
     }
   );
+
+  */
+
+
+
+
+
+
+
+
 
   this->server->serveStatic("/", LittleFS, "/webinterface").setDefaultFile("index.html");
   this->server->serveStatic("/api/streams.json", LittleFS, "/streams.json");
