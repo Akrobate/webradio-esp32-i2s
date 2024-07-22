@@ -110,10 +110,10 @@ void loop() {
 
     // network_credential->load();
 
-    delay(1);
-    digitalWrite(LED, HIGH);
-    delay(100);
-    digitalWrite(LED, LOW);
+    // delay(1);
+    // digitalWrite(LED, HIGH);
+    // delay(100);
+    // digitalWrite(LED, LOW);
 
     Serial.println("Scan start");
  
@@ -143,7 +143,7 @@ void loop() {
 
 
 
-    delay(15000);
+    delay(5000);
 
 }
 
