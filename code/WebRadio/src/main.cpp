@@ -1,22 +1,27 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <LittleFS.h>
+
 #include <WebRadioServer.h>
 #include <WifiNetworking.h>
 #include <NetworkCredential.h>
+#include <BusinessState.h>
+#include <DisplayScreen.h>
+#include <BMP180Probe.h>
+#include <DeviceSystem.h>
 
-#include <SPI.h>
+
 #include <Wire.h>
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
-
-Adafruit_SSD1306 ecranOLED(128, 64, &Wire, -1);
 
 void showMemoryUsage();
 
+BusinessState * business_state = new BusinessState();
 WebRadioServer * server = new WebRadioServer();
 WifiNetworking * wifi_networking = new WifiNetworking();
 NetworkCredential * network_credential = new NetworkCredential();
+DisplayScreen * display_screen = new DisplayScreen();
+BMP180Probe * bmp_180_probe = new BMP180Probe();
+DeviceSystem * device_system = new DeviceSystem();
 
 #define LED 4
 
@@ -25,126 +30,35 @@ int loops = 0;
 
 void setup() {
 
-    pinMode(LED, OUTPUT);
     Serial.begin(115200);
-
-    delay(1000);
-
+    delay(100);
     wifi_networking->startAP();
+    wifi_networking->scan();
 
     server->init();
     server->begin();
-    
-    network_credential->load();
-  
-
     server->injectWifiNetworking(wifi_networking);
     server->injectNetworkCredential(network_credential);
 
 
-    Serial.println("--------------start-------------");
-    serializeJsonPretty(*network_credential->network_credential_list, Serial);
+    bmp_180_probe->init();
+    bmp_180_probe->injectBusinesState(business_state);
 
-    Serial.println("          ");
-    Serial.println("--------------end-------------");
+    network_credential->load();
 
-
-    Serial.println("-------------- ITEM -------------");
-
-    Serial.println("Network 2");
-    int index = network_credential->getCredentialIndexBySSID("Network 2");
-    if (index == -1) {
-        Serial.println("SSID not found");
-    } else {
-        JsonObject obj = network_credential->getCredentialByIndex(index);
-        serializeJsonPretty(obj, Serial);
-
-    }
-    Serial.println("-------------- / ITEM -------------");
-
-
-
-
-
-
-
-    Wire.begin();
-
-    Serial.println(F("!!!!!!!!!!!!!!!!!!!!!!!!!!BEFORE BEGIN"));
-    Serial.print("Wire.getClock()  ");
-    Serial.println(Wire.getClock());
-    Wire.setClock(10000);
-    
-    Serial.print("Wire.getClock()  ");
-    Serial.println(Wire.getClock());
-
-    if (!ecranOLED.begin(SSD1306_SWITCHCAPVCC, 0x3C)) { // 0x3C    0x3D
-        Serial.println(F("!!!!!!!!!!!!!!!!!!!!!!!!!!SSD1306 initialization failed"));
-        for (;;);
-    }
-    Serial.println(F("!!!!!!!!!!!!!!!!!!!!!!!!!!After begin"));
-
-    delay(2000);
-
-    // ecranOLED.clearDisplay(); 
-    // int valeurTemperature = 25;
-    // ecranOLED.print("Temperature = ");
-    // ecranOLED.print(valeurTemperature);
-    // ecranOLED.print((char)247);
-    // ecranOLED.println("C");
-    ecranOLED.display();
-
-
-    wifi_networking->scan();
-
-    delay(2000);
-    
-
+    // Serial.println("--------------start-------------");
+    // serializeJsonPretty(*network_credential->network_credential_list, Serial);
+    // Serial.println("--------------end-------------");    
 }
-
-
 
 
 void loop() {
     showMemoryUsage();
 
-    // network_credential->load();
-
-    // delay(1);
-    // digitalWrite(LED, HIGH);
-    // delay(100);
-    // digitalWrite(LED, LOW);
-
-    Serial.println("Scan start");
- 
-    // wifi_networking->scan();
-    // DynamicJsonDocument * scan_list = wifi_networking->getAvailableNetworks();
-    // serializeJsonPretty(*scan_list, Serial);
-    // delete scan_list;
-
-    // wifi_networking->scanDebug();
-
-    // Wait a bit before scanning again.
-    
-
-    /*
-    bool status = wifi_networking->connect("dqdqsd", "dqfsqfqsdf");
-    if(status){
-        Serial.println("Connected to wifi");
-    } else {
-        Serial.println("Not connected to wifi");
-    }
+    loops++;
+    Serial.print("loops " );
+    Serial.println(loops);
     delay(5000);
-    wifi_networking->disconnect();
-    */
-   loops++;
-   Serial.print("loops " );
-   Serial.println(loops);
-
-
-
-    delay(5000);
-
 }
 
 
