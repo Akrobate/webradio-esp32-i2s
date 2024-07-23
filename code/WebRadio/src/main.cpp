@@ -10,11 +10,6 @@
 #include <BMP180Probe.h>
 #include <DeviceSystem.h>
 
-
-#include <Wire.h>
-
-void showMemoryUsage();
-
 BusinessState * business_state = new BusinessState();
 WebRadioServer * server = new WebRadioServer();
 WifiNetworking * wifi_networking = new WifiNetworking();
@@ -27,6 +22,7 @@ DeviceSystem * device_system = new DeviceSystem();
 
 int loops = 0;
 
+// U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ U8X8_PIN_NONE);
 
 void setup() {
 
@@ -44,7 +40,15 @@ void setup() {
     bmp_180_probe->init();
     bmp_180_probe->injectBusinesState(business_state);
 
-    network_credential->load();
+    display_screen->init();
+    display_screen->injectBusinesState(business_state);
+    display_screen->demoScreen();
+
+
+
+
+
+    delay(2000);
 
     // Serial.println("--------------start-------------");
     // serializeJsonPretty(*network_credential->network_credential_list, Serial);
@@ -53,28 +57,19 @@ void setup() {
 
 
 void loop() {
-    showMemoryUsage();
-
     loops++;
-    Serial.print("loops " );
-    Serial.println(loops);
-    delay(5000);
+
+    if (loops % 100 == 0) {
+        Serial.print("loops " );
+        Serial.println(loops);
+    }
+    
+
+    if (loops % 100 == 0) {
+        bmp_180_probe->updateBusinessState();
+        display_screen->infoScreen();
+    }
+
+    delay(10);
 }
 
-
-void showMemoryUsage() {
-    multi_heap_info_t info;
-
-    heap_caps_get_info(&info, MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT); // internal RAM, memory capable to store data or to create new task
-
-    Serial.println("========================================================");
-    Serial.print("Total Free: ");
-    Serial.println(info.total_free_bytes); // total currently free in all non-continues blocks
-
-    Serial.print("Minimum free: ");
-    Serial.println(info.minimum_free_bytes); // minimum free ever
-
-    Serial.print("Largest free block: ");
-    Serial.println(info.largest_free_block); // largest continues block to allocate big array
-    Serial.println("========================================================");
-}

@@ -5,16 +5,16 @@
 
 class BusinessState {
 
+    private:
+        float temperature = 0;
+        float pressure = 0;
 
+        float total_free_bytes = 0;
 
     public:
         BusinessState();
 
-        float temperature = 0;
-        float pressure = 0;
-
         String access_point_ssid = "";
-
 
         void setTemperature(float temperature);
         float getTemperature();
@@ -22,6 +22,8 @@ class BusinessState {
         void setPressure(float pressure);
         float getPressure();
 
+        void setTotalFreeBytes(float total_free_bytes);
+        float getTotalFreeBytes();
 };
 
 #endif
