@@ -53,6 +53,24 @@ void DisplayScreen::infoScreen() {
 
 
 
+void DisplayScreen::infoTestScreen() {
+    this->clear();
+
+    String text = "Texte centré";
+    this->u8g2->setFont(u8g2_font_7x13B_tf);
+    int text_width = this->u8g2->getUTF8Width(text.c_str());
+    int text_height = this->u8g2->getAscent() - this->u8g2->getDescent();
+
+    int x = this->u8g2->getDisplayWidth() / 2 - text_width / 2;
+    int y = this->u8g2->getDisplayHeight() / 2 + text_height / 2;
+
+    this->clear();
+    this->u8g2->drawUTF8(x, y, text.c_str());    
+    this->display();
+}
+
+
+
 void DisplayScreen::temperatureScreen() {
     this->clear();
 

@@ -1,12 +1,3 @@
-
-
-
-
-
-
-
-
-
 async function serviceAddSavedNetwork(network) {
     const {
         ssid,
