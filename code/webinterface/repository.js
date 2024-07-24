@@ -28,3 +28,20 @@ async function serviceAddSavedNetwork(network) {
 }
 
 
+async function serverRemoveSavedNetwork(network_index) {
+    const {
+        ssid,
+    } = network
+    try {
+        let form_data = new FormData()
+        form_data.append('ssid', ssid)
+        await fetch('/api/credentials',
+            {
+                body: form_data,
+                method: 'DELETE',
+            }
+        )
+    } catch (error) {
+        console.log('serviceAddSavedNetwork - Error:', error)
+    }
+}
