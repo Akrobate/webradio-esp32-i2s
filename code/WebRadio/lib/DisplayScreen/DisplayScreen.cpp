@@ -50,3 +50,16 @@ void DisplayScreen::infoScreen() {
 
     this->display();
 }
+
+
+
+void DisplayScreen::temperatureScreen() {
+    this->clear();
+
+    this->u8g2->setFont(u8g2_font_osr26_tn);
+    this->u8g2->setCursor(2, 45);
+    this->u8g2->print(this->business_state->getTemperature());
+    this->u8g2->print("°C");
+    this->display();
+}
+

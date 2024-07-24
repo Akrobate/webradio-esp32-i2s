@@ -67,7 +67,8 @@ void loop() {
 
     if (loops % 100 == 0) {
         bmp_180_probe->updateBusinessState();
-        display_screen->infoScreen();
+        // display_screen->infoScreen();
+        display_screen->temperatureScreen();   
     }
 
     delay(10);
