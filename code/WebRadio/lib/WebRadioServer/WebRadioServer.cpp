@@ -9,6 +9,11 @@ struct TaskTwoParameters {
 WebRadioServer::WebRadioServer() {
 }
 
+
+void WebRadioServer::begin() {
+    this->server->begin();
+}
+
 void WebRadioServer::init() {
 
   this->server = new AsyncWebServer(port);
@@ -69,14 +74,66 @@ void WebRadioServer::init() {
   );
 
 
+  this->server->on(
+    "/api/credentials",
+    HTTP_GET,
+    [&](AsyncWebServerRequest *request) {
+      String response;
+      DynamicJsonDocument * network_credential_list = this->network_credential->network_credential_list;
+      serializeJson(*network_credential_list, response);
+      request->send(200, "application/json", response);
+    }
+  );
+
+
+
+
+  this->server->on(
+    "/api/credentials",
+    HTTP_POST,
+    [&](AsyncWebServerRequest *request) {
+
+      String ssid = "";
+      String password = "";
+      if (request->hasParam("ssid", true)) {
+        ssid = request->getParam("ssid", true)->value();
+      }
+
+      if (request->hasParam("password", true)) {
+        password = request->getParam("password", true)->value();
+      }
+
+      Serial.print("Post ssid : ");
+      Serial.println(ssid);
+      Serial.print("password : ");
+      Serial.println(password);
+
+      request->send(201, "text/html", "OK");
+    }
+  );
+
+
+
+  this->server->on(
+    "/api/credentials",
+    HTTP_DELETE,
+    [&](AsyncWebServerRequest *request) {
+
+      String ssid = "";
+      if (request->hasParam("ssid", true)) {
+        ssid = request->getParam("ssid", true)->value();
+      }
+
+      Serial.print("Delete ssid : ");
+      Serial.println(ssid);
+      request->send(200, "text/html", "OK");
+    }
+  );
+
+
   this->server->serveStatic("/", LittleFS, "/webinterface").setDefaultFile("index.html");
   this->server->serveStatic("/api/streams.json", LittleFS, "/streams.json");
 
-}
-
-
-void WebRadioServer::begin() {
-    this->server->begin();
 }
 
 
