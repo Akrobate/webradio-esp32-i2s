@@ -86,8 +86,6 @@ void WebRadioServer::init() {
   );
 
 
-
-
   this->server->on(
     "/api/credentials",
     HTTP_POST,
@@ -111,7 +109,6 @@ void WebRadioServer::init() {
       request->send(201, "text/html", "OK");
     }
   );
-
 
 
   this->server->on(
