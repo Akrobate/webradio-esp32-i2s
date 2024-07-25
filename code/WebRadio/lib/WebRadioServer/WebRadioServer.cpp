@@ -37,6 +37,18 @@ void WebRadioServer::init() {
 
 
   this->server->on(
+    "/api/streams",
+    HTTP_GET,
+    [&](AsyncWebServerRequest *request) {
+      String response;
+      DynamicJsonDocument * stream_list = this->stream_repository->stream_list;
+      serializeJson(*stream_list, response);
+      request->send(200, "application/json", response);
+    }
+  );
+
+
+  this->server->on(
     "/api/available-networks",
     HTTP_GET,
     [&](AsyncWebServerRequest *request) {
@@ -130,9 +142,7 @@ void WebRadioServer::init() {
 
   this->server->serveStatic("/", LittleFS, "/webinterface").setDefaultFile("index.html");
   this->server->serveStatic("/api/streams.json", LittleFS, "/streams.json");
-
 }
-
 
 void WebRadioServer::injectWifiNetworking(WifiNetworking * wifi_networking) {
     this->wifi_networking = wifi_networking;
@@ -140,4 +150,8 @@ void WebRadioServer::injectWifiNetworking(WifiNetworking * wifi_networking) {
 
 void WebRadioServer::injectNetworkCredential(NetworkCredential * network_credential) {
     this->network_credential = network_credential;
+}
+
+void WebRadioServer::injectStreamRepository(StreamRepository * stream_repository) {
+    this->stream_repository = stream_repository;
 }

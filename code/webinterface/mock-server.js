@@ -129,27 +129,7 @@ const _available_networks_list = [
         ssid: "SSID 13",
         quality: 20,
         has_password: false,
-    },
-    {
-        ssid: "SSID 14",
-        quality: 10,
-        has_password: true,
-    },
-    {
-        ssid: "SSID 15",
-        quality: 80,
-        has_password: false,
-    },
-    {
-        ssid: "SSID 16",
-        quality: 70,
-        has_password: true,
-    },
-    {
-        ssid: "SSID 17",
-        quality: 60,
-        has_password: false,
-    },
+    }
 ]
 
 
@@ -180,8 +160,10 @@ async function serverGetSavedNetworksList() {
 }
 
 
-async function serverRemoveSavedNetwork(network_index) {
+async function serverRemoveSavedNetwork(ssid) {
+    console.log('serverRemoveSavedNetwork', ssid)
     await wait(SERVER_LAG_SHORT)
+    const network_index = _saved_networks_list.findIndex(network => network.ssid === ssid)
     _saved_networks_list.splice(network_index, 1)
     return Promise.resolve()
 }

@@ -54,7 +54,7 @@ int NetworkCredential::getCredentialIndexBySSID(String ssid) {
     JsonArray rootArray = this->network_credential_list->as<JsonArray>();
     for (int i = 0; i < rootArray.size(); i++) {
         JsonObject obj = rootArray[i].as<JsonObject>();
-        if (obj["name"] == ssid) {
+        if (obj["ssid"] == ssid) {
             return i;
         }
     }
@@ -65,7 +65,7 @@ int NetworkCredential::getCredentialIndexBySSID(String ssid) {
 /*
 boolean NetworkCredential::add(String ssid, String password) {
     JsonObject obj = this->network_credential_list->createNestedObject();
-    obj["name"] = ssid;
+    obj["ssid"] = ssid;
     obj["password"] = password;
     return this->save();
 }

@@ -5,6 +5,7 @@
 #include <WebRadioServer.h>
 #include <WifiNetworking.h>
 #include <NetworkCredential.h>
+#include <StreamRepository.h>
 #include <BusinessState.h>
 #include <DisplayScreen.h>
 #include <BMP180Probe.h>
@@ -14,6 +15,7 @@ BusinessState * business_state = new BusinessState();
 WebRadioServer * server = new WebRadioServer();
 WifiNetworking * wifi_networking = new WifiNetworking();
 NetworkCredential * network_credential = new NetworkCredential();
+StreamRepository * stream_repository = new StreamRepository();
 DisplayScreen * display_screen = new DisplayScreen();
 BMP180Probe * bmp_180_probe = new BMP180Probe();
 DeviceSystem * device_system = new DeviceSystem();
@@ -22,7 +24,6 @@ DeviceSystem * device_system = new DeviceSystem();
 
 int loops = 0;
 
-// U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ U8X8_PIN_NONE);
 
 void setup() {
 
@@ -31,11 +32,15 @@ void setup() {
     wifi_networking->startAP();
     wifi_networking->scan();
 
+    network_credential->load();
+    stream_repository->load();
+
     server->init();
     server->begin();
     server->injectWifiNetworking(wifi_networking);
     server->injectNetworkCredential(network_credential);
-
+    server->injectStreamRepository(stream_repository);
+    
 
     bmp_180_probe->init();
     bmp_180_probe->injectBusinesState(business_state);
@@ -48,7 +53,7 @@ void setup() {
 
 
 
-    delay(2000);
+    delay(1000);
 
     // Serial.println("--------------start-------------");
     // serializeJsonPretty(*network_credential->network_credential_list, Serial);

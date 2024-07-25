@@ -236,9 +236,9 @@ async function saveNetwork(btn) {
 }
 
 async function removeSavedNetwork(btn) {
-    const index = btn.dataset.index
+    const ssid = btn.dataset.ssid
     buttonSetLoadingState(btn, true)
-    await serverRemoveSavedNetwork(index)
+    await serverRemoveSavedNetwork(ssid)
     buttonSetLoadingState(btn, false)
     await loadSavedNetworksList()
 }

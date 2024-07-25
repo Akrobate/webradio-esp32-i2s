@@ -177,17 +177,18 @@
 
 
         <template id="template-saved-networks-list-item">
-            <li class="list-item" data-index="{{ data_index}}">
+            <li class="list-item" data-index="{{ data_index }}" data-ssid="{{ ssid }}">
                 <div class="content">
                     <div class="title">{{ ssid }}</div>
                 </div>
                 <div class="actions">
-                    <button class="accent" onclick="removeSavedNetwork(this)" data-index="{{ index }}">
+                    <button class="accent" onclick="removeSavedNetwork(this)" data-index="{{ index }}" data-ssid="{{ ssid }}">
                         remove
                     </button>
                 </div>
             </li>
         </template>
+
         
         <template id="template-list-loader">
             <div class="loader center mt-lg mb-lg"></div>

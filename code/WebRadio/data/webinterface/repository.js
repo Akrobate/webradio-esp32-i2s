@@ -1,3 +1,35 @@
+
+
+
+async function serverGetStationList() {
+    try {
+        const result = await fetch('/api/streams',
+            {
+                method: 'GET',
+            }
+        )
+        return result.json()
+    } catch (error) {
+        console.log('serverGetStationList - Error:', error)
+        return []
+    }
+}
+
+async function serverGetAvailableNetworksList() {
+    try {
+        const result = await fetch('/api/available-networks',
+            {
+                method: 'GET',
+            }
+        )
+        return result.json()
+    } catch (error) {
+        console.log('serverGetAvailableNetworksList - Error:', error)
+        return []
+    }
+}
+
+
 async function serverGetSavedNetworksList() {
     try {
         const result = await fetch('/api/credentials',
@@ -7,7 +39,7 @@ async function serverGetSavedNetworksList() {
         )
         return result.json()
     } catch (error) {
-        console.log('serviceAddSavedNetwork - Error:', error)
+        console.log('serverGetSavedNetworksList - Error:', error)
         return []
     }
 }
@@ -34,10 +66,7 @@ async function serviceAddSavedNetwork(network) {
 }
 
 
-async function serverRemoveSavedNetwork(network_index) {
-    const {
-        ssid,
-    } = network
+async function serverRemoveSavedNetwork(ssid) {
     try {
         let form_data = new FormData()
         form_data.append('ssid', ssid)
@@ -48,6 +77,6 @@ async function serverRemoveSavedNetwork(network_index) {
             }
         )
     } catch (error) {
-        console.log('serviceAddSavedNetwork - Error:', error)
+        console.log('serverRemoveSavedNetwork - Error:', error)
     }
 }
