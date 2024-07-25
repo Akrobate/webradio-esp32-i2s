@@ -101,7 +101,7 @@ void WebRadioServer::init() {
         password = request->getParam("password", true)->value();
       }
 
-      Serial.print("Post ssid : ");
+      Serial.print("ADD ssid : ");
       Serial.println(ssid);
       Serial.print("password : ");
       Serial.println(password);

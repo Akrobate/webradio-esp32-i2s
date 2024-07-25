@@ -4,7 +4,6 @@ NetworkCredential::NetworkCredential() {
 }
 
 
-
 boolean NetworkCredential::load() {
     LittleFS.begin();
     File file = LittleFS.open(NETWORK_CREDENTIAL_FILE, "r");
@@ -61,6 +60,7 @@ int NetworkCredential::getCredentialIndexBySSID(String ssid) {
     }
     return -1;
 }
+
 
 /*
 boolean NetworkCredential::add(String ssid, String password) {
