@@ -14,6 +14,7 @@ float BusinessState::getTemperature() {
     return this->temperature;
 }
 
+
 void BusinessState::setPressure(float pressure) {
     this->pressure = pressure;
 }
@@ -23,4 +24,10 @@ float BusinessState::getPressure() {
 }
 
 
+bool BusinessState::getIsConnectedToWifi() {
+    return this->is_connected_to_wifi;
+}
 
+void BusinessState::setIsConnectedToWifi(bool is_connected_to_wifi) {
+    this->is_connected_to_wifi = is_connected_to_wifi;
+}

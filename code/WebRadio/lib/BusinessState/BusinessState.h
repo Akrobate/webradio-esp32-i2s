@@ -11,10 +11,14 @@ class BusinessState {
 
         float total_free_bytes = 0;
 
+        bool is_connected_to_wifi = false;
+        String connected_to_ssid = "";
+
+        String local_ip = "";
+        String access_point_ssid = "";
+
     public:
         BusinessState();
-
-        String access_point_ssid = "";
 
         void setTemperature(float temperature);
         float getTemperature();
@@ -24,6 +28,19 @@ class BusinessState {
 
         void setTotalFreeBytes(float total_free_bytes);
         float getTotalFreeBytes();
+
+        void setIsConnectedToWifi(bool is_connected_to_wifi);
+        bool getIsConnectedToWifi();
+
+        void setConnectedToSSID(String connected_to_ssid);
+        String getConnectedToSSID();
+
+        void setLocalIP(String local_ip);
+        String getLocalIP();
+
+        void setAccessPointSSID(String access_point_ssid);
+        String getAccessPointSSID();
+
 };
 
 #endif
