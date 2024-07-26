@@ -29,6 +29,14 @@ class NetworkCredential {
         String getPasswordBySSID(String ssid);
         JsonObject getCredentialByIndex(int index);
         int getCredentialIndexBySSID(String ssid);
+        void setCredentialByIndex(int index, String ssid, String password);
+
+        void addCredential(String ssid, String password);
+        void upsertCredential(String ssid, String password);
+        
+        void removeCredentialByIndex(int index);
+        void removeCredentialBySSID(String ssid);
+        String getPasswordByIndex(int index);
 
 };
 
