@@ -1,5 +1,5 @@
-#ifndef NetworkCredential_h
-#define NetworkCredential_h
+#ifndef NetworkCredentialRepository_h
+#define NetworkCredentialRepository_h
 
 #include "ArduinoJson.h"
 #include <LittleFS.h>
@@ -16,10 +16,10 @@
 
 #define NETWORK_CREDENTIAL_FILE "/network_credentials.json"
 
-class NetworkCredential {
+class NetworkCredentialRepository {
 
     public:
-        NetworkCredential();
+        NetworkCredentialRepository();
 
         DynamicJsonDocument * network_credential_list = nullptr;
 

@@ -37,6 +37,28 @@ void WebRadioServer::init() {
 
 
   this->server->on(
+    "/api/info",
+    HTTP_GET,
+    [&](AsyncWebServerRequest *request) {
+      String response;
+      DynamicJsonDocument info(200);
+
+      JsonObject obj = info.to<JsonObject>();
+      obj["access_point_ssid"] = this->business_state->getAccessPointSSID();
+      obj["temperature"] = this->business_state->getTemperature();
+      obj["pressure"] = this->business_state->getPressure();
+      obj["total_free_bytes"] = this->business_state->getTotalFreeBytes();
+      obj["is_connected_to_wifi"] = this->business_state->getIsConnectedToWifi();
+      obj["connected_to_ssid"] = this->business_state->getConnectedToSSID();
+      obj["local_ip"] = this->business_state->getLocalIP();
+
+      serializeJson(info, response);
+      request->send(200, "application/json", response);
+    }
+  );
+
+
+  this->server->on(
     "/api/streams",
     HTTP_GET,
     [&](AsyncWebServerRequest *request) {
@@ -161,10 +183,14 @@ void WebRadioServer::injectWifiNetworking(WifiNetworking * wifi_networking) {
     this->wifi_networking = wifi_networking;
 }
 
-void WebRadioServer::injectNetworkCredential(NetworkCredential * network_credential) {
+void WebRadioServer::injectNetworkCredentialRepository(NetworkCredentialRepository * network_credential) {
     this->network_credential = network_credential;
 }
 
 void WebRadioServer::injectStreamRepository(StreamRepository * stream_repository) {
     this->stream_repository = stream_repository;
+}
+
+void WebRadioServer::injectBusinessState(BusinessState * business_state) {
+    this->business_state = business_state;
 }

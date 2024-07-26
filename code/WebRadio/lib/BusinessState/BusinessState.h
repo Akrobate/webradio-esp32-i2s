@@ -13,8 +13,8 @@ class BusinessState {
 
         bool is_connected_to_wifi = false;
         String connected_to_ssid = "";
-
         String local_ip = "";
+
         String access_point_ssid = "";
 
     public:

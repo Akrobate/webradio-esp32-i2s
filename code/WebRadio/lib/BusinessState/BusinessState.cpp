@@ -31,3 +31,36 @@ bool BusinessState::getIsConnectedToWifi() {
 void BusinessState::setIsConnectedToWifi(bool is_connected_to_wifi) {
     this->is_connected_to_wifi = is_connected_to_wifi;
 }
+
+
+String BusinessState::getConnectedToSSID() {
+    return this->connected_to_ssid;
+}
+
+void BusinessState::setConnectedToSSID(String connected_to_ssid) {
+    this->connected_to_ssid = connected_to_ssid;
+}
+
+String BusinessState::getLocalIP() {
+    return this->local_ip;
+}
+
+void BusinessState::setLocalIP(String local_ip) {
+    this->local_ip = local_ip;
+}
+
+void BusinessState::setTotalFreeBytes(float total_free_bytes) {
+    this->total_free_bytes = total_free_bytes;
+}
+
+float BusinessState::getTotalFreeBytes() {
+    return this->total_free_bytes;
+}
+
+void BusinessState::setAccessPointSSID(String access_point_ssid) {
+    this->access_point_ssid = access_point_ssid;
+}
+
+String BusinessState::getAccessPointSSID() {
+    return this->access_point_ssid;
+}

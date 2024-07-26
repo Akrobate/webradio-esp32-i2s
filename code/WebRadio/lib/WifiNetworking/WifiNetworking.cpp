@@ -13,17 +13,21 @@ void WifiNetworking::startAP() {
 }
 
 
-bool WifiNetworking::connect(char * ssid, char * password) {
+bool WifiNetworking::connect(String ssid, String password) {
+    this->business_state->setConnectedToSSID(ssid);
     this->wifi->begin(ssid, password);
     int timeout = 0;
+    Serial.print("Connecting to ");
+    Serial.print(ssid);
     while (this->wifi->status() != WL_CONNECTED) {
         delay(500);
         Serial.print(".");
-        if (timeout > 20) {
+        if (timeout > 10) {
             return false;
         }
         timeout++;
     }
+    this->business_state->setIsConnectedToWifi(true);
     return true;
 }
 
@@ -34,6 +38,7 @@ bool WifiNetworking::isConnected() {
 
 
 void WifiNetworking::disconnect() {
+    this->business_state->setIsConnectedToWifi(false);
     this->wifi->disconnect();
 }
 
@@ -151,4 +156,9 @@ void WifiNetworking::scan() {
 
 DynamicJsonDocument * WifiNetworking::getAvailableNetworks() {
     return this->available_networks;
+}
+
+
+void WifiNetworking::injectBusinessState(BusinessState * business_state) {
+    this->business_state = business_state;
 }

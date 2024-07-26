@@ -1,10 +1,10 @@
-#include "NetworkCredential.h"
+#include "NetworkCredentialRepository.h"
 
-NetworkCredential::NetworkCredential() {
+NetworkCredentialRepository::NetworkCredentialRepository() {
 }
 
 
-boolean NetworkCredential::load() {
+boolean NetworkCredentialRepository::load() {
     LittleFS.begin();
     File file = LittleFS.open(NETWORK_CREDENTIAL_FILE, "r");
 
@@ -27,7 +27,7 @@ boolean NetworkCredential::load() {
 }
 
 
-bool NetworkCredential::save() {
+bool NetworkCredentialRepository::save() {
     LittleFS.begin();
     File file = LittleFS.open(NETWORK_CREDENTIAL_FILE, "w");
 
@@ -43,13 +43,13 @@ bool NetworkCredential::save() {
 }
 
 
-JsonObject NetworkCredential::getCredentialByIndex(int index) {
+JsonObject NetworkCredentialRepository::getCredentialByIndex(int index) {
     JsonArray rootArray = this->network_credential_list->as<JsonArray>();
     return rootArray[index].as<JsonObject>();
 }
 
 
-void NetworkCredential::upsertCredential(String ssid, String password) {
+void NetworkCredentialRepository::upsertCredential(String ssid, String password) {
     int index = this->getCredentialIndexBySSID(ssid);
     if (index == -1) {
         this->addCredential(ssid, password);
@@ -59,23 +59,23 @@ void NetworkCredential::upsertCredential(String ssid, String password) {
 }
 
 
-void NetworkCredential::addCredential(String ssid, String password) {
-    JsonArray rootArray = this->network_credential_list->to<JsonArray>();
+void NetworkCredentialRepository::addCredential(String ssid, String password) {
+    JsonArray rootArray = this->network_credential_list->as<JsonArray>();
     JsonObject obj = rootArray.createNestedObject();
     obj["ssid"] = ssid;
     obj["password"] = password;
 }
 
 
-void NetworkCredential::setCredentialByIndex(int index, String ssid, String password) {
-    JsonArray rootArray = this->network_credential_list->to<JsonArray>();
+void NetworkCredentialRepository::setCredentialByIndex(int index, String ssid, String password) {
+    JsonArray rootArray = this->network_credential_list->as<JsonArray>();
     JsonObject obj = rootArray[index].to<JsonObject>();
     obj["ssid"] = ssid;
     obj["password"] = password;
 }
 
 
-int NetworkCredential::getCredentialIndexBySSID(String ssid) {
+int NetworkCredentialRepository::getCredentialIndexBySSID(String ssid) {
     JsonArray rootArray = this->network_credential_list->as<JsonArray>();
     for (int i = 0; i < rootArray.size(); i++) {
         JsonObject obj = rootArray[i].as<JsonObject>();
@@ -87,13 +87,13 @@ int NetworkCredential::getCredentialIndexBySSID(String ssid) {
 }
 
 
-void NetworkCredential::removeCredentialByIndex(int index) {
-    JsonArray rootArray = this->network_credential_list->to<JsonArray>();
+void NetworkCredentialRepository::removeCredentialByIndex(int index) {
+    JsonArray rootArray = this->network_credential_list->as<JsonArray>();
     rootArray.remove(index);
 }
 
 
-void NetworkCredential::removeCredentialBySSID(String ssid) {
+void NetworkCredentialRepository::removeCredentialBySSID(String ssid) {
     int index = this->getCredentialIndexBySSID(ssid);
     if (index != -1) {
         this->removeCredentialByIndex(index);
@@ -101,7 +101,7 @@ void NetworkCredential::removeCredentialBySSID(String ssid) {
 }
 
 
-String NetworkCredential::getPasswordByIndex(int index) {
+String NetworkCredentialRepository::getPasswordByIndex(int index) {
     JsonArray rootArray = this->network_credential_list->as<JsonArray>();
     JsonObject obj = rootArray[index].as<JsonObject>();
     return obj["password"];
