@@ -107,10 +107,16 @@ void WebRadioServer::init() {
       String password = "";
       if (request->hasParam("ssid", true)) {
         ssid = request->getParam("ssid", true)->value();
+      } else {
+        request->send(400, "text/html", "Missing ssid");
+        return;
       }
 
       if (request->hasParam("password", true)) {
         password = request->getParam("password", true)->value();
+      } else {
+        request->send(400, "text/html", "Missing password");
+        return;
       }
 
       Serial.print("ADD ssid : ");
@@ -118,6 +124,7 @@ void WebRadioServer::init() {
       Serial.print("password : ");
       Serial.println(password);
 
+      this->network_credential->upsertCredential(ssid, password);
       request->send(201, "text/html", "OK");
     }
   );
@@ -131,10 +138,16 @@ void WebRadioServer::init() {
       String ssid = "";
       if (request->hasParam("ssid", true)) {
         ssid = request->getParam("ssid", true)->value();
+      } else {
+        request->send(400, "text/html", "Missing ssid");
+        return;
       }
 
       Serial.print("Delete ssid : ");
       Serial.println(ssid);
+
+      this->network_credential->removeCredentialBySSID(ssid);
+
       request->send(200, "text/html", "OK");
     }
   );
