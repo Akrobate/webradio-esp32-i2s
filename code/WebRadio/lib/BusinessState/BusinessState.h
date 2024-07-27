@@ -9,7 +9,7 @@ class BusinessState {
         float temperature = 0;
         float pressure = 0;
 
-        float total_free_bytes = 0;
+        int total_free_bytes = 0;
 
         bool is_connected_to_wifi = false;
         String connected_to_ssid = "";
@@ -26,8 +26,8 @@ class BusinessState {
         void setPressure(float pressure);
         float getPressure();
 
-        void setTotalFreeBytes(float total_free_bytes);
-        float getTotalFreeBytes();
+        void setTotalFreeBytes(int total_free_bytes);
+        int getTotalFreeBytes();
 
         void setIsConnectedToWifi(bool is_connected_to_wifi);
         bool getIsConnectedToWifi();

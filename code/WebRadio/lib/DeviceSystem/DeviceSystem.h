@@ -29,6 +29,8 @@ class DeviceSystem {
 
         void showMemoryUsage();
 
+        void updateBusinessState();
+
 };
 
 #endif

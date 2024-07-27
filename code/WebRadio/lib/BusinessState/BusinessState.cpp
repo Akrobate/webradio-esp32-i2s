@@ -49,11 +49,11 @@ void BusinessState::setLocalIP(String local_ip) {
     this->local_ip = local_ip;
 }
 
-void BusinessState::setTotalFreeBytes(float total_free_bytes) {
+void BusinessState::setTotalFreeBytes(int total_free_bytes) {
     this->total_free_bytes = total_free_bytes;
 }
 
-float BusinessState::getTotalFreeBytes() {
+int BusinessState::getTotalFreeBytes() {
     return this->total_free_bytes;
 }
 

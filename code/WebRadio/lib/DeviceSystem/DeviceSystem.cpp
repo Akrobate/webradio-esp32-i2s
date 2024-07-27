@@ -45,3 +45,9 @@ void DeviceSystem::showMemoryUsage() {
 void DeviceSystem::injectBusinesState(BusinessState * business_state) {
     this->business_state = business_state;
 }
+
+
+void DeviceSystem::updateBusinessState() {
+    this->update();
+    this->business_state->setTotalFreeBytes(this->total_free_bytes);
+}
