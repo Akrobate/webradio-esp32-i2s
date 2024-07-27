@@ -34,6 +34,7 @@ function isValidUrl(string) {
 document.addEventListener('DOMContentLoaded', async () => {
     loadStationList()
     loadSavedNetworksList()
+    loadInfoData()
 })
 
 
@@ -247,4 +248,24 @@ async function refreshAvailableNetworks(btn) {
     buttonSetLoadingState(btn, true)
     await loadAvailableNetworksList()
     buttonSetLoadingState(btn, false)
+}
+
+
+/**
+ * Info
+ */
+
+async function refreshInfo(btn) {
+    buttonSetLoadingState(btn, true)
+    await loadInfoData()
+    buttonSetLoadingState(btn, false)
+}
+
+
+async function loadInfoData() {
+    const info = await serverGetInfo()
+    const _el = $('.block-info')
+    $('.connection-status', _el).textContent = info.is_connected_to_wifi ? 'Connected' : 'Disconnected'
+    $('.wifi-ssid', _el).textContent = info.connected_to_ssid ==  '' ?  'None' : info.connected_to_ssid
+    $('.local-ip', _el).textContent = info.local_ip ==  '' ? 'None' : info.local_ip 
 }

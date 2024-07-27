@@ -174,3 +174,15 @@ async function serviceAddSavedNetwork(network) {
     return Promise.resolve()
 }
 
+async function serverGetInfo() {
+    await wait(SERVER_LAG_LONG)
+    return Promise.resolve({
+        access_point_ssid: 'ESP32-Access-Point',
+        temperature: 21.2000009,
+        pressure: 1020.2000009,
+        total_free_bytes: 123000,
+        is_connected_to_wifi: false,
+        connected_to_ssid: 'SSID X',
+        local_ip: '192.168.1.176',
+    })
+}

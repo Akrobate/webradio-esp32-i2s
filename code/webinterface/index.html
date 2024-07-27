@@ -27,12 +27,16 @@
                 </div>
 
                 <div class="col col-6 col-sm-12">
-                    <div class="card height-100 elevation">
+                    <div class="card height-100 elevation block-info">
                         <h2>Status informations</h2>
-                        <p>Wifi status: <strong>connected</strong></p>
-                        <p>Wifi SSID: <strong>SSID 1</strong></p>
-                        <p>Local IP: <strong>192.168.1.10</strong></p>
+                        <p>Wifi status: <strong class="connection-status"> - </strong></p>
+                        <p>Wifi SSID: <strong class="wifi-ssid"> - </strong></p>
+                        <p>Local IP: <strong class="local-ip"> - </strong></p>
+                        <button class="primary mt-md" onclick="refreshInfo(this)">
+                            Refresh
+                        </button>
                     </div>
+
                 </div>
             </div>
 

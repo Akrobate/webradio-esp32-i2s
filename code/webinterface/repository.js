@@ -80,3 +80,18 @@ async function serverRemoveSavedNetwork(ssid) {
         console.log('serverRemoveSavedNetwork - Error:', error)
     }
 }
+
+
+async function serverGetInfo() {
+    try {
+        const result = await fetch('/api/info',
+            {
+                method: 'GET',
+            }
+        )
+        return result.json()
+    } catch (error) {
+        console.log('serverGetInfo - Error:', error)
+        return []
+    }
+}
