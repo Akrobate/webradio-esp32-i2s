@@ -16,6 +16,7 @@
 
 void temperatureTask(void *pvParameters);
 void deviceSystemTask(void *pvParameters);
+void networkConnectionTask(void *pvParameters);
 
 
 BusinessState * business_state = new BusinessState();
@@ -76,7 +77,8 @@ void setup() {
     }
 
     xTaskCreate(temperatureTask, "Task Temperature", 2000, NULL, 1, NULL);
-    xTaskCreate(deviceSystemTask, "Task 2", 1000, NULL, 1, NULL);
+    xTaskCreate(deviceSystemTask, "Task deviceSystem", 1000, NULL, 1, NULL);
+    xTaskCreate(networkConnectionTask, "Task NetworkConnection", 5000, NULL, 1, NULL);
 }
 
 
@@ -126,3 +128,29 @@ void deviceSystemTask(void *pvParameters) {
         vTaskDelayUntil(&xLastWakeTime, xDelay);
     }
 }
+
+
+
+void networkConnectionTask(void *pvParameters) {
+    (void) pvParameters;
+
+    while (1) {
+        if (xSemaphoreTake(xMutex, portMAX_DELAY) == pdTRUE) {            
+            JsonArray credential_list = network_credential_repository->network_credential_list->as<JsonArray>();
+            for (JsonObject credential : credential_list) {
+                String ssid = credential["ssid"];
+                String password = credential["password"];
+                Serial.print("*-*-*-*-*-*-*-*-*-*-*");
+                Serial.print("ssid: ");
+                Serial.print(ssid);
+                Serial.print(" password: ");
+                Serial.println(password);
+                // wifi_networking->connect(ssid, password);
+            }
+
+            xSemaphoreGive(xMutex);
+        }
+        vTaskDelay(pdMS_TO_TICKS(5000));
+    }
+}
+

@@ -13,6 +13,9 @@ class DeviceSystem {
         BusinessState * business_state = nullptr;
 
     public:
+        int min_total_free_bytes = 0;
+        int max_total_free_bytes = 0;
+
         int total_free_bytes = 0;
         int minimum_free_bytes = 0;
         int largest_free_block = 0;
