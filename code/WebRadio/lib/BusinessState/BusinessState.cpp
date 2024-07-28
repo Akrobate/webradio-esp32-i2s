@@ -64,3 +64,12 @@ void BusinessState::setAccessPointSSID(String access_point_ssid) {
 String BusinessState::getAccessPointSSID() {
     return this->access_point_ssid;
 }
+
+
+bool BusinessState::getIsConnectingToWifi() {
+    return this->is_connecting_to_wifi;
+}
+
+void BusinessState::setIsConnectingToWifi(bool is_connecting_to_wifi) {
+    this->is_connecting_to_wifi = is_connecting_to_wifi;
+}
