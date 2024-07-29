@@ -121,6 +121,7 @@ void deviceSystemTask(void *pvParameters) {
     const TickType_t xDelay = pdMS_TO_TICKS(1000); // 1 s
 
     while (1) {
+        device_system->update();
         if (xSemaphoreTake(xMutex, portMAX_DELAY) == pdTRUE) {
             device_system->updateBusinessState();
             xSemaphoreGive(xMutex);
