@@ -57,6 +57,14 @@ int BusinessState::getTotalFreeBytes() {
     return this->total_free_bytes;
 }
 
+void BusinessState::setMinimumFreeBytes(int minimum_free_bytes) {
+    this->minimum_free_bytes = minimum_free_bytes;
+}
+
+int BusinessState::getMinimumFreeBytes() {
+    return this->minimum_free_bytes;
+}
+
 void BusinessState::setAccessPointSSID(String access_point_ssid) {
     this->access_point_ssid = access_point_ssid;
 }

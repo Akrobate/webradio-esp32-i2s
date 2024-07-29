@@ -16,6 +16,7 @@ class BusinessState {
 
         // System
         int total_free_bytes = 0;
+        int minimum_free_bytes = 0;
 
         // weather report
         float temperature = 0;
@@ -32,6 +33,9 @@ class BusinessState {
 
         void setTotalFreeBytes(int total_free_bytes);
         int getTotalFreeBytes();
+
+        void setMinimumFreeBytes(int minimum_free_bytes);
+        int getMinimumFreeBytes();
 
         void setIsConnectedToWifi(bool is_connected_to_wifi);
         bool getIsConnectedToWifi();
