@@ -27,7 +27,9 @@ class WifiNetworking {
 
         void startAP();
         bool connect(String ssid, String password);
+        void begin(String ssid, String password);
         bool isConnected();
+        String getLocalIP();
         void disconnect();
 
         void injectBusinessState(BusinessState * business_state);

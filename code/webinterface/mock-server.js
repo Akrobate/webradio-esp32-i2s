@@ -183,6 +183,7 @@ async function serverGetInfo() {
         total_free_bytes: 123000,
         minimum_free_bytes: 122000,
         is_connected_to_wifi: false,
+        is_connecting_to_wifi: true,
         connected_to_ssid: 'SSID X',
         local_ip: '192.168.1.176',
     })

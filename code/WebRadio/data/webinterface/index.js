@@ -34,7 +34,8 @@ function isValidUrl(string) {
 document.addEventListener('DOMContentLoaded', async () => {
     loadStationList()
     loadSavedNetworksList()
-    loadInfoAndWifiStatusData()
+    setInterval(loadInfoAndWifiStatusData, 2000)
+    // loadInfoAndWifiStatusData()
 })
 
 
@@ -265,12 +266,14 @@ async function loadInfoAndWifiStatusData() {
     const info = await serverGetInfo()
     const _el_block_wifi_status = $('.block-wifi-status')
     const _el_block_info = $('.block-info')
-    $('.connection-status', _el_block_wifi_status).textContent = info.is_connected_to_wifi ? 'Connected' : 'Disconnected'
+    $('.connection-status', _el_block_wifi_status).textContent = info.is_connecting_to_wifi
+        ? 'Connecting...'
+        : info.is_connected_to_wifi ? 'Connected' : 'Disconnected'
     $('.wifi-ssid', _el_block_wifi_status).textContent = info.connected_to_ssid ==  '' ?  'None' : info.connected_to_ssid
     $('.local-ip', _el_block_wifi_status).textContent = info.local_ip ==  '' ? 'None' : info.local_ip
 
-    $('.temperature', _el_block_info).textContent = info.temperature
-    $('.pressure', _el_block_info).textContent = info.pressure
+    $('.temperature', _el_block_info).textContent = info.temperature.toFixed(2)
+    $('.pressure', _el_block_info).textContent = info.pressure.toFixed(2)
     $('.free-memory', _el_block_info).textContent = info.total_free_bytes
     $('.min-free-memory', _el_block_info).textContent = info.minimum_free_bytes
 }

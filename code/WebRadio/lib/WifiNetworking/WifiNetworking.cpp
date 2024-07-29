@@ -31,6 +31,12 @@ bool WifiNetworking::connect(String ssid, String password) {
     return true;
 }
 
+void WifiNetworking::begin(String ssid, String password) {
+    this->business_state->setConnectedToSSID(ssid);
+    this->business_state->setIsConnectingToWifi(true);
+    this->wifi->begin(ssid, password);
+}
+
 
 bool WifiNetworking::isConnected() {
     return this->wifi->status() == WL_CONNECTED;
@@ -161,4 +167,9 @@ DynamicJsonDocument * WifiNetworking::getAvailableNetworks() {
 
 void WifiNetworking::injectBusinessState(BusinessState * business_state) {
     this->business_state = business_state;
+}
+
+
+String WifiNetworking::getLocalIP() {
+    return this->wifi->localIP().toString();
 }

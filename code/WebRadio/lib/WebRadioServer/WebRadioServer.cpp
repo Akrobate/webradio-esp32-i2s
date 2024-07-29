@@ -48,8 +48,9 @@ void WebRadioServer::init() {
       obj["temperature"] = this->business_state->getTemperature();
       obj["pressure"] = this->business_state->getPressure();
       obj["total_free_bytes"] = this->business_state->getTotalFreeBytes();
-      obj["min_total_free_bytes"] = this->business_state->getTotalFreeBytes();
+      obj["minimum_free_bytes"] = this->business_state->getMinimumFreeBytes();
       obj["is_connected_to_wifi"] = this->business_state->getIsConnectedToWifi();
+      obj["is_connecting_to_wifi"] = this->business_state->getIsConnectingToWifi();
       obj["connected_to_ssid"] = this->business_state->getConnectedToSSID();
       obj["local_ip"] = this->business_state->getLocalIP();
 

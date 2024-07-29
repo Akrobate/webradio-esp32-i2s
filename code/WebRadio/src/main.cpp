@@ -136,7 +136,9 @@ void networkConnectionTask(void *pvParameters) {
     (void) pvParameters;
 
     while (1) {
-        if (xSemaphoreTake(xMutex, portMAX_DELAY) == pdTRUE) {            
+        if (xSemaphoreTake(xMutex, portMAX_DELAY) == pdTRUE) {
+
+            JsonArray available_networks_list = wifi_networking->available_networks->as<JsonArray>();
             JsonArray credential_list = network_credential_repository->network_credential_list->as<JsonArray>();
             for (JsonObject credential : credential_list) {
                 String ssid = credential["ssid"];
@@ -147,6 +149,23 @@ void networkConnectionTask(void *pvParameters) {
                 Serial.print(" password: ");
                 Serial.println(password);
                 // wifi_networking->connect(ssid, password);
+
+                bool should_try_connect = false;
+
+                for (JsonObject available_network : available_networks_list) {
+                    if (ssid == available_network["ssid"]) {
+                        should_try_connect = true;
+                        break;
+                    }
+                }
+
+                if (should_try_connect) {
+                    Serial.print("Whould try to connect to ");
+                    Serial.print(ssid);
+                    Serial.print(" ");
+                    Serial.println(password);
+                }
+
             }
 
             xSemaphoreGive(xMutex);
