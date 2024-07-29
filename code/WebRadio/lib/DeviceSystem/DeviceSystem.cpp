@@ -48,5 +48,6 @@ void DeviceSystem::injectBusinesState(BusinessState * business_state) {
 
 
 void DeviceSystem::updateBusinessState() {
-    this->business_state->setTotalFreeBytes(this->total_free_bytes);
+    this->business_state->setTotalFreeBytes(this->getTotalFreeBytes());
+    this->business_state->setMinimumFreeBytes(this->getMinimumFreeBytes());
 }
