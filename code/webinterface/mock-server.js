@@ -186,5 +186,8 @@ async function serverGetInfo() {
         is_connecting_to_wifi: true,
         connected_to_ssid: 'SSID X',
         local_ip: '192.168.1.176',
+        date_time: '2023-07-16T12:30:00',
+        date_time_configured: false,
+        gmt_offset_hours: 1,
     })
 }
