@@ -81,3 +81,48 @@ bool BusinessState::getIsConnectingToWifi() {
 void BusinessState::setIsConnectingToWifi(bool is_connecting_to_wifi) {
     this->is_connecting_to_wifi = is_connecting_to_wifi;
 }
+
+
+void BusinessState::setGMTOffsetSec(long gmt_offset_sec) {
+    this->gmt_offset_sec = gmt_offset_sec;
+}
+
+long BusinessState::getGMTOffsetSec() {
+    return this->gmt_offset_sec;
+}
+
+void BusinessState::setDaylightOffsetSec(int daylight_offset_sec) {
+    this->daylight_offset_sec = daylight_offset_sec;
+}
+
+int BusinessState::getDaylightOffsetSec() {
+    return this->daylight_offset_sec;
+}
+
+void BusinessState::setNTPServerHost(String ntp_server_host) {
+    this->ntp_server_host = ntp_server_host;
+}
+
+String BusinessState::getNTPServerHost() {
+    return this->ntp_server_host;
+}
+
+const char * BusinessState::getNTPServerHostChar() {
+    return this->ntp_server_host.c_str();
+}
+
+void BusinessState::setDateTime(String date_time) {
+    this->date_time = date_time;
+}
+
+String BusinessState::getDateTime() {
+    return this->date_time;
+}
+
+void BusinessState::setDateTimeConfigured(bool date_time_configured) {
+    this->date_time_configured = date_time_configured;
+}
+
+bool BusinessState::getDateTimeConfigured() {
+    return this->date_time_configured;
+}

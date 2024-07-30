@@ -22,6 +22,16 @@ class BusinessState {
         float temperature = 0;
         float pressure = 0;
 
+        // time
+        String date_time = "";
+        bool date_time_configured = false;
+
+        // NTP
+        long gmt_offset_sec = 0;
+        int daylight_offset_sec = 0;
+        String ntp_server_host = "";
+
+
     public:
         BusinessState();
 
@@ -51,6 +61,23 @@ class BusinessState {
 
         void setIsConnectingToWifi(bool is_connecting_to_wifi);
         bool getIsConnectingToWifi();
+
+
+        void setGMTOffsetSec(long gmt_offset_sec);
+        long getGMTOffsetSec();
+
+        void setDaylightOffsetSec(int daylight_offset_sec);
+        int getDaylightOffsetSec();
+
+        void setNTPServerHost(String ntp_server_host);
+        String getNTPServerHost();
+        const char * getNTPServerHostChar();
+
+        void setDateTime(String date_time);
+        String getDateTime();
+
+        void setDateTimeConfigured(bool date_time_configured);
+        bool getDateTimeConfigured();
 
 };
 

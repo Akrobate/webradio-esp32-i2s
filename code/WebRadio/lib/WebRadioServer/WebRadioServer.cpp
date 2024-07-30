@@ -41,7 +41,7 @@ void WebRadioServer::init() {
     HTTP_GET,
     [&](AsyncWebServerRequest *request) {
       String response;
-      DynamicJsonDocument info(200);
+      DynamicJsonDocument info(500);
 
       JsonObject obj = info.to<JsonObject>();
       obj["access_point_ssid"] = this->business_state->getAccessPointSSID();
@@ -53,6 +53,8 @@ void WebRadioServer::init() {
       obj["is_connecting_to_wifi"] = this->business_state->getIsConnectingToWifi();
       obj["connected_to_ssid"] = this->business_state->getConnectedToSSID();
       obj["local_ip"] = this->business_state->getLocalIP();
+      obj["date_time"] = this->business_state->getDateTime();
+      obj["date_time_configured"] = this->business_state->getDateTimeConfigured();
 
       serializeJson(info, response);
       request->send(200, "application/json", response);

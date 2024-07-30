@@ -1,5 +1,5 @@
 #include "DeviceSystem.h"
-
+#include "time.h"
 
 DeviceSystem::DeviceSystem() {
 }
@@ -12,6 +12,53 @@ void DeviceSystem::update() {
     this->total_free_bytes = (int)info.total_free_bytes; // total currently free in all non-continues blocks
     this->minimum_free_bytes = (int)info.minimum_free_bytes; // minimum free ever
     this->largest_free_block = (int)info.largest_free_block; // largest continues block to allocate big array
+
+    if (this->date_time_configured) {   
+        struct tm timeinfo;
+        if (!getLocalTime(&timeinfo)) {
+            Serial.println("Failed to obtain time");
+        } else {
+            char buffer[64];
+            strftime(buffer, sizeof(buffer), "%Y-%m-%dT%H:%M:%S", &timeinfo);
+            this->date_time = String(buffer);
+        }
+    }
+}
+
+
+void DeviceSystem::configureTimeTask() {
+    xTaskCreate(
+        [](void *arg){
+          {
+            DeviceSystem * instance = (DeviceSystem *)arg;
+            while(!instance->date_time_configured) {
+              Serial.println("Configuring time");
+              if (instance->business_state->getIsConnectedToWifi()) {
+                configTime(instance->gmt_offset_sec, instance->daylight_offset_sec, instance->ntp_server_host.c_str());
+                vTaskDelay(1000);
+                struct tm timeinfo;
+                if (getLocalTime(&timeinfo)) {
+                    instance->date_time_configured = true;
+                    break;
+                } else {
+                    Serial.println("Failed to obtain time");
+                }
+              } else {
+                Serial.println("ConfigTimeTask waiting for wifi connection");
+              }
+              vTaskDelay(5000);
+            }
+          }
+          vTaskDelete(NULL);
+        },
+        "ConfigTimeTask",
+        5000,
+        (void*)this,
+        1,
+        NULL
+    );
+
+
 }
 
 
@@ -50,4 +97,7 @@ void DeviceSystem::injectBusinesState(BusinessState * business_state) {
 void DeviceSystem::updateBusinessState() {
     this->business_state->setTotalFreeBytes(this->getTotalFreeBytes());
     this->business_state->setMinimumFreeBytes(this->getMinimumFreeBytes());
+
+    this->business_state->setDateTime(this->date_time);
+    this->business_state->setDateTimeConfigured(this->date_time_configured);
 }
