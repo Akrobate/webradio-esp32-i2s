@@ -14,6 +14,9 @@
 #include "soc/soc.h" //disable brownour problems
 #include "soc/rtc_cntl_reg.h" //disable brownour problems
 
+#include "time.h"
+
+
 void temperatureTask(void *pvParameters);
 void deviceSystemTask(void *pvParameters);
 void networkConnectionTask(void *pvParameters);
@@ -29,6 +32,12 @@ BMP180Probe * bmp_180_probe = new BMP180Probe();
 DeviceSystem * device_system = new DeviceSystem();
 
 
+// ntp
+// const char* ntpServer = "pool.ntp.org";
+// const long  gmtOffset_sec = 3600 * 1;
+// const int   daylightOffset_sec = 3600 * 1;
+
+
 #define LED 4
 
 int loops = 0;
@@ -41,6 +50,7 @@ void setup() {
     delay(100);
 
     device_system->injectBusinesState(business_state);
+    device_system->configureTimeTask();
 
     wifi_networking->startAP();
     wifi_networking->scan();
@@ -64,12 +74,6 @@ void setup() {
     display_screen->injectBusinesState(business_state);
     display_screen->demoScreen();
 
-    delay(1000);
-
-    // Serial.println("--------------start-------------");
-    // serializeJsonPretty(*network_credential_repository->network_credential_repository_list, Serial);
-    // Serial.println("--------------end-------------"); 
-
     xMutex = xSemaphoreCreateMutex();
     if (xMutex == NULL) {
         Serial.println("Mutex creation failed");
@@ -77,8 +81,9 @@ void setup() {
     }
 
     xTaskCreate(temperatureTask, "Task Temperature", 2000, NULL, 1, NULL);
-    xTaskCreate(deviceSystemTask, "Task deviceSystem", 1000, NULL, 1, NULL);
+    xTaskCreate(deviceSystemTask, "Task deviceSystem", 2000, NULL, 1, NULL);
     xTaskCreate(networkConnectionTask, "Task NetworkConnection", 5000, NULL, 1, NULL);
+    
 }
 
 
@@ -91,9 +96,16 @@ void loop() {
     }
     
     if (loops % 100 == 0) {
-        // bmp_180_probe->updateBusinessState();
-        // display_screen->infoScreen();
         display_screen->temperatureScreen();
+
+        /*
+        struct tm timeinfo;
+        if (!getLocalTime(&timeinfo)) {
+            Serial.println("Failed to obtain time");
+        } else {
+            Serial.println(&timeinfo, "%A, %B %d %Y %H:%M:%S");
+        }
+        */
     }
 
     delay(10);
@@ -136,36 +148,40 @@ void networkConnectionTask(void *pvParameters) {
     (void) pvParameters;
 
     while (1) {
-        if (xSemaphoreTake(xMutex, portMAX_DELAY) == pdTRUE) {
-
-            JsonArray available_networks_list = wifi_networking->available_networks->as<JsonArray>();
+        if (!wifi_networking->isConnected() && xSemaphoreTake(xMutex, portMAX_DELAY) == pdTRUE) {
+            business_state->setIsConnectedToWifi(false);
             JsonArray credential_list = network_credential_repository->network_credential_list->as<JsonArray>();
             for (JsonObject credential : credential_list) {
                 String ssid = credential["ssid"];
                 String password = credential["password"];
-                Serial.print("*-*-*-*-*-*-*-*-*-*-*");
-                Serial.print("ssid: ");
-                Serial.print(ssid);
-                Serial.print(" password: ");
-                Serial.println(password);
-                // wifi_networking->connect(ssid, password);
 
-                bool should_try_connect = false;
-
-                for (JsonObject available_network : available_networks_list) {
-                    if (ssid == available_network["ssid"]) {
-                        should_try_connect = true;
-                        break;
+                if (wifi_networking->isNetworkAvailable(ssid)) {
+                    Serial.print("Whould try to connect to ");
+                    Serial.print(ssid);
+                    wifi_networking->begin(ssid, password);
+                    int tries_count = 0;
+                    while (!wifi_networking->isConnected()) {
+                        vTaskDelay(pdMS_TO_TICKS(500));
+                        if (tries_count > 10) {
+                            break;
+                        }
+                        tries_count++;
                     }
                 }
 
-                if (should_try_connect) {
-                    Serial.print("Whould try to connect to ");
-                    Serial.print(ssid);
-                    Serial.print(" ");
-                    Serial.println(password);
-                }
+                if (wifi_networking->isConnected()) {
+                    business_state->setIsConnectedToWifi(true);
+                    business_state->setIsConnectingToWifi(false);
+                    business_state->setLocalIP(wifi_networking->getLocalIP());
+                    
 
+
+                    // configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
+
+
+
+                    break;
+                }
             }
 
             xSemaphoreGive(xMutex);
