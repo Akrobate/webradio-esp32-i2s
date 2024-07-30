@@ -276,4 +276,16 @@ async function loadInfoAndWifiStatusData() {
     $('.pressure', _el_block_info).textContent = info.pressure.toFixed(2)
     $('.free-memory', _el_block_info).textContent = info.total_free_bytes
     $('.min-free-memory', _el_block_info).textContent = info.minimum_free_bytes
+
+    $('.time', _el_block_info).textContent = info.date_time_configured
+        ? `${formatTime(info.date_time)}`
+        : 'not configured'
+}
+
+
+function formatTime(date_time_string) {
+    const date = new Date(date_time_string)
+    const hours = date.getHours().toString().padStart(2, '0')
+    const minutes = date.getMinutes().toString().padStart(2, '0')
+    return `${hours}:${minutes}`;
 }
