@@ -12,6 +12,10 @@
 class WifiNetworking {
 
     public:
+
+        SemaphoreHandle_t scanningNetworksMutex;
+
+
         WiFiClass * wifi;
         DynamicJsonDocument * available_networks = nullptr;
 
@@ -33,6 +37,9 @@ class WifiNetworking {
         void disconnect();
 
         void injectBusinessState(BusinessState * business_state);
+
+        String encryptionTypeToString(wifi_auth_mode_t encryptionType);
+        bool isNetworkAvailable(String ssid);
 
 };
 

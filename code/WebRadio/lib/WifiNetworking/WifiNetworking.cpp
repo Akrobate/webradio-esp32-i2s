@@ -2,6 +2,11 @@
 
 WifiNetworking::WifiNetworking() {
     this->wifi = &WiFi;
+    this->scanningNetworksMutex = xSemaphoreCreateMutex();
+    if (this->scanningNetworksMutex == NULL) {
+        Serial.println("scanningNetworksMutex creation failed");
+        while (1);
+    }
 }
 
 
@@ -67,100 +72,43 @@ void WifiNetworking::scanDebug() {
             Serial.print(" | ");
             Serial.printf("%2d", this->wifi->channel(i));
             Serial.print(" | ");
-            switch (this->wifi->encryptionType(i))
-            {
-            case WIFI_AUTH_OPEN:
-                Serial.print("open");
-                break;
-            case WIFI_AUTH_WEP:
-                Serial.print("WEP");
-                break;
-            case WIFI_AUTH_WPA_PSK:
-                Serial.print("WPA");
-                break;
-            case WIFI_AUTH_WPA2_PSK:
-                Serial.print("WPA2");
-                break;
-            case WIFI_AUTH_WPA_WPA2_PSK:
-                Serial.print("WPA+WPA2");
-                break;
-            case WIFI_AUTH_WPA2_ENTERPRISE:
-                Serial.print("WPA2-EAP");
-                break;
-            case WIFI_AUTH_WPA3_PSK:
-                Serial.print("WPA3");
-                break;
-            case WIFI_AUTH_WPA2_WPA3_PSK:
-                Serial.print("WPA2+WPA3");
-                break;
-            case WIFI_AUTH_WAPI_PSK:
-                Serial.print("WAPI");
-                break;
-            default:
-                Serial.print("unknown");
-            }
+            Serial.print(this->encryptionTypeToString(this->wifi->encryptionType(i)));
             Serial.println();
             delay(10);
         }
     }
     Serial.println("");
- 
     this->wifi->scanDelete();
 }
 
 
 void WifiNetworking::scan() {
-    int n = this->wifi->scanNetworks();
+    if (xSemaphoreTake(this->scanningNetworksMutex, portMAX_DELAY) == pdTRUE) {
+        int n = this->wifi->scanNetworks();
 
-    delete this->available_networks;
-    this->available_networks = new DynamicJsonDocument(1024);
-    JsonArray networks = this->available_networks->to<JsonArray>();
-   
-    for (int i = 0; i < n; ++i) {
-
-        JsonObject network = networks.createNestedObject();
-        network["nr"] = i + 1;
-        network["ssid"] = this->wifi->SSID(i);
-        network["rssi"] = this->wifi->RSSI(i) * -1;
-        network["channel"] = this->wifi->channel(i);
-        
-        switch (this->wifi->encryptionType(i)) {
-            case WIFI_AUTH_OPEN:
-                network["encryption"] = "open";
-                break;
-            case WIFI_AUTH_WEP:
-                network["encryption"] = "WEP";
-                break;
-            case WIFI_AUTH_WPA_PSK:
-                network["encryption"] = "WPA";
-                break;
-            case WIFI_AUTH_WPA2_PSK:
-                network["encryption"] = "WPA2";
-                break;
-            case WIFI_AUTH_WPA_WPA2_PSK:
-                network["encryption"] = "WPA+WPA2";
-                break;
-            case WIFI_AUTH_WPA2_ENTERPRISE:
-                network["encryption"] = "WPA2-EAP";
-                break;
-            case WIFI_AUTH_WPA3_PSK:
-                network["encryption"] = "WPA3";
-                break;
-            case WIFI_AUTH_WPA2_WPA3_PSK:
-                network["encryption"] = "WPA2+WPA3";
-                break;
-            case WIFI_AUTH_WAPI_PSK:
-                network["encryption"] = "WAPI";
-                break;
-            default:
-                network["encryption"] = "unknown";
+        delete this->available_networks;
+        this->available_networks = new DynamicJsonDocument(1024);
+        JsonArray networks = this->available_networks->to<JsonArray>();
+    
+        for (int i = 0; i < n; ++i) {
+            JsonObject network = networks.createNestedObject();
+            network["nr"] = i + 1;
+            network["ssid"] = this->wifi->SSID(i);
+            network["rssi"] = this->wifi->RSSI(i) * -1;
+            network["channel"] = this->wifi->channel(i);
+            network["encryption"] = this->encryptionTypeToString(this->wifi->encryptionType(i));
         }
+        this->wifi->scanDelete();
+        xSemaphoreGive(this->scanningNetworksMutex);
     }
-    this->wifi->scanDelete();
 }
 
 
 DynamicJsonDocument * WifiNetworking::getAvailableNetworks() {
+    if (xSemaphoreTake(this->scanningNetworksMutex, portMAX_DELAY) == pdTRUE) {
+        xSemaphoreGive(this->scanningNetworksMutex);
+        return this->available_networks;
+    }
     return this->available_networks;
 }
 
@@ -172,4 +120,54 @@ void WifiNetworking::injectBusinessState(BusinessState * business_state) {
 
 String WifiNetworking::getLocalIP() {
     return this->wifi->localIP().toString();
+}
+
+
+String WifiNetworking::encryptionTypeToString(wifi_auth_mode_t encryption_type) {
+    String encryption_type_string = "";
+
+    switch (encryption_type) {
+        case WIFI_AUTH_OPEN:
+            encryption_type_string = "open";
+            break;
+        case WIFI_AUTH_WEP:
+            encryption_type_string = "WEP";
+            break;
+        case WIFI_AUTH_WPA_PSK:
+            encryption_type_string = "WPA";
+            break;
+        case WIFI_AUTH_WPA2_PSK:
+            encryption_type_string = "WPA2";
+            break;
+        case WIFI_AUTH_WPA_WPA2_PSK:
+            encryption_type_string = "WPA+WPA2";
+            break;
+        case WIFI_AUTH_WPA2_ENTERPRISE:
+            encryption_type_string = "WPA2-EAP";
+            break;
+        case WIFI_AUTH_WPA3_PSK:
+            encryption_type_string = "WPA3";
+            break;
+        case WIFI_AUTH_WPA2_WPA3_PSK:
+            encryption_type_string = "WPA2+WPA3";
+            break;
+        case WIFI_AUTH_WAPI_PSK:
+            encryption_type_string = "WAPI";
+            break;
+        default:
+            encryption_type_string = "unknown";
+    }
+    return encryption_type_string;
+}
+
+bool WifiNetworking::isNetworkAvailable(String ssid) {
+    bool is_available = false;
+    JsonArray available_networks_list = this->getAvailableNetworks()->as<JsonArray>();
+    for (JsonObject available_network : available_networks_list) {
+        if (ssid == available_network["ssid"]) {
+            is_available = true;
+            break;
+        }
+    }
+    return is_available;
 }
