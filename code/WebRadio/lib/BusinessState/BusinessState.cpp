@@ -1,10 +1,21 @@
 #include "BusinessState.h"
 
 BusinessState::BusinessState() {
-    this->temperature = 0;
-    this->pressure = 0;
-    this->access_point_ssid = "";
+    this->business_state_mutex = xSemaphoreCreateMutex();
+    if (this->business_state_mutex == NULL) {
+        Serial.println("Mutex creation failed");
+        while (1);
+    }
 }
+
+boolean BusinessState::lock() {
+    return (xSemaphoreTake(this->business_state_mutex, portMAX_DELAY) == pdTRUE);
+}
+
+void BusinessState::unlock() {
+    xSemaphoreGive(this->business_state_mutex);
+}
+
 
 void BusinessState::setTemperature(float temperature) {
     this->temperature = temperature;

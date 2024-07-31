@@ -6,6 +6,9 @@
 class BusinessState {
 
     private:
+
+        SemaphoreHandle_t business_state_mutex;
+
         // WiFi
         bool is_connected_to_wifi = false;
         bool is_connecting_to_wifi = false;
@@ -34,6 +37,9 @@ class BusinessState {
 
     public:
         BusinessState();
+
+        bool lock();
+        void unlock();
 
         void setTemperature(float temperature);
         float getTemperature();

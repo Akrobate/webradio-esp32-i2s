@@ -29,11 +29,21 @@ void BMP180Probe::injectBusinesState(BusinessState * business_state) {
     this->business_state = business_state;
 }
 
+void BMP180Probe::update() {
+    if (this->is_initialized) {
+        this->temperature = this->getTemperature();
+        this->pressure = this->getPressure();
+    }
+}
+
 
 void BMP180Probe::updateBusinessState() {
     if (this->is_initialized) {
-        this->business_state->setTemperature(this->getTemperature());
-        this->business_state->setPressure(this->getPressure());
+        if (this->business_state->lock()) {
+            this->business_state->setTemperature(this->temperature);
+            this->business_state->setPressure(this->pressure);
+            this->business_state->unlock();
+        }
     }
 }
 

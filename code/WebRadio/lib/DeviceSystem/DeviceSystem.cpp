@@ -95,9 +95,13 @@ void DeviceSystem::injectBusinesState(BusinessState * business_state) {
 
 
 void DeviceSystem::updateBusinessState() {
-    this->business_state->setTotalFreeBytes(this->getTotalFreeBytes());
-    this->business_state->setMinimumFreeBytes(this->getMinimumFreeBytes());
+    if (this->business_state->lock()) {
+        this->business_state->setTotalFreeBytes(this->getTotalFreeBytes());
+        this->business_state->setMinimumFreeBytes(this->getMinimumFreeBytes());
 
-    this->business_state->setDateTime(this->date_time);
-    this->business_state->setDateTimeConfigured(this->date_time_configured);
+        this->business_state->setDateTime(this->date_time);
+        this->business_state->setDateTimeConfigured(this->date_time_configured);
+        
+        this->business_state->unlock();
+    }
 }

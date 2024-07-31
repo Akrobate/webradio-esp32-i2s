@@ -31,13 +31,6 @@ DisplayScreen * display_screen = new DisplayScreen();
 BMP180Probe * bmp_180_probe = new BMP180Probe();
 DeviceSystem * device_system = new DeviceSystem();
 
-
-// ntp
-// const char* ntpServer = "pool.ntp.org";
-// const long  gmtOffset_sec = 3600 * 1;
-// const int   daylightOffset_sec = 3600 * 1;
-
-
 #define LED 4
 
 int loops = 0;
@@ -97,15 +90,6 @@ void loop() {
     
     if (loops % 100 == 0) {
         display_screen->temperatureScreen();
-
-        /*
-        struct tm timeinfo;
-        if (!getLocalTime(&timeinfo)) {
-            Serial.println("Failed to obtain time");
-        } else {
-            Serial.println(&timeinfo, "%A, %B %d %Y %H:%M:%S");
-        }
-        */
     }
 
     delay(10);
@@ -114,42 +98,35 @@ void loop() {
 
 void temperatureTask(void *pvParameters) {
     (void) pvParameters;
-    TickType_t xLastWakeTime = xTaskGetTickCount();
-    const TickType_t xDelay = pdMS_TO_TICKS(5000); // 5 s
-
     while (1) {
-        if (xSemaphoreTake(xMutex, portMAX_DELAY) == pdTRUE) {
-            bmp_180_probe->updateBusinessState();
-            xSemaphoreGive(xMutex);
-        }
-        vTaskDelayUntil(&xLastWakeTime, xDelay);
+        bmp_180_probe->update();
+        bmp_180_probe->updateBusinessState();
+        vTaskDelay(pdMS_TO_TICKS(5000));
     }
 }
 
 
 void deviceSystemTask(void *pvParameters) {
     (void) pvParameters;
-    TickType_t xLastWakeTime = xTaskGetTickCount();
-    const TickType_t xDelay = pdMS_TO_TICKS(1000); // 1 s
-
     while (1) {
         device_system->update();
-        if (xSemaphoreTake(xMutex, portMAX_DELAY) == pdTRUE) {
-            device_system->updateBusinessState();
-            xSemaphoreGive(xMutex);
-        }
-        vTaskDelayUntil(&xLastWakeTime, xDelay);
+        device_system->updateBusinessState();
+        vTaskDelay(pdMS_TO_TICKS(1000));
     }
 }
-
 
 
 void networkConnectionTask(void *pvParameters) {
     (void) pvParameters;
 
     while (1) {
-        if (!wifi_networking->isConnected() && xSemaphoreTake(xMutex, portMAX_DELAY) == pdTRUE) {
-            business_state->setIsConnectedToWifi(false);
+        if (!wifi_networking->isConnected()) {
+
+            if (business_state->lock()) {
+                business_state->setIsConnectedToWifi(false);
+                business_state->unlock();
+            }
+
             JsonArray credential_list = network_credential_repository->network_credential_list->as<JsonArray>();
             for (JsonObject credential : credential_list) {
                 String ssid = credential["ssid"];
@@ -170,20 +147,15 @@ void networkConnectionTask(void *pvParameters) {
                 }
 
                 if (wifi_networking->isConnected()) {
-                    business_state->setIsConnectedToWifi(true);
-                    business_state->setIsConnectingToWifi(false);
-                    business_state->setLocalIP(wifi_networking->getLocalIP());
-                    
-
-
-                    // configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
-
-
-
+                    if (business_state->lock()) {
+                        business_state->setIsConnectedToWifi(true);
+                        business_state->setIsConnectingToWifi(false);
+                        business_state->setLocalIP(wifi_networking->getLocalIP());
+                        business_state->unlock();
+                    }
                     break;
                 }
             }
-
             xSemaphoreGive(xMutex);
         }
         vTaskDelay(pdMS_TO_TICKS(5000));

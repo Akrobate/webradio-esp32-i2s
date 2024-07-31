@@ -15,10 +15,14 @@ class BMP180Probe {
 
         BusinessState * business_state = nullptr;
 
+        float temperature = 0;
+        float pressure = 0;
+
     public:
         BMP180Probe();
 
         void injectBusinesState(BusinessState * business_state);
+        void update();
         void updateBusinessState();
 
         void init();
