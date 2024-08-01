@@ -1,0 +1,5 @@
+{
+    "gmt_offset_sec": 3600,
+    "daylight_offset_sec": 3600,
+    "ntp_server_host": "pool.ntp.org"
+}

@@ -10,6 +10,7 @@
 #include <DisplayScreen.h>
 #include <BMP180Probe.h>
 #include <DeviceSystem.h>
+#include <ConfigurationRepository.h>
 
 #include "soc/soc.h" //disable brownour problems
 #include "soc/rtc_cntl_reg.h" //disable brownour problems
@@ -30,6 +31,7 @@ StreamRepository * stream_repository = new StreamRepository();
 DisplayScreen * display_screen = new DisplayScreen();
 BMP180Probe * bmp_180_probe = new BMP180Probe();
 DeviceSystem * device_system = new DeviceSystem();
+ConfigurationRepository * configuration_repository = new ConfigurationRepository();
 
 #define LED 4
 
@@ -41,6 +43,9 @@ void setup() {
 
     Serial.begin(115200);
     delay(100);
+
+    configuration_repository->load();
+    configuration_repository->injectBusinessState(business_state);
 
     device_system->injectBusinesState(business_state);
     device_system->configureTimeTask();
