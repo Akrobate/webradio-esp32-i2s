@@ -95,3 +95,29 @@ async function serverGetInfo() {
         return []
     }
 }
+
+
+
+async function serverSaveConfiguration(network) {
+    const {
+        ntp_server_host,
+        gmt_offset,
+        daylight_offset,
+    } = network
+    try {
+        let form_data = new FormData()
+
+        form_data.append('ntp_server_host', ntp_server_host)
+        form_data.append('gmt_offset', gmt_offset)
+        form_data.append('daylight_offset', daylight_offset)
+
+        await fetch('/api/configurations',
+            {
+                body: form_data,
+                method: 'POST',
+            }
+        )
+    } catch (error) {
+        console.log('serverSaveConfiguration - Error:', error)
+    }
+}
