@@ -191,3 +191,23 @@ async function serverGetInfo() {
         gmt_offset_hours: 1,
     })
 }
+
+
+
+async function serverSaveConfiguration() {
+    await wait(SERVER_LAG_LONG)
+    return Promise.resolve({
+        access_point_ssid: 'ESP32-Access-Point',
+        temperature: 21.2000009,
+        pressure: 1020.2000009,
+        total_free_bytes: 123000,
+        minimum_free_bytes: 122000,
+        is_connected_to_wifi: false,
+        is_connecting_to_wifi: true,
+        connected_to_ssid: 'SSID X',
+        local_ip: '192.168.1.176',
+        date_time: '2023-07-16T12:30:00',
+        date_time_configured: false,
+        gmt_offset_hours: 1,
+    })
+}
