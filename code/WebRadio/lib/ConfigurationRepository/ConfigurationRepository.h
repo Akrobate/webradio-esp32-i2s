@@ -30,6 +30,7 @@ class ConfigurationRepository {
         bool save();
 
         void injectBusinessState(BusinessState * business_state);
+        void updateBusinessState();
 
 };
 
