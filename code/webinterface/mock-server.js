@@ -198,7 +198,7 @@ async function serverGetInfo() {
     })
 }
 
-async function serverSaveConfiguration(input) {
+async function serverSaveConfigurations(input) {
 
     await wait(SERVER_LAG_LONG)
 

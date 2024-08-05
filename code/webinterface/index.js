@@ -35,7 +35,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     loadStationList()
     loadSavedNetworksList()
     setInterval(loadInfoAndWifiStatusData, 2000)
-    // loadInfoAndWifiStatusData()
 })
 
 
@@ -281,6 +280,10 @@ async function loadInfoAndWifiStatusData() {
         ? `${formatTime(info.date_time)}`
         : 'not configured'
 }
+
+
+
+
 
 
 function formatTime(date_time_string) {

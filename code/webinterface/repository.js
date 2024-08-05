@@ -98,18 +98,24 @@ async function serverGetInfo() {
 
 
 
-async function serverSaveConfiguration(network) {
+async function serverSaveConfigurations(network) {
     const {
         ntp_server_host,
-        gmt_offset,
-        daylight_offset,
+        gmt_offset_sec,
+        daylight_offset_sec,
     } = network
     try {
         let form_data = new FormData()
 
-        form_data.append('ntp_server_host', ntp_server_host)
-        form_data.append('gmt_offset', gmt_offset)
-        form_data.append('daylight_offset', daylight_offset)
+        if (ntp_server_host !== undefined) {
+            form_data.append('ntp_server_host', ntp_server_host)
+        }
+        if (gmt_offset_sec !== undefined) {
+            form_data.append('gmt_offset_sec', gmt_offset_sec)
+        }
+        if (daylight_offset_sec !== undefined) {
+            form_data.append('daylight_offset_sec', daylight_offset_sec)
+        }
 
         await fetch('/api/configurations',
             {
@@ -118,6 +124,6 @@ async function serverSaveConfiguration(network) {
             }
         )
     } catch (error) {
-        console.log('serverSaveConfiguration - Error:', error)
+        console.log('serverSaveConfigurations - Error:', error)
     }
 }

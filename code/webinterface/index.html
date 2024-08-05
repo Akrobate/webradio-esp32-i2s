@@ -134,8 +134,14 @@
                         Date Time Configuration
                     </h3>
                     
-                    <input type="text" id="ntp-host-url" placeholder="Ntp server host">
-                    <input class="mt-md" id="gmt-offset" type="text" placeholder="GMT Offset">
+                    <input type="text" id="ntp-server-host" placeholder="Ntp server host">
+                    
+                    <input class="mt-md" id="gmt-offset-sec" type="text" placeholder="GMT Offset">
+
+                    <select class="mt-md" id="daylight-offset-sec">
+                        <option value="0">No daylight saving</option>
+                        <option value="1">Daylight saving</option>
+                    </select>
 
                     <button class="mt-md" onclick="addStation(this)">
                         Save
