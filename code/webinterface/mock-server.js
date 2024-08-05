@@ -148,6 +148,12 @@ const _saved_networks_list = [
     }
 ]
 
+const _saved_configurations = {
+    gmt_offset_sec: 3600,
+    daylight_offset_sec: 3600,
+    ntp_server_host: 'pool.ntp.org'
+}
+
 async function serverGetAvailableNetworksList() {
     await wait(SERVER_LAG_SHORT)
     return _available_networks_list
@@ -188,22 +194,31 @@ async function serverGetInfo() {
         local_ip: '192.168.1.176',
         date_time: '2023-07-16T12:30:00',
         date_time_configured: false,
+        ..._saved_configurations,
     })
 }
 
-async function serverSaveConfiguration() {
+async function serverSaveConfiguration(input) {
+
     await wait(SERVER_LAG_LONG)
-    return Promise.resolve({
-        access_point_ssid: 'ESP32-Access-Point',
-        temperature: 21.2000009,
-        pressure: 1020.2000009,
-        total_free_bytes: 123000,
-        minimum_free_bytes: 122000,
-        is_connected_to_wifi: false,
-        is_connecting_to_wifi: true,
-        connected_to_ssid: 'SSID X',
-        local_ip: '192.168.1.176',
-        date_time: '2023-07-16T12:30:00',
-        date_time_configured: false,
-    })
+
+    const {
+        gmt_offset_sec,
+        daylight_offset_sec,
+        ntp_server_host,
+    } = input
+
+    if (gmt_offset_sec) {
+        _saved_configurations.gmt_offset_sec = gmt_offset_sec
+    }
+    if (daylight_offset_sec) {
+        _saved_configurations.daylight_offset_sec = daylight_offset_sec
+    }
+    if (ntp_server_host) {
+        _saved_configurations.ntp_server_host = ntp_server_host
+    }
+
+
+    await wait(SERVER_LAG_LONG)
+    return Promise.resolve(_saved_configurations)
 }
