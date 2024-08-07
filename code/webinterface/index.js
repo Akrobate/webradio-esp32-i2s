@@ -34,6 +34,7 @@ function isValidUrl(string) {
 document.addEventListener('DOMContentLoaded', async () => {
     loadStationList()
     loadSavedNetworksList()
+    initDateTimeConfigurationManager()
     setInterval(loadInfoAndWifiStatusData, 2000)
 })
 
@@ -282,7 +283,42 @@ async function loadInfoAndWifiStatusData() {
 }
 
 
+async function initDateTimeConfigurationManager() {
 
+    const daylight_offset_label_list = [
+        {
+            value: -3600 * 2,
+            label: '-2 hour'
+        },
+        {
+            value: -3600,
+            label: '-1 hour'
+        },
+        {
+            value: 0,
+            label: 'None'
+        },
+        {
+            value: 3600,
+            label: '1 hour'
+        },
+        {
+            value: 3600 * 2,
+            label: '2 hour'
+        },
+    ]
+
+    const _el = $('#date-time-configuration-manager')
+
+
+    $('#daylight-offset-sec', _el).innerHTML = daylight_offset_label_list.map((item) => `<option value="${item.value}">${item.label}</option>`).join(' ')
+
+    // <option value="0">No daylight saving</option>
+    // <option value="1">Daylight saving</option>
+
+    console.log('herre')
+
+}
 
 
 
