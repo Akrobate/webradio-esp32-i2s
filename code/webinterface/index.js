@@ -308,6 +308,38 @@ async function initDateTimeConfigurationManager() {
         },
     ]
 
+    const gmt_offset_label_list = [
+        {
+            value: -3600 * 3,
+            label: '-3 hour'
+        },
+        {
+            value: -3600 * 2,
+            label: '-2 hour'
+        },
+        {
+            value: -3600,
+            label: '-1 hour'
+        },
+        {
+            value: 0,
+            label: 'None'
+        },
+        {
+            value: 3600,
+            label: '1 hour'
+        },
+        {
+            value: 3600 * 2,
+            label: '2 hour'
+        },
+        {
+            value: 3600 * 3,
+            label: '3 hour'
+        },
+    ]
+
+
     const _el = $('#date-time-configuration-manager')
 
 
