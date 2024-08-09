@@ -308,6 +308,10 @@ async function initDateTimeConfigurationManager() {
         },
     ]
 
+
+    // gmt min = -12
+    // gmt max = 12
+
     const gmt_offset_label_list = [
         {
             value: -3600 * 3,
