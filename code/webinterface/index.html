@@ -136,14 +136,16 @@
                     
                     <input type="text" id="ntp-server-host" placeholder="Ntp server host">
                     
-                    <input class="mt-md" id="gmt-offset-sec" type="text" placeholder="GMT Offset">
+                    <p class="mt-md ml-sm">Time GMT Offset</p>
+                    <select id="gmt-offset-sec">
+                    </select>
 
-                    <select class="mt-md" id="daylight-offset-sec">
-
+                    <p class="mt-md ml-sm">Daylight offset</p>
+                    <select id="daylight-offset-sec">
                     </select>
 
                     <button class="mt-md" onclick="addStation(this)">
-                        Save
+                        Update
                     </button>
                 </div>
             </div>

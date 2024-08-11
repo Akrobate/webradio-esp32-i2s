@@ -33,6 +33,14 @@
 .mb-md { margin-bottom: var(--margin-md); }
 .mb-lg { margin-bottom: var(--margin-lg); }
 
+.ml-xs { margin-left: var(--margin-xs); }
+.ml-sm { margin-left: var(--margin-sm); }
+.ml-md { margin-left: var(--margin-md); }
+.ml-lg { margin-left: var(--margin-lg); }
+
+
+
+
 body {
     background-color: var(--neutral-color-4);
     color: var(--neutral-color-1);

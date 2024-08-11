@@ -309,45 +309,21 @@ async function initDateTimeConfigurationManager() {
     ]
 
 
-    // gmt min = -12
-    // gmt max = 12
+    const gmt_offset_min = -12
+    const gmt_offset_max = 14
 
-    const gmt_offset_label_list = [
-        {
-            value: -3600 * 3,
-            label: '-3 hour'
-        },
-        {
-            value: -3600 * 2,
-            label: '-2 hour'
-        },
-        {
-            value: -3600,
-            label: '-1 hour'
-        },
-        {
-            value: 0,
-            label: 'None'
-        },
-        {
-            value: 3600,
-            label: '1 hour'
-        },
-        {
-            value: 3600 * 2,
-            label: '2 hour'
-        },
-        {
-            value: 3600 * 3,
-            label: '3 hour'
-        },
-    ]
-
+    const gmt_offset_label_list = Array.from({length: 25}).map((_, index) => {
+        const hours = index - 12
+        return {
+            value: 3600 * hours,
+            label: `${hours} hours`
+        }
+    })
 
     const _el = $('#date-time-configuration-manager')
 
-
     $('#daylight-offset-sec', _el).innerHTML = daylight_offset_label_list.map((item) => `<option value="${item.value}">${item.label}</option>`).join(' ')
+    $('#gmt-offset-sec', _el).innerHTML = gmt_offset_label_list.map((item) => `<option value="${item.value}">${item.label}</option>`).join(' ')
 
     // <option value="0">No daylight saving</option>
     // <option value="1">Daylight saving</option>
