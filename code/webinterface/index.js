@@ -1,6 +1,8 @@
 const STATION_NAME_MAX_LENGTH = 30
 const STATION_HOST_MAX_LENGTH = 1000
 
+const info_data = {}
+
 function $(selector, element = document) {
     return element.querySelector(selector)
 }
@@ -32,6 +34,7 @@ function isValidUrl(string) {
  * INIT
  */
 document.addEventListener('DOMContentLoaded', async () => {
+    await loadInfoAndWifiStatusData()
     loadStationList()
     loadSavedNetworksList()
     initDateTimeConfigurationManager()
@@ -263,7 +266,12 @@ async function refreshInfo(btn) {
 
 
 async function loadInfoAndWifiStatusData() {
-    const info = await serverGetInfo()
+    const info_data = await serverGetInfo()
+
+    const info = {
+        ...info_data,
+    }
+
     const _el_block_wifi_status = $('.block-wifi-status')
     const _el_block_info = $('.block-info')
     $('.connection-status', _el_block_wifi_status).textContent = info.is_connecting_to_wifi
@@ -308,27 +316,24 @@ async function initDateTimeConfigurationManager() {
         },
     ]
 
-
-    const gmt_offset_min = -12
-    const gmt_offset_max = 14
-
-    const gmt_offset_label_list = Array.from({length: 25}).map((_, index) => {
+    const gmt_offset_label_list = Array.from({length: 27}).map((_, index) => {
         const hours = index - 12
         return {
             value: 3600 * hours,
-            label: `${hours} hours`
+            label: hours === 1 || hours === -1 ? `GMT ${hours}` : hours > 0 ? `GMT +${hours}` : `GMT ${hours}`
         }
     })
 
     const _el = $('#date-time-configuration-manager')
 
-    $('#daylight-offset-sec', _el).innerHTML = daylight_offset_label_list.map((item) => `<option value="${item.value}">${item.label}</option>`).join(' ')
-    $('#gmt-offset-sec', _el).innerHTML = gmt_offset_label_list.map((item) => `<option value="${item.value}">${item.label}</option>`).join(' ')
+    const _el_gmt_offset_sec = $('#gmt-offset-sec', _el)
+    const _el_daylight_offset_sec = $('#daylight-offset-sec', _el)
 
-    // <option value="0">No daylight saving</option>
-    // <option value="1">Daylight saving</option>
+    _el_gmt_offset_sec.innerHTML = gmt_offset_label_list.map((item) => `<option value="${item.value}">${item.label}</option>`).join(' ')
+    _el_daylight_offset_sec.innerHTML = daylight_offset_label_list.map((item) => `<option value="${item.value}">${item.label}</option>`).join(' ')
 
-    console.log('herre')
+    _el_gmt_offset_sec.value = 0
+    _el_daylight_offset_sec.value = 0
 
 }
 
