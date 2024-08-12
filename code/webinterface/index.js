@@ -308,11 +308,11 @@ async function initDateTimeConfigurationManager() {
         },
         {
             value: 3600,
-            label: '1 hour'
+            label: '+1 hour'
         },
         {
             value: 3600 * 2,
-            label: '2 hour'
+            label: '+2 hour'
         },
     ]
 
