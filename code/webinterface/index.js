@@ -1,7 +1,7 @@
 const STATION_NAME_MAX_LENGTH = 30
 const STATION_HOST_MAX_LENGTH = 1000
 
-const info_data = {}
+let info_data = {}
 
 function $(selector, element = document) {
     return element.querySelector(selector)
@@ -266,7 +266,7 @@ async function refreshInfo(btn) {
 
 
 async function loadInfoAndWifiStatusData() {
-    const info_data = await serverGetInfo()
+    info_data = await serverGetInfo()
 
     const info = {
         ...info_data,
@@ -328,10 +328,12 @@ async function initDateTimeConfigurationManager() {
 
     const _el_gmt_offset_sec = $('#gmt-offset-sec', _el)
     const _el_daylight_offset_sec = $('#daylight-offset-sec', _el)
+    const _el_ntp_server_host = $('#ntp-server-host', _el)
 
     _el_gmt_offset_sec.innerHTML = gmt_offset_label_list.map((item) => `<option value="${item.value}">${item.label}</option>`).join(' ')
     _el_daylight_offset_sec.innerHTML = daylight_offset_label_list.map((item) => `<option value="${item.value}">${item.label}</option>`).join(' ')
-
+    _el_ntp_server_host.value = info_data.ntp_server_host
+console.log(info_data)
     _el_gmt_offset_sec.value = 0
     _el_daylight_offset_sec.value = 0
 
