@@ -296,7 +296,7 @@ async function initDateTimeConfigurationManager() {
     const daylight_offset_label_list = [
         {
             value: -3600 * 2,
-            label: '-2 hour'
+            label: '-2 hours'
         },
         {
             value: -3600,
@@ -312,7 +312,7 @@ async function initDateTimeConfigurationManager() {
         },
         {
             value: 3600 * 2,
-            label: '+2 hour'
+            label: '+2 hours'
         },
     ]
 
@@ -333,9 +333,9 @@ async function initDateTimeConfigurationManager() {
     _el_gmt_offset_sec.innerHTML = gmt_offset_label_list.map((item) => `<option value="${item.value}">${item.label}</option>`).join(' ')
     _el_daylight_offset_sec.innerHTML = daylight_offset_label_list.map((item) => `<option value="${item.value}">${item.label}</option>`).join(' ')
     _el_ntp_server_host.value = info_data.ntp_server_host
-console.log(info_data)
-    _el_gmt_offset_sec.value = 0
-    _el_daylight_offset_sec.value = 0
+
+    _el_gmt_offset_sec.value = info_data.gmt_offset_sec
+    _el_daylight_offset_sec.value = info_data.daylight_offset_sec
 
 }
 
