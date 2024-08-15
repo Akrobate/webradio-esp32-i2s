@@ -340,6 +340,23 @@ async function initDateTimeConfigurationManager() {
 }
 
 
+function saveConfiguration(btn) {
+
+    const _el = $('#date-time-configuration-manager')
+    const _el_gmt_offset_sec = $('#gmt-offset-sec', _el)
+    const _el_daylight_offset_sec = $('#daylight-offset-sec', _el)
+    const _el_ntp_server_host = $('#ntp-server-host', _el)
+
+    const gmt_offset_sec = Number(_el_gmt_offset_sec.value)
+    const daylight_offset_sec = Number(_el_daylight_offset_sec.value)
+    const ntp_server_host = _el_ntp_server_host.value
+
+    buttonSetLoadingState(btn, true)
+    serviceSaveConfigurations({gmt_offset_sec, daylight_offset_sec, ntp_server_host})
+    buttonSetLoadingState(btn, false)
+
+}
+
 
 function formatTime(date_time_string) {
     const date = new Date(date_time_string)
