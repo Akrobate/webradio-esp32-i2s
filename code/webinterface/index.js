@@ -340,7 +340,7 @@ async function initDateTimeConfigurationManager() {
 }
 
 
-function saveConfiguration(btn) {
+async function saveConfiguration(btn) {
 
     const _el = $('#date-time-configuration-manager')
     const _el_gmt_offset_sec = $('#gmt-offset-sec', _el)
@@ -352,7 +352,7 @@ function saveConfiguration(btn) {
     const ntp_server_host = _el_ntp_server_host.value
 
     buttonSetLoadingState(btn, true)
-    serviceSaveConfigurations({gmt_offset_sec, daylight_offset_sec, ntp_server_host})
+    await serverSaveConfigurations({gmt_offset_sec, daylight_offset_sec, ntp_server_host})
     buttonSetLoadingState(btn, false)
 
 }
