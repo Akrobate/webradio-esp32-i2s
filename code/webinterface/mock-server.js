@@ -151,7 +151,7 @@ const _saved_networks_list = [
 const _saved_configurations = {
     gmt_offset_sec: 3600,
     daylight_offset_sec: 3600,
-    ntp_server_host: 'pool.ntp.org'
+    ntp_server_host: 'http://pool.ntp.org'
 }
 
 async function serverGetAvailableNetworksList() {
@@ -201,6 +201,8 @@ async function serverGetInfo() {
 async function serverSaveConfigurations(input) {
 
     await wait(SERVER_LAG_LONG)
+
+    console.log('serverSaveConfigurations', input)
 
     const {
         gmt_offset_sec,
