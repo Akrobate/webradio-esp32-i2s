@@ -26,28 +26,33 @@ async function wait(ms) {
 }
 
 async function serverGetStationList() {
+    console.log('serverGetStationList')
     await wait(SERVER_LAG_LONG);
     return _stations_list;
 }
 
 async function serverRemoveStation(station_index) {
+    console.log('serverRemoveStation', station_index)
     await wait(SERVER_LAG_LONG);
     _stations_list.splice(station_index, 1);
     return ;
 }
 
 async function serverEditStation(station_index, station) {
+    console.log('serverEditStation', station_index, station)
     _stations_list[station_index] = station;
     return Promise.resolve();
 }
 
 async function serverAddStation(station) {
+    console.log('serverAddStation', station)
     await wait(SERVER_LAG_SHORT + 3000);
     _stations_list.push(station);
     return Promise.resolve();
 }
 
 async function serverStationMoveUp(index) {
+    console.log('serverStationMoveUp', index)
     await wait(SERVER_LAG_SHORT);
     const tmp = _stations_list[index]
     _stations_list[index] = _stations_list[index - 1]
@@ -57,6 +62,7 @@ async function serverStationMoveUp(index) {
 
 
 async function serverStationMoveDown(index) {
+    console.log('serverStationMoveDown', index)
     await wait(SERVER_LAG_SHORT);
     const tmp = _stations_list[index]
     _stations_list[index] = _stations_list[index + 1]
@@ -155,12 +161,14 @@ const _saved_configurations = {
 }
 
 async function serverGetAvailableNetworksList() {
+    console.log('serverGetAvailable')
     await wait(SERVER_LAG_SHORT)
     return _available_networks_list
 }
 
 
 async function serverGetSavedNetworksList() {
+    console.log('serverGetSavedNetworksList')
     await wait(SERVER_LAG_SHORT)
     return _saved_networks_list
 }
@@ -200,9 +208,9 @@ async function serverGetInfo() {
 
 async function serverSaveConfigurations(input) {
 
+    console.log('serverSaveConfigurations', input)
     await wait(SERVER_LAG_LONG)
 
-    console.log('serverSaveConfigurations', input)
 
     const {
         gmt_offset_sec,
