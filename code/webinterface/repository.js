@@ -15,6 +15,23 @@ async function serverGetStationList() {
     }
 }
 
+
+async function serverAddStation(station) {
+    try {
+        let form_data = new FormData()
+        form_data.append('station', station)
+        await fetch('/api/streams',
+            {
+                body: form_data,
+                method: 'POST',
+            }
+        )
+    } catch (error) {
+        console.log('serverAddStation - Error:', error)
+    }
+}
+
+
 async function serverGetAvailableNetworksList() {
     try {
         const result = await fetch('/api/available-networks',
