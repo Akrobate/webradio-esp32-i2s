@@ -32,6 +32,38 @@ async function serverAddStation(station) {
 }
 
 
+async function serverStationMoveUp(index) {
+    try {
+        let form_data = new FormData()
+        form_data.append('index', index)
+        await fetch('/api/streams/position-up',
+            {
+                body: form_data,
+                method: 'POST',
+            }
+        )
+    } catch (error) {
+        console.log('serverStationMoveUp - Error:', error)
+    }
+}
+
+
+async function serverStationMoveDown(index) {
+    try {
+        let form_data = new FormData()
+        form_data.append('index', index)
+        await fetch('/api/streams/position-down',
+            {
+                body: form_data,
+                method: 'POST',
+            }
+        )
+    } catch (error) {
+        console.log('serverStationMoveDown - Error:', error)
+    }
+}
+
+
 async function serverGetAvailableNetworksList() {
     try {
         const result = await fetch('/api/available-networks',
