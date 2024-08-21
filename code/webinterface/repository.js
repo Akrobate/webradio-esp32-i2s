@@ -32,6 +32,34 @@ async function serverAddStation(station) {
 }
 
 
+async function serverRemoveStation(index) {
+    try {
+        await fetch(`/api/streams/${index}`,
+            {
+                method: 'DELETE',
+            }
+        )
+    } catch (error) {
+        console.log('serverRemoveStation - Error:', error)
+    }
+}
+
+async function serverEditStation(index, station) {
+    try {
+        let form_data = new FormData()
+        form_data.append('station', station)
+        await fetch(`/api/streams/${index}`,
+            {
+                body: form_data,
+                method: 'PATCH',
+            }
+        )
+    } catch (error) {
+        console.log('serverEditStation - Error:', error)
+    }
+}
+
+
 async function serverStationMoveUp(index) {
     try {
         let form_data = new FormData()
