@@ -16,3 +16,13 @@ This project includes:
 * Webinterface for control and configuration
 * 3D models for 3D printing
 * CNC Models
+
+
+## Routes
+
+### Streams
+
+GET /api/streams
+Returns all the recorded radio stations
+
+
