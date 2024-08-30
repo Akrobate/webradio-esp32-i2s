@@ -75,6 +75,50 @@ void WebRadioServer::init() {
 
 
   this->server->on(
+    "/api/configurations",
+    HTTP_POST,
+    [&](AsyncWebServerRequest *request) {
+
+      String ntp_server_host = "";
+      int gmt_offset_sec = 0;
+      int daylight_offset_sec = 0;
+
+      if (request->hasParam("ntp_server_host", true)) {
+        ntp_server_host = request->getParam("ntp_server_host", true)->value();
+      } else {
+        request->send(400, "text/html", "Missing ntp_server_host");
+        return;
+      }
+
+      if (request->hasParam("gmt_offset_sec", true)) {
+        gmt_offset_sec = request->getParam("gmt_offset_sec", true)->value().toInt();
+      } else {
+        request->send(400, "text/html", "Missing gmt_offset_sec");
+        return;
+      }
+
+      if (request->hasParam("daylight_offset_sec", true)) {
+        daylight_offset_sec = request->getParam("daylight_offset_sec", true)->value().toInt();
+      } else {
+        request->send(400, "text/html", "Missing daylight_offset_sec");
+        return;
+      }
+
+      Serial.print("ntp_server_host : ");
+      Serial.println(ntp_server_host);
+      Serial.print("gmt_offset_sec : ");
+      Serial.println(gmt_offset_sec);
+      Serial.print("daylight_offset_sec : ");
+      Serial.println(daylight_offset_sec);
+
+      // this->network_credential->upsertCredential(ssid, password);
+
+      request->send(201, "text/html", "OK");
+    }
+  );
+
+
+  this->server->on(
     "/api/available-networks",
     HTTP_GET,
     [&](AsyncWebServerRequest *request) {
