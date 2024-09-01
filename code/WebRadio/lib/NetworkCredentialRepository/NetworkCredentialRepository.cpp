@@ -32,7 +32,7 @@ bool NetworkCredentialRepository::save() {
     File file = LittleFS.open(NETWORK_CREDENTIAL_FILE, "w");
 
     if (!file) {
-        Serial.println("Failed to open file for writing");
+        Serial.println("Failed to open network credential file for writing");
         return false;
     }
 

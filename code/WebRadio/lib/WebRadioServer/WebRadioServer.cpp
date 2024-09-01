@@ -80,7 +80,7 @@ void WebRadioServer::init() {
     [&](AsyncWebServerRequest *request) {
 
       String ntp_server_host = "";
-      int gmt_offset_sec = 0;
+      long gmt_offset_sec = 0;
       int daylight_offset_sec = 0;
 
       if (request->hasParam("ntp_server_host", true)) {

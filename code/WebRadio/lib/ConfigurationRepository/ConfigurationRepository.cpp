@@ -29,14 +29,29 @@ bool ConfigurationRepository::load() {
 }
 
 bool ConfigurationRepository::save() {
+    LittleFS.begin();
+    File file = LittleFS.open(CONFIGURATION_FILE, "w");
+
+    if (!file) {
+        Serial.println("Failed to open configuration file for writing");
+        return false;
+    }
+
+    DynamicJsonDocument doc(1024);
+    JsonObject rootObject = doc.to<JsonObject>();
+    rootObject["gmt_offset_sec"] = this->gmt_offset_sec;
+    rootObject["daylight_offset_sec"] = this->daylight_offset_sec;
+    rootObject["ntp_server_host"] = this->ntp_server_host;
+
+    serializeJson(doc, file);
+
+    file.close();
     return true;
 }
 
 void ConfigurationRepository::injectBusinessState(BusinessState * business_state) {
     this->business_state = business_state;
 }
-
-
 
 void ConfigurationRepository::updateBusinessState() {
     if (this->business_state->lock()) {
