@@ -64,6 +64,7 @@ void NetworkCredentialRepository::addCredential(String ssid, String password) {
     JsonObject obj = rootArray.createNestedObject();
     obj["ssid"] = ssid;
     obj["password"] = password;
+    this->save();
 }
 
 
@@ -72,6 +73,7 @@ void NetworkCredentialRepository::setCredentialByIndex(int index, String ssid, S
     JsonObject obj = rootArray[index].to<JsonObject>();
     obj["ssid"] = ssid;
     obj["password"] = password;
+    this->save();
 }
 
 
@@ -90,6 +92,7 @@ int NetworkCredentialRepository::getCredentialIndexBySSID(String ssid) {
 void NetworkCredentialRepository::removeCredentialByIndex(int index) {
     JsonArray rootArray = this->network_credential_list->as<JsonArray>();
     rootArray.remove(index);
+    this->save();
 }
 
 
