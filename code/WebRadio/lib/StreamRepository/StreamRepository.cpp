@@ -60,3 +60,12 @@ int StreamRepository::getCredentialIndexBySSID(String ssid) {
     }
     return -1;
 }
+
+
+void StreamRepository::addStream(String name, String host) {
+    JsonArray rootArray = this->stream_list->as<JsonArray>();
+    JsonObject obj = rootArray.createNestedObject();
+    obj["name"] = name;
+    obj["host"] = host;
+    this->save();
+}

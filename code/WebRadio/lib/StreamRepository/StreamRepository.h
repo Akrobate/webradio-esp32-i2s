@@ -27,6 +27,9 @@ class StreamRepository {
         JsonObject getCredentialByIndex(int index);
         int getCredentialIndexBySSID(String ssid);
 
+        void addStream(String name, String host);
+
+
 };
 
 #endif
