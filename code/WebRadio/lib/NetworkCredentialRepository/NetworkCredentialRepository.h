@@ -29,7 +29,7 @@ class NetworkCredentialRepository {
         String getPasswordBySSID(String ssid);
         JsonObject getCredentialByIndex(int index);
         int getCredentialIndexBySSID(String ssid);
-        void setCredentialByIndex(int index, String ssid, String password);
+        void updateCredential(int index, String ssid, String password);
 
         void addCredential(String ssid, String password);
         void upsertCredential(String ssid, String password);

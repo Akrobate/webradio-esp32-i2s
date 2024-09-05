@@ -54,7 +54,7 @@ void NetworkCredentialRepository::upsertCredential(String ssid, String password)
     if (index == -1) {
         this->addCredential(ssid, password);
     } else {
-        this->setCredentialByIndex(index, ssid, password);
+        this->updateCredential(index, ssid, password);
     }
 }
 
@@ -68,7 +68,7 @@ void NetworkCredentialRepository::addCredential(String ssid, String password) {
 }
 
 
-void NetworkCredentialRepository::setCredentialByIndex(int index, String ssid, String password) {
+void NetworkCredentialRepository::updateCredential(int index, String ssid, String password) {
     JsonArray rootArray = this->network_credential_list->as<JsonArray>();
     JsonObject obj = rootArray[index].to<JsonObject>();
     obj["ssid"] = ssid;
