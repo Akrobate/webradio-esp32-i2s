@@ -16,10 +16,15 @@ async function serverGetStationList() {
 }
 
 
-async function serverAddStation(station) {
+async function serverAddStation(input) {
+    const {
+        host,
+        name,
+    } = input
     try {
         let form_data = new FormData()
-        form_data.append('station', station)
+        form_data.append('host', host)
+        form_data.append('name', name)
         await fetch('/api/streams',
             {
                 body: form_data,
@@ -44,10 +49,15 @@ async function serverRemoveStation(index) {
     }
 }
 
-async function serverEditStation(index, station) {
+async function serverEditStation(index, input) {
+    const {
+        host,
+        name,
+    } = input
     try {
         let form_data = new FormData()
-        form_data.append('station', station)
+        form_data.append('host', host)
+        form_data.append('name', name)
         await fetch(`/api/streams/${index}`,
             {
                 body: form_data,
