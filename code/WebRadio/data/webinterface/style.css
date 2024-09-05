@@ -33,6 +33,14 @@
 .mb-md { margin-bottom: var(--margin-md); }
 .mb-lg { margin-bottom: var(--margin-lg); }
 
+.ml-xs { margin-left: var(--margin-xs); }
+.ml-sm { margin-left: var(--margin-sm); }
+.ml-md { margin-left: var(--margin-md); }
+.ml-lg { margin-left: var(--margin-lg); }
+
+
+
+
 body {
     background-color: var(--neutral-color-4);
     color: var(--neutral-color-1);
@@ -234,6 +242,15 @@ input[type="text"] {
     box-sizing: border-box;
 }
 
+select {
+    padding: 10px;
+    border: 1px solid var(--neutral-color-2);
+    border-radius: 4px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #fff;
+}
 
 input.error {
     border: 1px solid var(--accent-color);

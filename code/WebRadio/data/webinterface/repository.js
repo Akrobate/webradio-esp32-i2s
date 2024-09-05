@@ -15,6 +15,93 @@ async function serverGetStationList() {
     }
 }
 
+
+async function serverAddStation(input) {
+    const {
+        host,
+        name,
+    } = input
+    try {
+        let form_data = new FormData()
+        form_data.append('host', host)
+        form_data.append('name', name)
+        await fetch('/api/streams',
+            {
+                body: form_data,
+                method: 'POST',
+            }
+        )
+    } catch (error) {
+        console.log('serverAddStation - Error:', error)
+    }
+}
+
+
+async function serverRemoveStation(index) {
+    try {
+        await fetch(`/api/streams/${index}`,
+            {
+                method: 'DELETE',
+            }
+        )
+    } catch (error) {
+        console.log('serverRemoveStation - Error:', error)
+    }
+}
+
+async function serverEditStation(index, input) {
+    const {
+        host,
+        name,
+    } = input
+    try {
+        let form_data = new FormData()
+        form_data.append('host', host)
+        form_data.append('name', name)
+        await fetch(`/api/streams/${index}`,
+            {
+                body: form_data,
+                method: 'PATCH',
+            }
+        )
+    } catch (error) {
+        console.log('serverEditStation - Error:', error)
+    }
+}
+
+
+async function serverStationMoveUp(index) {
+    try {
+        let form_data = new FormData()
+        form_data.append('index', index)
+        await fetch('/api/streams/position-up',
+            {
+                body: form_data,
+                method: 'POST',
+            }
+        )
+    } catch (error) {
+        console.log('serverStationMoveUp - Error:', error)
+    }
+}
+
+
+async function serverStationMoveDown(index) {
+    try {
+        let form_data = new FormData()
+        form_data.append('index', index)
+        await fetch('/api/streams/position-down',
+            {
+                body: form_data,
+                method: 'POST',
+            }
+        )
+    } catch (error) {
+        console.log('serverStationMoveDown - Error:', error)
+    }
+}
+
+
 async function serverGetAvailableNetworksList() {
     try {
         const result = await fetch('/api/available-networks',
@@ -93,5 +180,37 @@ async function serverGetInfo() {
     } catch (error) {
         console.log('serverGetInfo - Error:', error)
         return []
+    }
+}
+
+
+
+async function serverSaveConfigurations(network) {
+    const {
+        ntp_server_host,
+        gmt_offset_sec,
+        daylight_offset_sec,
+    } = network
+    try {
+        let form_data = new FormData()
+
+        if (ntp_server_host !== undefined) {
+            form_data.append('ntp_server_host', ntp_server_host)
+        }
+        if (gmt_offset_sec !== undefined) {
+            form_data.append('gmt_offset_sec', gmt_offset_sec)
+        }
+        if (daylight_offset_sec !== undefined) {
+            form_data.append('daylight_offset_sec', daylight_offset_sec)
+        }
+
+        await fetch('/api/configurations',
+            {
+                body: form_data,
+                method: 'POST',
+            }
+        )
+    } catch (error) {
+        console.log('serverSaveConfigurations - Error:', error)
     }
 }

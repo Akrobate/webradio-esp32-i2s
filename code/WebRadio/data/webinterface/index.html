@@ -134,11 +134,19 @@
                         Date Time Configuration
                     </h3>
                     
-                    <input type="text" id="input-station-name" placeholder="Name">
-                    <input class="mt-md" id="input-station-host" type="text" placeholder="Hostname">
+                    <p class="mt-md ml-sm">NTP server host url</p>
+                    <input type="text" id="ntp-server-host" placeholder="Ntp server host">
+                    
+                    <p class="mt-md ml-sm">Time GMT Offset</p>
+                    <select id="gmt-offset-sec">
+                    </select>
 
-                    <button class="mt-md" onclick="addStation(this)">
-                        Save
+                    <p class="mt-md ml-sm">Daylight offset</p>
+                    <select id="daylight-offset-sec">
+                    </select>
+
+                    <button class="mt-md" onclick="saveConfiguration(this)">
+                        Update
                     </button>
                 </div>
             </div>
@@ -203,4 +211,5 @@
         </template>
 
     </body>
-<body>
+</html>
+    
