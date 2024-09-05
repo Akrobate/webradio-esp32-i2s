@@ -75,6 +75,81 @@ void WebRadioServer::init() {
 
 
   this->server->on(
+    "/api/streams",
+    HTTP_POST,
+    [&](AsyncWebServerRequest *request) {
+
+      String name = "";
+      String host = "";
+
+      if (request->hasParam("name", true)) {
+        name = request->getParam("name", true)->value();
+      } else {
+        request->send(400, "text/html", "Missing name");
+        return;
+      }
+
+      if (request->hasParam("host", true)) {
+        host = request->getParam("host", true)->value();
+      } else {
+        request->send(400, "text/html", "Missing host");
+        return;
+      }
+
+      Serial.print("name : ");
+      Serial.println(name);
+      Serial.print("host : ");
+      Serial.println(host);
+      this->stream_repository->addStream(name, host);
+
+      request->send(201, "text/html", "OK");
+    }
+  );
+
+
+  this->server->on(
+    "/api/streams/{stream_index}",
+    HTTP_PATCH,
+    [&](AsyncWebServerRequest *request) {
+
+      int index = -1;
+      String name = "";
+      String host = "";
+
+      if (request->pathArg(0) != NULL) {
+        String index_str = request->pathArg(0);
+        index = index_str.toInt();
+      } else {
+        request->send(400, "text/html", "Bad index");
+      }
+
+      if (request->hasParam("name", true)) {
+        name = request->getParam("name", true)->value();
+      } else {
+        request->send(400, "text/html", "Missing name");
+        return;
+      }
+
+      if (request->hasParam("host", true)) {
+        host = request->getParam("host", true)->value();
+      } else {
+        request->send(400, "text/html", "Missing host");
+        return;
+      }
+      Serial.print("index: ");
+      Serial.println(index);
+      Serial.print("name : ");
+      Serial.println(name);
+      Serial.print("host : ");
+      Serial.println(host);
+
+      request->send(201, "text/html", "OK");
+    }
+  );
+
+
+
+  this->server->on(
     "/api/configurations",
     HTTP_POST,
     [&](AsyncWebServerRequest *request) {
@@ -224,6 +299,8 @@ void WebRadioServer::init() {
 
 
   this->server->serveStatic("/", LittleFS, "/webinterface").setDefaultFile("index.html");
+  
+  // Debug routes
   this->server->serveStatic("/api/streams.json", LittleFS, "/streams.json");
 }
 

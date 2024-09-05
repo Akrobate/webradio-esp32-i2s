@@ -1,6 +1,8 @@
 #ifndef WebRadioServer_h
 #define WebRadioServer_h
 
+#define ASYNCWEBSERVER_REGEX
+
 #include <ESPAsyncWebServer.h>
 #include <LittleFS.h>
 #include <ArduinoJson.h>
