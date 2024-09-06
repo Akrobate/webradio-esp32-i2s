@@ -138,8 +138,10 @@ async function deleteStation(btn) {
 }
 
 
-async function editStation(elemnent) {
-    elemnent.parentElement.parentElement.remove()
+async function editStation(_el) {
+    const index = Number(_el.dataset.index)
+    await serverEditStation(index)
+    await loadStationList()
 }
 
 async function stationMoveUp(_el) {
