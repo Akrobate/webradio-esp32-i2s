@@ -84,8 +84,6 @@
                         <button class="primary mt-lg" onclick="refreshAvailableNetworks(this)">
                             Refresh
                         </button>
-
-                        
                     </div>
                     <div class="step-2 hidden">
                         <h4 class="mb-md">
@@ -113,12 +111,17 @@
                         Manage stations
                     </h3>
                     
-                    <input type="text" id="input-station-name" placeholder="Name">
-                    <input class="mt-md" id="input-station-host" type="text" placeholder="Hostname">
+                    <div class="inner-card elevation ">
+                        <input type="text" id="input-station-name" placeholder="Name">
+                        <input class="mt-md" id="input-station-host" type="text" placeholder="Hostname">
 
-                    <button class="mt-md" onclick="addStation(this)">
-                        Add
-                    </button>
+                        <button class="primary mt-md" onclick="addStation(this)">
+                            Add
+                        </button>
+                        <button class="secondary  mt-md" onclick="resetEditStation(this)">
+                            Cancel
+                        </button>
+                    </div>
                 </div>
 
                 <div class="loader hidden center mt-lg mb-lg"></div>
