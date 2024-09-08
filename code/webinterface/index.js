@@ -49,13 +49,13 @@ async function loadList(
     data_function
 ) {
     _list_el.innerHTML = template_el.innerHTML
-    const stations_list = await data_function()
+    const data_list = await data_function()
     _list_el.innerHTML = ''
     const template_html = list_item_el.innerHTML
-    stations_list.forEach((station, index) => {
+    data_list.forEach((data, index) => {
         let html = template_html
-        Object.keys(station).forEach((key) => {
-            html = html.replaceAll(`{{ ${key} }}`, station[key]);
+        Object.keys(data).forEach((key) => {
+            html = html.replaceAll(`{{ ${key} }}`, data[key]);
         })
         html = html.replaceAll('{{ index }}', index);
         const _new_el = document.createElement("div")
@@ -65,6 +65,9 @@ async function loadList(
 }
 
 
+/**
+ * Stations management
+ */
 async function loadStationList() {
     const _el = $('#radio-stations-list')
     await loadList(
@@ -83,13 +86,69 @@ async function loadStationList() {
 }
 
 
+async function showAddFormStation() {
+    const _el = $('#station-manager')
+    const _add_form_trigger = $('.add-trigger', _el)
+    const _add_form = $('.add-form', _el)
+    const _add_station = $('.add-station', _el)
+
+    rmCls(_add_form, 'hidden')
+    addCls(_add_form_trigger, 'hidden')
+    rmCls(_add_station, 'hidden')
+}
+
+
+async function showEditFormStation(btn) {
+    resetHideAddFormStation()
+    const index = Number(btn.dataset.index)
+    const name = btn.dataset.name
+    const host = btn.dataset.host
+
+    const {
+        _name_input,
+        _host_input,
+        _index_input,
+        _station_manager_el: _el
+    } = extractStationFormInputs();
+
+    const _add_form_trigger = $('.add-trigger', _el)
+    const _add_form = $('.add-form', _el)
+    const _edit_station = $('.edit-station', _el)
+
+    _name_input.value = name
+    _host_input.value = host
+    _index_input.value = index
+
+    rmCls(_add_form, 'hidden')
+    addCls(_add_form_trigger, 'hidden')
+    rmCls(_edit_station, 'hidden')
+}
+
+
+async function resetHideAddFormStation() {
+    const _el = $('#station-manager')
+    const _add_form_trigger = $('.add-trigger', _el)
+    const _add_form = $('.add-form', _el)
+    const _add_station = $('.add-station', _el)
+    const _edit_station = $('.edit-station', _el)
+
+    addCls(_add_station, 'hidden')
+    addCls(_edit_station, 'hidden')
+
+    addCls(_add_form, 'hidden')
+    rmCls(_add_form_trigger, 'hidden')
+    resetAddFormValues();
+}
+
+
 async function addStation(btn) {
 
-    const _name_input = $('#input-station-name')
-    const _host_input = $('#input-station-host')
-        
-    const name = _name_input.value
-    const host = _host_input.value
+    const {
+        _name_input,
+        _host_input,
+        name,
+        host,
+    } = extractStationFormInputs();
 
     if (name.length == 0) {
         addCls(_name_input, 'error')
@@ -119,13 +178,70 @@ async function addStation(btn) {
 
     buttonSetLoadingState(btn, true)
     await serverAddStation({name, host})
-    _host_input.value = ''
+    buttonSetLoadingState(btn, false)
+    resetHideAddFormStation()
+    await loadStationList()
+}
+
+
+async function editStation(btn) {
+    const {
+        _name_input,
+        _host_input,
+        name,
+        host,
+        index,
+    } = extractStationFormInputs();
+
+    if (name.length == 0) {
+        addCls(_name_input, 'error')
+        return
+    }
+
+    if (!isValidUrl(host)) {
+        addCls(_host_input, 'error')
+        return
+    }
+
+    if (name.length > STATION_NAME_MAX_LENGTH) {
+        addCls(_name_input, 'error')
+        return
+    }
+
+    if (host.length > STATION_HOST_MAX_LENGTH) {
+        addCls(_host_input, 'error')
+        return
+    }
+    
+    rmCls(_name_input, 'error')
+    rmCls(_host_input, 'error')
+
+    _name_input.disabled = true
+    _host_input.disabled = true
+
+    buttonSetLoadingState(btn, true)
+    await serverEditStation(index, {name, host})
+    buttonSetLoadingState(btn, false)
+    resetHideAddFormStation()
+    await loadStationList()
+}
+
+
+function resetAddFormValues() {    
+    const {
+        _name_input,
+        _host_input,
+        _index_input,
+    } = extractStationFormInputs();
+
     _name_input.value = ''
+    _host_input.value = ''
+    _index_input.value = ''
+
     _name_input.disabled = false
     _host_input.disabled = false
-    buttonSetLoadingState(btn, false)
-
-    await loadStationList()
+    rmCls(_name_input, 'error')
+    rmCls(_host_input, 'error')
 }
 
 
@@ -138,12 +254,6 @@ async function deleteStation(btn) {
 }
 
 
-async function editStation(_el) {
-    const index = Number(_el.dataset.index)
-    await serverEditStation(index)
-    await loadStationList()
-}
-
 async function stationMoveUp(_el) {
     const index = Number(_el.dataset.index)
     await serverStationMoveUp(index)
@@ -154,6 +264,28 @@ async function stationMoveDown(_el) {
     const index = Number(_el.dataset.index)
     await serverStationMoveDown(index)
     await loadStationList()
+}
+
+
+function extractStationFormInputs() {
+    const _el = $('#station-manager')
+    const _name_input = $('#input-station-name', _el)
+    const _host_input = $('#input-station-host', _el)
+    const _index_input = $('#input-station-index', _el)
+    
+    const name = _name_input.value
+    const host = _host_input.value
+    const index = Number(_index_input.value)
+
+    return {
+        _station_manager_el: _el,
+        _name_input,
+        _host_input,
+        _index_input,
+        name,
+        host,
+        index,
+    }
 }
 
 
