@@ -111,14 +111,22 @@
                         Manage stations
                     </h3>
                     
-                    <div class="inner-card elevation ">
+                    <button class="primary mt-md add-trigger" onclick="showAddFormStation(this)">
+                        Add new Station
+                    </button>
+
+                    <div class="inner-card elevation add-form hidden" >
                         <input type="text" id="input-station-name" placeholder="Name">
                         <input class="mt-md" id="input-station-host" type="text" placeholder="Hostname">
-
-                        <button class="primary mt-md" onclick="addStation(this)">
+                        <input id="input-station-index" type="hidden">
+                        
+                        <button class="primary mt-md add-station hidden" onclick="addStation(this)">
                             Add
                         </button>
-                        <button class="secondary  mt-md" onclick="resetEditStation(this)">
+                        <button class="primary mt-md edit-station hidden" onclick="editStation(this)">
+                            Edit
+                        </button>
+                        <button class="secondary  mt-md" onclick="resetHideAddFormStation(this)">
                             Cancel
                         </button>
                     </div>
@@ -173,7 +181,7 @@
                         <svg viewBox="0 0 24 24"><path d="M9,4H15V12H19.84L12,19.84L4.16,12H9V4Z" style="fill: currentcolor;"></path></svg>
                     </button>
 
-                    <button class="">
+                    <button class="" onclick="showEditFormStation(this)" data-index="{{ index }}" data-name="{{ name }}" data-host="{{ host }}">
                         edit
                     </button>
                 </div>
