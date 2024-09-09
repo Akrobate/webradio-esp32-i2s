@@ -141,58 +141,21 @@ async function resetHideAddFormStation() {
 }
 
 
-async function addStation(btn) {
+async function addEditStation(btn) {
 
     const {
         _name_input,
         _host_input,
-        name,
-        host,
-    } = extractStationFormInputs();
-
-    if (name.length == 0) {
-        addCls(_name_input, 'error')
-        return
-    }
-
-    if (!isValidUrl(host)) {
-        addCls(_host_input, 'error')
-        return
-    }
-
-    if (name.length > STATION_NAME_MAX_LENGTH) {
-        addCls(_name_input, 'error')
-        return
-    }
-
-    if (host.length > STATION_HOST_MAX_LENGTH) {
-        addCls(_host_input, 'error')
-        return
-    }
-    
-    rmCls(_name_input, 'error')
-    rmCls(_host_input, 'error')
-
-    _name_input.disabled = true
-    _host_input.disabled = true
-
-    buttonSetLoadingState(btn, true)
-    await serverAddStation({name, host})
-    buttonSetLoadingState(btn, false)
-    resetHideAddFormStation()
-    await loadStationList()
-}
-
-
-async function editStation(btn) {
-    const {
-        _name_input,
-        _host_input,
+        _index_input,
         name,
         host,
         index,
     } = extractStationFormInputs();
 
+    console.log("index........",_index_input.value);
+
+    const is_editing =_index_input.value !== ''
+
     if (name.length == 0) {
         addCls(_name_input, 'error')
         return
@@ -220,7 +183,13 @@ async function editStation(btn) {
     _host_input.disabled = true
 
     buttonSetLoadingState(btn, true)
-    await serverEditStation(index, {name, host})
+
+    if (is_editing) {
+        await serverEditStation(index, {name, host})
+    } else {
+        await serverAddStation({name, host})
+    }
+
     buttonSetLoadingState(btn, false)
     resetHideAddFormStation()
     await loadStationList()
