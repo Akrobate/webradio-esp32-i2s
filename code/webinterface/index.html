@@ -123,7 +123,7 @@
                         <button class="primary mt-md add-station hidden" onclick="addEditStation(this)">
                             Add
                         </button>
-                        <button class="primary mt-md edit-station hidden" onclick="editStation(this)">
+                        <button class="primary mt-md edit-station hidden" onclick="addEditStation(this)">
                             Edit
                         </button>
                         <button class="secondary  mt-md" onclick="resetHideAddFormStation(this)">
@@ -173,11 +173,11 @@
                     <button class="accent" onclick="deleteStation(this)" data-index="{{ index }}">
                         remove
                     </button>
-                    <button class="icon button-up" onclick="stationMoveUp(this)" data-index="{{ index }}">
+                    <button class="icon button-up" onclick="MoveUpStation(this)" data-index="{{ index }}">
                         <svg viewBox="0 0 24 24"><path d="M15,20H9V12H4.16L12,4.16L19.84,12H15V20Z" style="fill: currentcolor;"></path></svg>
                     </button>
 
-                    <button class="icon button-down" onclick="stationMoveDown(this)" data-index="{{ index }}">
+                    <button class="icon button-down" onclick="MoveDownStation(this)" data-index="{{ index }}">
                         <svg viewBox="0 0 24 24"><path d="M9,4H15V12H19.84L12,19.84L4.16,12H9V4Z" style="fill: currentcolor;"></path></svg>
                     </button>
 
