@@ -84,8 +84,6 @@
                         <button class="primary mt-lg" onclick="refreshAvailableNetworks(this)">
                             Refresh
                         </button>
-
-                        
                     </div>
                     <div class="step-2 hidden">
                         <h4 class="mb-md">
@@ -113,12 +111,25 @@
                         Manage stations
                     </h3>
                     
-                    <input type="text" id="input-station-name" placeholder="Name">
-                    <input class="mt-md" id="input-station-host" type="text" placeholder="Hostname">
-
-                    <button class="mt-md" onclick="addStation(this)">
-                        Add
+                    <button class="primary mt-md add-trigger" onclick="showAddFormStation(this)">
+                        Add new Station
                     </button>
+
+                    <div class="inner-card elevation add-form hidden" >
+                        <input type="text" id="input-station-name" placeholder="Name">
+                        <input class="mt-md" id="input-station-host" type="text" placeholder="Hostname">
+                        <input id="input-station-index" type="hidden">
+                        
+                        <button class="primary mt-md add-station hidden" onclick="addEditStation(this)">
+                            Add
+                        </button>
+                        <button class="primary mt-md edit-station hidden" onclick="addEditStation(this)">
+                            Edit
+                        </button>
+                        <button class="secondary  mt-md" onclick="resetHideAddFormStation(this)">
+                            Cancel
+                        </button>
+                    </div>
                 </div>
 
                 <div class="loader hidden center mt-lg mb-lg"></div>
@@ -162,15 +173,15 @@
                     <button class="accent" onclick="deleteStation(this)" data-index="{{ index }}">
                         remove
                     </button>
-                    <button class="icon button-up" onclick="stationMoveUp(this)" data-index="{{ index }}">
+                    <button class="icon button-up" onclick="MoveUpStation(this)" data-index="{{ index }}">
                         <svg viewBox="0 0 24 24"><path d="M15,20H9V12H4.16L12,4.16L19.84,12H15V20Z" style="fill: currentcolor;"></path></svg>
                     </button>
 
-                    <button class="icon button-down" onclick="stationMoveDown(this)" data-index="{{ index }}">
+                    <button class="icon button-down" onclick="MoveDownStation(this)" data-index="{{ index }}">
                         <svg viewBox="0 0 24 24"><path d="M9,4H15V12H19.84L12,19.84L4.16,12H9V4Z" style="fill: currentcolor;"></path></svg>
                     </button>
 
-                    <button class="">
+                    <button class="" onclick="showEditFormStation(this)" data-index="{{ index }}" data-name="{{ name }}" data-host="{{ host }}">
                         edit
                     </button>
                 </div>
