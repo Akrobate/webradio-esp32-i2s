@@ -3,6 +3,10 @@ const STATION_HOST_MAX_LENGTH = 1000
 
 let info_data = {}
 
+/**
+ * Generic methods
+ */
+
 function $(selector, element = document) {
     return element.querySelector(selector)
 }
@@ -30,17 +34,12 @@ function isValidUrl(string) {
 }
 
 
-/**
- * INIT
- */
-document.addEventListener('DOMContentLoaded', async () => {
-    await loadInfoAndWifiStatusData()
-    loadStationList()
-    loadSavedNetworksList()
-    initDateTimeConfigurationManager()
-    setInterval(loadInfoAndWifiStatusData, 2000)
-})
-
+function formatTime(date_time_string) {
+    const date = new Date(date_time_string)
+    const hours = date.getHours().toString().padStart(2, '0')
+    const minutes = date.getMinutes().toString().padStart(2, '0')
+    return `${hours}:${minutes}`;
+}
 
 async function loadList(
     _list_el,
@@ -63,6 +62,18 @@ async function loadList(
         _list_el.appendChild(_new_el.firstElementChild)
     })
 }
+
+
+/**
+ * INIT
+ */
+document.addEventListener('DOMContentLoaded', async () => {
+    await loadInfoAndWifiStatusData()
+    loadStationList()
+    loadSavedNetworksList()
+    initDateTimeConfigurationManager()
+    setInterval(loadInfoAndWifiStatusData, 2000)
+})
 
 
 /**
@@ -109,7 +120,7 @@ async function showEditFormStation(btn) {
         _host_input,
         _index_input,
         _station_manager_el: _el
-    } = extractStationFormInputs();
+    } = extractFormInputsStation();
 
     const _add_form_trigger = $('.add-trigger', _el)
     const _add_form = $('.add-form', _el)
@@ -126,7 +137,13 @@ async function showEditFormStation(btn) {
 
 
 async function resetHideAddFormStation() {
-    const _el = $('#station-manager')
+    const {
+        _name_input,
+        _host_input,
+        _index_input,
+        _station_manager_el: _el,
+    } = extractFormInputsStation();
+
     const _add_form_trigger = $('.add-trigger', _el)
     const _add_form = $('.add-form', _el)
     const _add_station = $('.add-station', _el)
@@ -134,10 +151,17 @@ async function resetHideAddFormStation() {
 
     addCls(_add_station, 'hidden')
     addCls(_edit_station, 'hidden')
-
     addCls(_add_form, 'hidden')
     rmCls(_add_form_trigger, 'hidden')
-    resetAddFormValues();
+
+    _name_input.value = ''
+    _host_input.value = ''
+    _index_input.value = ''
+
+    _name_input.disabled = false
+    _host_input.disabled = false
+    rmCls(_name_input, 'error')
+    rmCls(_host_input, 'error')
 }
 
 
@@ -150,7 +174,7 @@ async function addEditStation(btn) {
         name,
         host,
         index,
-    } = extractStationFormInputs();
+    } = extractFormInputsStation();
 
     console.log("index........",_index_input.value);
 
@@ -196,24 +220,6 @@ async function addEditStation(btn) {
 }
 
 
-function resetAddFormValues() {    
-    const {
-        _name_input,
-        _host_input,
-        _index_input,
-    } = extractStationFormInputs();
-
-    _name_input.value = ''
-    _host_input.value = ''
-    _index_input.value = ''
-
-    _name_input.disabled = false
-    _host_input.disabled = false
-    rmCls(_name_input, 'error')
-    rmCls(_host_input, 'error')
-}
-
-
 async function deleteStation(btn) {
     const index = btn.dataset.index
     buttonSetLoadingState(btn, true)
@@ -223,20 +229,20 @@ async function deleteStation(btn) {
 }
 
 
-async function stationMoveUp(_el) {
+async function MoveUpStation(_el) {
     const index = Number(_el.dataset.index)
-    await serverStationMoveUp(index)
+    await serverMoveUpStation(index)
     await loadStationList()
 }
 
-async function stationMoveDown(_el) {
+async function MoveDownStation(_el) {
     const index = Number(_el.dataset.index)
-    await serverStationMoveDown(index)
+    await serverMoveDownStation(index)
     await loadStationList()
 }
 
 
-function extractStationFormInputs() {
+function extractFormInputsStation() {
     const _el = $('#station-manager')
     const _name_input = $('#input-station-name', _el)
     const _host_input = $('#input-station-host', _el)
@@ -393,7 +399,9 @@ async function loadInfoAndWifiStatusData() {
         : 'not configured'
 }
 
-
+/**
+ * DateTimeConfigurationManager
+ */
 async function initDateTimeConfigurationManager() {
 
     const daylight_offset_label_list = [
@@ -460,10 +468,3 @@ async function saveConfiguration(btn) {
 
 }
 
-
-function formatTime(date_time_string) {
-    const date = new Date(date_time_string)
-    const hours = date.getHours().toString().padStart(2, '0')
-    const minutes = date.getMinutes().toString().padStart(2, '0')
-    return `${hours}:${minutes}`;
-}

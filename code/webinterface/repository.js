@@ -70,7 +70,7 @@ async function serverEditStation(index, input) {
 }
 
 
-async function serverStationMoveUp(index) {
+async function serverMoveUpStation(index) {
     try {
         let form_data = new FormData()
         form_data.append('index', index)
@@ -81,12 +81,12 @@ async function serverStationMoveUp(index) {
             }
         )
     } catch (error) {
-        console.log('serverStationMoveUp - Error:', error)
+        console.log('serverMoveUpStation - Error:', error)
     }
 }
 
 
-async function serverStationMoveDown(index) {
+async function serverMoveDownStation(index) {
     try {
         let form_data = new FormData()
         form_data.append('index', index)
@@ -97,7 +97,7 @@ async function serverStationMoveDown(index) {
             }
         )
     } catch (error) {
-        console.log('serverStationMoveDown - Error:', error)
+        console.log('serverMoveDownStation - Error:', error)
     }
 }
 

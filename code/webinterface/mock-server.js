@@ -40,6 +40,7 @@ async function serverRemoveStation(station_index) {
 
 async function serverEditStation(station_index, station) {
     console.log('serverEditStation', station_index, station)
+    await wait(SERVER_LAG_SHORT);
     _stations_list[station_index] = station;
     return Promise.resolve();
 }
@@ -51,8 +52,8 @@ async function serverAddStation(station) {
     return Promise.resolve();
 }
 
-async function serverStationMoveUp(index) {
-    console.log('serverStationMoveUp', index)
+async function serverMoveUpStation(index) {
+    console.log('serverMoveUpStation', index)
     await wait(SERVER_LAG_SHORT);
     const tmp = _stations_list[index]
     _stations_list[index] = _stations_list[index - 1]
@@ -61,8 +62,8 @@ async function serverStationMoveUp(index) {
 }
 
 
-async function serverStationMoveDown(index) {
-    console.log('serverStationMoveDown', index)
+async function serverMoveDownStation(index) {
+    console.log('serverMoveDownStation', index)
     await wait(SERVER_LAG_SHORT);
     const tmp = _stations_list[index]
     _stations_list[index] = _stations_list[index + 1]
