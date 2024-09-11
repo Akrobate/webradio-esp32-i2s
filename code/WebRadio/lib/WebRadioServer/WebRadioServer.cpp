@@ -108,7 +108,7 @@ void WebRadioServer::init() {
 
 
   this->server->on(
-    "/api/streams/{stream_index}",
+    "^\\/api\\/streams\\/([0-9]+)$",
     HTTP_PATCH,
     [&](AsyncWebServerRequest *request) {
 
@@ -136,7 +136,7 @@ void WebRadioServer::init() {
         request->send(400, "text/html", "Missing host");
         return;
       }
-      Serial.print("index: ");
+      Serial.print("EDIT - index: ");
       Serial.println(index);
       Serial.print("name : ");
       Serial.println(name);
@@ -147,6 +147,27 @@ void WebRadioServer::init() {
     }
   );
 
+
+  this->server->on(
+    "^\\/api\\/streams\\/([0-9]+)$",
+    HTTP_DELETE,
+    [&](AsyncWebServerRequest *request) {
+
+      int index = -1;
+
+      if (request->pathArg(0) != NULL) {
+        String index_str = request->pathArg(0);
+        index = index_str.toInt();
+      } else {
+        request->send(400, "text/html", "Bad index");
+      }
+
+      Serial.print("DELETE - index: ");
+      Serial.println(index);
+
+      request->send(201, "text/html", "OK");
+    }
+  );
 
 
   this->server->on(
