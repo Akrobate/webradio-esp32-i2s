@@ -23,11 +23,12 @@ class StreamRepository {
         boolean load();
         boolean save();
 
-        String getPasswordBySSID(String ssid);
-        JsonObject getCredentialByIndex(int index);
-        int getCredentialIndexBySSID(String ssid);
-
         void addStream(String name, String host);
+        void updateStream(int index, String name, String host);
+        void removeStream(int index);
+
+        JsonObject getStreamByIndex(int index);
+        int getStreamIndexBySSID(String ssid);
 
 
 };

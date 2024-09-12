@@ -44,13 +44,13 @@ bool StreamRepository::save() {
 }
 
 
-JsonObject StreamRepository::getCredentialByIndex(int index) {
+JsonObject StreamRepository::getStreamByIndex(int index) {
     JsonArray rootArray = this->stream_list->as<JsonArray>();
     return rootArray[index].as<JsonObject>();
 }
 
 
-int StreamRepository::getCredentialIndexBySSID(String ssid) {
+int StreamRepository::getStreamIndexBySSID(String ssid) {
     JsonArray rootArray = this->stream_list->as<JsonArray>();
     for (int i = 0; i < rootArray.size(); i++) {
         JsonObject obj = rootArray[i].as<JsonObject>();
@@ -67,5 +67,21 @@ void StreamRepository::addStream(String name, String host) {
     JsonObject obj = rootArray.createNestedObject();
     obj["name"] = name;
     obj["host"] = host;
+    this->save();
+}
+
+
+void StreamRepository::updateStream(int index, String name, String host) {
+    JsonArray rootArray = this->stream_list->as<JsonArray>();
+    JsonObject obj = rootArray[index].to<JsonObject>();
+    obj["name"] = name;
+    obj["host"] = host;
+    this->save();
+}
+
+
+void StreamRepository::removeStream(int index) {
+    JsonArray rootArray = this->stream_list->as<JsonArray>();
+    rootArray.remove(index);
     this->save();
 }
