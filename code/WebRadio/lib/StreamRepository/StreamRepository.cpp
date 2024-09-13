@@ -50,18 +50,6 @@ JsonObject StreamRepository::getStreamByIndex(int index) {
 }
 
 
-int StreamRepository::getStreamIndexBySSID(String ssid) {
-    JsonArray rootArray = this->stream_list->as<JsonArray>();
-    for (int i = 0; i < rootArray.size(); i++) {
-        JsonObject obj = rootArray[i].as<JsonObject>();
-        if (obj["ssid"] == ssid) {
-            return i;
-        }
-    }
-    return -1;
-}
-
-
 void StreamRepository::addStream(String name, String host) {
     JsonArray rootArray = this->stream_list->as<JsonArray>();
     JsonObject obj = rootArray.createNestedObject();

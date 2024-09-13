@@ -28,7 +28,6 @@ class StreamRepository {
         void removeStream(int index);
 
         JsonObject getStreamByIndex(int index);
-        int getStreamIndexBySSID(String ssid);
 
 
 };
