@@ -143,6 +143,8 @@ void WebRadioServer::init() {
       Serial.print("host : ");
       Serial.println(host);
 
+      this->stream_repository->updateStream(index, name, host);
+
       request->send(201, "text/html", "OK");
     }
   );
@@ -164,6 +166,8 @@ void WebRadioServer::init() {
 
       Serial.print("DELETE - index: ");
       Serial.println(index);
+
+      this->stream_repository->removeStream(index);
 
       request->send(201, "text/html", "OK");
     }
