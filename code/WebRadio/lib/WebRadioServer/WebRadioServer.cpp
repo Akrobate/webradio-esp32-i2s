@@ -174,6 +174,55 @@ void WebRadioServer::init() {
   );
 
 
+
+
+  this->server->on(
+    "^\\/api\\/streams\\/([0-9]+)\\/position-up$",
+    HTTP_POST,
+    [&](AsyncWebServerRequest *request) {
+
+      int index = -1;
+
+      if (request->pathArg(0) != NULL) {
+        String index_str = request->pathArg(0);
+        index = index_str.toInt();
+      } else {
+        request->send(400, "text/html", "Bad index");
+      }
+
+      Serial.print("POSITION UP - index: ");
+      Serial.println(index);
+
+      // this->stream_repository->updateStream(index, name, host);
+
+      request->send(201, "text/html", "OK");
+    }
+  );
+
+
+  this->server->on(
+    "^\\/api\\/streams\\/([0-9]+)\\/position-down$",
+    HTTP_POST,
+    [&](AsyncWebServerRequest *request) {
+
+      int index = -1;
+
+      if (request->pathArg(0) != NULL) {
+        String index_str = request->pathArg(0);
+        index = index_str.toInt();
+      } else {
+        request->send(400, "text/html", "Bad index");
+      }
+
+      Serial.print("POSITION DOWN - index: ");
+      Serial.println(index);
+
+      // this->stream_repository->updateStream(index, name, host);
+
+      request->send(201, "text/html", "OK");
+    }
+  );
+
   this->server->on(
     "/api/configurations",
     HTTP_POST,
