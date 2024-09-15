@@ -72,14 +72,7 @@ async function serverEditStation(index, input) {
 
 async function serverMoveUpStation(index) {
     try {
-        let form_data = new FormData()
-        form_data.append('index', index)
-        await fetch('/api/streams/position-up',
-            {
-                body: form_data,
-                method: 'POST',
-            }
-        )
+        await fetch(`/api/streams/${index}/position-up`)
     } catch (error) {
         console.log('serverMoveUpStation - Error:', error)
     }
@@ -88,14 +81,7 @@ async function serverMoveUpStation(index) {
 
 async function serverMoveDownStation(index) {
     try {
-        let form_data = new FormData()
-        form_data.append('index', index)
-        await fetch('/api/streams/position-down',
-            {
-                body: form_data,
-                method: 'POST',
-            }
-        )
+        await fetch(`/api/streams/${index}/position-down`)
     } catch (error) {
         console.log('serverMoveDownStation - Error:', error)
     }
