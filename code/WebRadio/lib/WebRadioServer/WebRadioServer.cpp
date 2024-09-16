@@ -43,18 +43,18 @@ void WebRadioServer::init() {
       String response;
       DynamicJsonDocument info(500);
 
-      JsonObject obj = info.to<JsonObject>();
-      obj["access_point_ssid"] = this->business_state->getAccessPointSSID();
-      obj["temperature"] = this->business_state->getTemperature();
-      obj["pressure"] = this->business_state->getPressure();
-      obj["total_free_bytes"] = this->business_state->getTotalFreeBytes();
-      obj["minimum_free_bytes"] = this->business_state->getMinimumFreeBytes();
-      obj["is_connected_to_wifi"] = this->business_state->getIsConnectedToWifi();
-      obj["is_connecting_to_wifi"] = this->business_state->getIsConnectingToWifi();
-      obj["connected_to_ssid"] = this->business_state->getConnectedToSSID();
-      obj["local_ip"] = this->business_state->getLocalIP();
-      obj["date_time"] = this->business_state->getDateTime();
-      obj["date_time_configured"] = this->business_state->getDateTimeConfigured();
+      JsonObject response_object = info.to<JsonObject>();
+      response_object["access_point_ssid"] = this->business_state->getAccessPointSSID();
+      response_object["temperature"] = this->business_state->getTemperature();
+      response_object["pressure"] = this->business_state->getPressure();
+      response_object["total_free_bytes"] = this->business_state->getTotalFreeBytes();
+      response_object["minimum_free_bytes"] = this->business_state->getMinimumFreeBytes();
+      response_object["is_connected_to_wifi"] = this->business_state->getIsConnectedToWifi();
+      response_object["is_connecting_to_wifi"] = this->business_state->getIsConnectingToWifi();
+      response_object["connected_to_ssid"] = this->business_state->getConnectedToSSID();
+      response_object["local_ip"] = this->business_state->getLocalIP();
+      response_object["date_time"] = this->business_state->getDateTime();
+      response_object["date_time_configured"] = this->business_state->getDateTimeConfigured();
 
       serializeJson(info, response);
       request->send(200, "application/json", response);

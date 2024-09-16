@@ -70,7 +70,10 @@ void setup() {
 
     display_screen->init();
     display_screen->injectBusinesState(business_state);
+
     display_screen->demoScreen();
+    delay(1000);
+    display_screen->infoTestScreen();
 
     xMutex = xSemaphoreCreateMutex();
     if (xMutex == NULL) {
