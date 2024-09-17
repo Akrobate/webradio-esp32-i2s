@@ -38,8 +38,8 @@ void DisplayScreen::injectBusinesState(BusinessState * business_state) {
 void DisplayScreen::infoScreen() {
     this->clear();
 
-    this->u8g2->setFont(u8g2_font_7x13B_tf);
-    this->u8g2->setCursor(0, 10);
+    this->u8g2->setFont(u8g2_font_6x12_tf);
+    this->u8g2->setCursor(5, 10);
     this->u8g2->print("Temperature: ");
     this->u8g2->print(this->business_state->getTemperature());
     this->u8g2->print(" C");
@@ -47,6 +47,12 @@ void DisplayScreen::infoScreen() {
     this->u8g2->print("Pressure: ");
     this->u8g2->print(this->business_state->getPressure());
     this->u8g2->print(" hPa");
+
+    String text = this->business_state->getDateTime();
+    int text_width = this->u8g2->getUTF8Width(text.c_str());
+    int x = this->u8g2->getDisplayWidth() / 2 - text_width / 2;
+    this->u8g2->drawUTF8(x, 50, text.c_str());    
+
 
     this->display();
 }

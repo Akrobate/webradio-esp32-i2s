@@ -97,7 +97,7 @@ void loop() {
     }
     
     if (loops % 100 == 0) {
-        display_screen->temperatureScreen();
+        display_screen->infoScreen();
     }
 
     delay(10);
