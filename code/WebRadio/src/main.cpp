@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <LittleFS.h>
+#include <Audio.h>
 
 #include <WebRadioServer.h>
 #include <WifiNetworking.h>
@@ -17,11 +18,15 @@
 
 #include "time.h"
 
+#define I2S_DOUT      25
+#define I2S_LRC       26
+#define I2S_BCLK      27
+
 
 void temperatureTask(void *pvParameters);
 void deviceSystemTask(void *pvParameters);
 void networkConnectionTask(void *pvParameters);
-
+void audioTask(void *pvParameters);
 
 BusinessState * business_state = new BusinessState();
 WebRadioServer * server = new WebRadioServer();
@@ -32,6 +37,8 @@ DisplayScreen * display_screen = new DisplayScreen();
 BMP180Probe * bmp_180_probe = new BMP180Probe();
 DeviceSystem * device_system = new DeviceSystem();
 ConfigurationRepository * configuration_repository = new ConfigurationRepository();
+
+Audio audio;
 
 #define LED 4
 
@@ -85,11 +92,30 @@ void setup() {
     xTaskCreate(deviceSystemTask, "Task deviceSystem", 2000, NULL, 1, NULL);
     xTaskCreate(networkConnectionTask, "Task NetworkConnection", 5000, NULL, 1, NULL);
     
+
+    // Audio
+    audio.setPinout(I2S_BCLK, I2S_LRC, I2S_DOUT);
+    audio.setVolume(10);
+
+    disableCore0WDT(); // Disable watchdog on CORE0
+    xTaskCreatePinnedToCore(
+                  audioTask,   /* Function to implement the task */
+                  "audioTask", /* Name of the task */
+                  10000,      /* Stack size in words */
+                  NULL,       /* Task input parameter */
+                  15,          /* Priority of the task */
+                  NULL,       /* Task handle. */
+                  0);  /* Core where the task should run */
 }
+
+
+bool isStationChanged = true;
 
 
 void loop() {
     loops++;
+
+
 
     if (loops % 100 == 0) {
         Serial.print("loops " );
@@ -170,3 +196,17 @@ void networkConnectionTask(void *pvParameters) {
     }
 }
 
+
+void audioTask(void *pvParameters) {
+
+
+  while(1) {
+    if (business_state->getIsConnectedToWifi()) {
+    //    if (isStationChanged) {
+    //        audio.connecttohost("http://broadcast.infomaniak.ch/radioclassique-high.mp3");
+    //        isStationChanged = false;
+    //    }
+    //    audio.loop();
+    }
+  }
+}
