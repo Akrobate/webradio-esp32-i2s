@@ -1,7 +1,6 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <LittleFS.h>
-#include <Audio.h>
 
 #include <WebRadioServer.h>
 #include <WifiNetworking.h>
@@ -11,6 +10,7 @@
 #include <DisplayScreen.h>
 #include <BMP180Probe.h>
 #include <DeviceSystem.h>
+#include <AudioProcess.h>
 #include <ConfigurationRepository.h>
 
 #include "soc/soc.h" //disable brownour problems
@@ -37,8 +37,7 @@ DisplayScreen * display_screen = new DisplayScreen();
 BMP180Probe * bmp_180_probe = new BMP180Probe();
 DeviceSystem * device_system = new DeviceSystem();
 ConfigurationRepository * configuration_repository = new ConfigurationRepository();
-
-Audio audio;
+AudioProcess * audio_process = new AudioProcess();
 
 #define LED 4
 
@@ -61,6 +60,8 @@ void setup() {
     wifi_networking->scan();
     wifi_networking->injectBusinessState(business_state);
     
+
+
     network_credential_repository->load();
     stream_repository->load();
 
@@ -84,7 +85,7 @@ void setup() {
 
     xMutex = xSemaphoreCreateMutex();
     if (xMutex == NULL) {
-        Serial.println("Mutex creation failed");
+        Serial.println("[FATAL Error] Mutex creation failed");
         while (1);
     }
 
@@ -92,20 +93,10 @@ void setup() {
     xTaskCreate(deviceSystemTask, "Task deviceSystem", 2000, NULL, 1, NULL);
     xTaskCreate(networkConnectionTask, "Task NetworkConnection", 5000, NULL, 1, NULL);
     
+    audio_process->injectBusinesState(business_state);
+    audio_process->injectStreamRepository(stream_repository);
+    audio_process->init();
 
-    // Audio
-    audio.setPinout(I2S_BCLK, I2S_LRC, I2S_DOUT);
-    audio.setVolume(10);
-
-    disableCore0WDT(); // Disable watchdog on CORE0
-    xTaskCreatePinnedToCore(
-                  audioTask,   /* Function to implement the task */
-                  "audioTask", /* Name of the task */
-                  10000,      /* Stack size in words */
-                  NULL,       /* Task input parameter */
-                  15,          /* Priority of the task */
-                  NULL,       /* Task handle. */
-                  0);  /* Core where the task should run */
 }
 
 
@@ -196,17 +187,3 @@ void networkConnectionTask(void *pvParameters) {
     }
 }
 
-
-void audioTask(void *pvParameters) {
-
-
-  while(1) {
-    if (business_state->getIsConnectedToWifi()) {
-    //    if (isStationChanged) {
-    //        audio.connecttohost("http://broadcast.infomaniak.ch/radioclassique-high.mp3");
-    //        isStationChanged = false;
-    //    }
-    //    audio.loop();
-    }
-  }
-}

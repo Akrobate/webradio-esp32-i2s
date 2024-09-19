@@ -35,6 +35,12 @@ class BusinessState {
         String ntp_server_host = "";
 
 
+        // Streams
+        int playing_stream = -1;
+        int playing_volume = 0;
+
+
+
     public:
         BusinessState();
 
@@ -84,6 +90,12 @@ class BusinessState {
 
         void setDateTimeConfigured(bool date_time_configured);
         bool getDateTimeConfigured();
+
+        void setPlayingStream(int playing_stream);
+        int getPlayingStream();
+
+        void setPlayingVolume(int playing_volume);
+        int getPlayingVolume();
 
 };
 

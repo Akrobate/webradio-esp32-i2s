@@ -137,3 +137,21 @@ void BusinessState::setDateTimeConfigured(bool date_time_configured) {
 bool BusinessState::getDateTimeConfigured() {
     return this->date_time_configured;
 }
+
+
+// Streams
+void BusinessState::setPlayingStream(int playing_stream) {
+    this->playing_stream = playing_stream;
+}
+
+int BusinessState::getPlayingStream() {
+    return this->playing_stream;
+}
+
+void BusinessState::setPlayingVolume(int playing_volume) {
+    this->playing_volume = playing_volume;
+}
+
+int BusinessState::getPlayingVolume() {
+    return this->playing_volume;
+}
