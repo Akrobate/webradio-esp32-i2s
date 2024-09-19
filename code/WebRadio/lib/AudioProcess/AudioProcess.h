@@ -3,13 +3,15 @@
 
 #include <Arduino.h>
 #include <BusinessState.h>
+#include <StreamRepository.h>
 #include <Audio.h>
 
 class AudioProcess {
 
-    private:
-
+    public:
         BusinessState * business_state = nullptr;
+        StreamRepository * stream_repository = nullptr;
+
         Audio * audio;
         unsigned int I2S_DOUT = 25;
         unsigned int I2S_LRC =  26;
@@ -18,15 +20,15 @@ class AudioProcess {
 
         bool is_initialized = false;
         bool is_playing = false;
+
+        int playing_stream_index = -1;
         int volume = 0;
-        String host = "";
 
-
-
-    public:
         AudioProcess();
 
         void injectBusinesState(BusinessState * business_state);
+        void injectStreamRepository(StreamRepository * stream_repository);
+
         void init();
 
 };
