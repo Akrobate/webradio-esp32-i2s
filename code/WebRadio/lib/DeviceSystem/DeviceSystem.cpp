@@ -21,6 +21,12 @@ void DeviceSystem::update() {
             char buffer[64];
             strftime(buffer, sizeof(buffer), "%Y-%m-%dT%H:%M:%S", &timeinfo);
             this->date_time = String(buffer);
+            
+            strftime(buffer, sizeof(buffer), "%H:%M", &timeinfo);
+            this->formated_time = String(buffer);
+            
+            strftime(buffer, sizeof(buffer), "%d/%m", &timeinfo);
+            this->formated_date = String(buffer);
         }
     }
 }
@@ -101,6 +107,9 @@ void DeviceSystem::updateBusinessState() {
 
         this->business_state->setDateTime(this->date_time);
         this->business_state->setDateTimeConfigured(this->date_time_configured);
+
+        this->business_state->setFormatedTime(this->formated_time);
+        this->business_state->setFormatedDate(this->formated_date);
         
         this->business_state->unlock();
     }

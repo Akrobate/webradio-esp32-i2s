@@ -27,9 +27,12 @@ class BusinessState {
 
         // time
         String date_time = "";
+        String formated_date = "";
+        String formated_time = "";
+
         bool date_time_configured = false;
 
-        // NTP
+        // NTP config
         long gmt_offset_sec = 0;
         int daylight_offset_sec = 0;
         String ntp_server_host = "";
@@ -96,6 +99,12 @@ class BusinessState {
 
         void setPlayingVolume(int playing_volume);
         int getPlayingVolume();
+
+        void setFormatedDate(String formated_date);
+        String getFormatedDate();
+
+        void setFormatedTime(String formated_time);
+        String getFormatedTime();
 
 };
 

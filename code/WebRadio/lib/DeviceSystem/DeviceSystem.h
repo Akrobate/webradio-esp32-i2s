@@ -19,6 +19,8 @@ class DeviceSystem {
         int largest_free_block = 0;
 
         String date_time = "";
+        String formated_date = "";
+        String formated_time = "";
         bool date_time_configured = false;
 
         long gmt_offset_sec = 3600 * 1;

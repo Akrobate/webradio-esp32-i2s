@@ -155,3 +155,19 @@ void BusinessState::setPlayingVolume(int playing_volume) {
 int BusinessState::getPlayingVolume() {
     return this->playing_volume;
 }
+
+void BusinessState::setFormatedTime(String formated_time) {
+    this->formated_time = formated_time;
+}
+
+String BusinessState::getFormatedTime() {
+    return this->formated_time;
+}
+
+void BusinessState::setFormatedDate(String formated_date) {
+    this->formated_date = formated_date;
+}
+
+String BusinessState::getFormatedDate() {
+    return this->formated_date;
+}
