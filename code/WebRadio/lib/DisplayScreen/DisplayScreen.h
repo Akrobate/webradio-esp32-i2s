@@ -25,6 +25,9 @@ class DisplayScreen {
         void infoScreen();
         void temperatureScreen();
         void infoTestScreen();
+
+        void standbyScreen();
+
 };
 
 #endif

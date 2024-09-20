@@ -70,11 +70,9 @@ void DisplayScreen::infoTestScreen() {
     int x = this->u8g2->getDisplayWidth() / 2 - text_width / 2;
     int y = this->u8g2->getDisplayHeight() / 2 + text_height / 2;
 
-    this->clear();
     this->u8g2->drawUTF8(x, y, text.c_str());    
     this->display();
 }
-
 
 
 void DisplayScreen::temperatureScreen() {
@@ -84,6 +82,43 @@ void DisplayScreen::temperatureScreen() {
     this->u8g2->setCursor(2, 45);
     this->u8g2->print(this->business_state->getTemperature());
     this->u8g2->print("°C");
+    this->display();
+}
+
+
+void DisplayScreen::standbyScreen() {
+    this->clear();
+
+    int text_width = 0;
+    int text_height = 0;
+    int x = 0;
+    int y = 0;
+
+    String formated_time = this->business_state->getFormatedTime();
+    this->u8g2->setFont(u8g2_font_osr26_tn);
+    text_width = this->u8g2->getUTF8Width(formated_time.c_str());
+    text_height = this->u8g2->getAscent() - this->u8g2->getDescent();
+    x = this->u8g2->getDisplayWidth() / 2 - text_width / 2;
+    y = this->u8g2->getDisplayHeight() / 2 + text_height / 2;
+    this->u8g2->drawUTF8(x, y, formated_time.c_str());  
+    
+
+    String formated_date = this->business_state->getFormatedDate();
+    this->u8g2->setFont(u8g2_font_6x12_tf);
+    text_height = this->u8g2->getAscent() - this->u8g2->getDescent();
+    x = 0;
+    y = text_height;
+    this->u8g2->drawUTF8(x, y, formated_date.c_str()); 
+
+    float temperature = this->business_state->getTemperature();
+    String formated_temperature = String(temperature) + " C";
+    this->u8g2->setFont(u8g2_font_6x12_tf);
+    text_width = this->u8g2->getUTF8Width(formated_temperature.c_str());
+    text_height = this->u8g2->getAscent() - this->u8g2->getDescent();
+    x = this->u8g2->getDisplayWidth() - text_width;
+    y = text_height;
+    this->u8g2->drawUTF8(x, y, formated_temperature.c_str());  
+    
     this->display();
 }
 
