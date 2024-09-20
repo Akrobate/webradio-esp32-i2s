@@ -106,15 +106,14 @@ bool isStationChanged = true;
 void loop() {
     loops++;
 
-
-
     if (loops % 100 == 0) {
         Serial.print("loops " );
         Serial.println(loops);
     }
     
     if (loops % 100 == 0) {
-        display_screen->infoScreen();
+        display_screen->standbyScreen();
+        //display_screen->infoScreen();
     }
 
     delay(10);
