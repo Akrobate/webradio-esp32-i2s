@@ -74,38 +74,6 @@ void WebRadioServer::init() {
   );
 
 
-  this->server->on(
-    "/api/streams",
-    HTTP_POST,
-    [&](AsyncWebServerRequest *request) {
-
-      String name = "";
-      String host = "";
-
-      if (request->hasParam("name", true)) {
-        name = request->getParam("name", true)->value();
-      } else {
-        request->send(400, "text/html", "Missing name");
-        return;
-      }
-
-      if (request->hasParam("host", true)) {
-        host = request->getParam("host", true)->value();
-      } else {
-        request->send(400, "text/html", "Missing host");
-        return;
-      }
-
-      Serial.print("name : ");
-      Serial.println(name);
-      Serial.print("host : ");
-      Serial.println(host);
-      this->stream_repository->addStream(name, host);
-
-      request->send(201, "text/html", "OK");
-    }
-  );
-
 
   this->server->on(
     "^\\/api\\/streams\\/([0-9]+)$",
@@ -222,6 +190,91 @@ void WebRadioServer::init() {
       request->send(201, "text/html", "OK");
     }
   );
+
+
+  this->server->on(
+    "^\\/api\\/streams\\/(-?[0-9]+)\\/play$",
+    HTTP_POST,
+    [&](AsyncWebServerRequest *request) {
+
+      int index = -1;
+
+      if (request->pathArg(0) != NULL) {
+        String index_str = request->pathArg(0);
+        index = index_str.toInt();
+      } else {
+        request->send(400, "text/html", "Bad index");
+      }
+
+      Serial.print("Play ");
+      Serial.println(index);
+
+      this->business_state->setPlayingStream(index);
+      request->send(201, "text/html", "OK");
+    }
+  );
+
+
+
+
+  this->server->on(
+    "/api/streams",
+    HTTP_POST,
+    [&](AsyncWebServerRequest *request) {
+
+      String name = "";
+      String host = "";
+
+      if (request->hasParam("name", true)) {
+        name = request->getParam("name", true)->value();
+      } else {
+        request->send(400, "text/html", "/api/streams Missing name");
+        return;
+      }
+
+      if (request->hasParam("host", true)) {
+        host = request->getParam("host", true)->value();
+      } else {
+        request->send(400, "text/html", "Missing host");
+        return;
+      }
+
+      Serial.print("name : ");
+      Serial.println(name);
+      Serial.print("host : ");
+      Serial.println(host);
+      this->stream_repository->addStream(name, host);
+
+      request->send(201, "text/html", "OK");
+    }
+  );
+
+
+
+
+
+  this->server->on(
+    "/api/volume",
+    HTTP_POST,
+    [&](AsyncWebServerRequest *request) {
+
+      int value = 0;
+
+      if (request->hasParam("value", true)) {
+        value = request->getParam("value", true)->value().toInt();
+      } else {
+        request->send(400, "text/html", "Missing value");
+        return;
+      }
+
+      Serial.print("Volume ");
+      Serial.println(value);
+
+      this->business_state->setPlayingVolume(value);
+      request->send(201, "text/html", "OK");
+    }
+  );
+
 
   this->server->on(
     "/api/configurations",
