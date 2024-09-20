@@ -2,6 +2,8 @@
 #define AudioProcess_h
 
 #include <Arduino.h>
+#include "ArduinoJson.h"
+
 #include <BusinessState.h>
 #include <StreamRepository.h>
 #include <Audio.h>
