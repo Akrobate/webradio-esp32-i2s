@@ -89,9 +89,9 @@ void setup() {
         while (1);
     }
 
-    xTaskCreate(temperatureTask, "Task Temperature", 2000, NULL, 1, NULL);
-    xTaskCreate(deviceSystemTask, "Task deviceSystem", 2000, NULL, 1, NULL);
-    xTaskCreate(networkConnectionTask, "Task NetworkConnection", 5000, NULL, 1, NULL);
+    xTaskCreate(temperatureTask, "Task Temperature", 2000, NULL, 1, NULL); // 2000
+    xTaskCreate(deviceSystemTask, "Task deviceSystem", 2000, NULL, 1, NULL); // 2000 -
+    xTaskCreate(networkConnectionTask, "Task NetworkConnection", 2000, NULL, 1, NULL); // 5000
     
     audio_process->injectBusinesState(business_state);
     audio_process->injectStreamRepository(stream_repository);
