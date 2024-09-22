@@ -27,8 +27,8 @@ class BusinessState {
 
         // time
         String date_time = "";
-        String formated_date = "";
-        String formated_time = "";
+        String formated_date = "...";
+        String formated_time = "...";
 
         bool date_time_configured = false;
 
@@ -41,6 +41,7 @@ class BusinessState {
         // Streams
         int playing_stream = -1;
         int playing_volume = 0;
+        unsigned long volume_changed_at_millis = 0;
 
 
 
@@ -105,6 +106,9 @@ class BusinessState {
 
         void setFormatedTime(String formated_time);
         String getFormatedTime();
+
+        void setVolumeChangedAtMillis(unsigned long volume_changed_at_millis);
+        unsigned long getVolumeChangedAtMillis();
 
 };
 

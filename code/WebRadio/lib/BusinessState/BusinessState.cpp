@@ -150,6 +150,7 @@ int BusinessState::getPlayingStream() {
 
 void BusinessState::setPlayingVolume(int playing_volume) {
     this->playing_volume = playing_volume;
+    this->setVolumeChangedAtMillis(millis());
 }
 
 int BusinessState::getPlayingVolume() {
@@ -170,4 +171,12 @@ void BusinessState::setFormatedDate(String formated_date) {
 
 String BusinessState::getFormatedDate() {
     return this->formated_date;
+}
+
+void BusinessState::setVolumeChangedAtMillis(unsigned long volume_changed_at_millis) {
+    this->volume_changed_at_millis = volume_changed_at_millis;
+}
+
+unsigned long BusinessState::getVolumeChangedAtMillis() {
+    return this->volume_changed_at_millis;
 }
