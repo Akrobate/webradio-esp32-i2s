@@ -39,7 +39,6 @@ bool WifiNetworking::connect(String ssid, String password) {
 void WifiNetworking::begin(String ssid, String password) {
     if (this->business_state->lock()) {
         this->business_state->setConnectedToSSID(ssid);
-        this->business_state->setIsConnectingToWifi(true);
         this->business_state->unlock();
     }
     this->wifi->begin(ssid, password);

@@ -41,8 +41,12 @@ void setup() {
     //WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0);
 
     Serial.begin(115200);
+
+    display_screen->injectBusinesState(business_state);
+    display_screen->init();
     delay(100);
 
+    // Why configuration repository do need busuness state?? 
     configuration_repository->injectBusinessState(business_state);
     configuration_repository->load();
 
@@ -66,9 +70,6 @@ void setup() {
     bmp_180_probe->injectBusinesState(business_state);
     bmp_180_probe->init();
 
-    display_screen->injectBusinesState(business_state);
-    display_screen->init();
-
     xTaskCreate(temperatureTask, "Task Temperature", 2000, NULL, 1, NULL); // 2000
     xTaskCreate(deviceSystemTask, "Task deviceSystem", 2000, NULL, 1, NULL); // 2000 -
     xTaskCreate(networkConnectionTask, "Task NetworkConnection", 2000, NULL, 1, NULL); // 5000
@@ -88,7 +89,7 @@ void loop() {
     }
 }
 
-
+// @todo: move to a task in the class
 void temperatureTask(void *pvParameters) {
     (void) pvParameters;
     while (1) {
@@ -98,7 +99,7 @@ void temperatureTask(void *pvParameters) {
     }
 }
 
-
+// @todo: move to a task in the class
 void deviceSystemTask(void *pvParameters) {
     (void) pvParameters;
     while (1) {
@@ -117,6 +118,7 @@ void networkConnectionTask(void *pvParameters) {
 
             if (business_state->lock()) {
                 business_state->setIsConnectedToWifi(false);
+                business_state->setIsConnectingToWifi(true);
                 business_state->unlock();
             }
 
@@ -142,14 +144,13 @@ void networkConnectionTask(void *pvParameters) {
                 if (wifi_networking->isConnected()) {
                     if (business_state->lock()) {
                         business_state->setIsConnectedToWifi(true);
-                        business_state->setIsConnectingToWifi(false);
                         business_state->setLocalIP(wifi_networking->getLocalIP());
+                        business_state->setIsConnectingToWifi(false);
                         business_state->unlock();
                     }
                     break;
                 }
             }
-            // xSemaphoreGive(xMutex);
         }
         vTaskDelay(pdMS_TO_TICKS(5000));
     }
