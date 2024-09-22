@@ -16,13 +16,6 @@
 #include "soc/soc.h" //disable brownour problems
 #include "soc/rtc_cntl_reg.h" //disable brownour problems
 
-#include "time.h"
-
-#define I2S_DOUT      25
-#define I2S_LRC       26
-#define I2S_BCLK      27
-
-
 void temperatureTask(void *pvParameters);
 void deviceSystemTask(void *pvParameters);
 void networkConnectionTask(void *pvParameters);
@@ -42,7 +35,7 @@ AudioProcess * audio_process = new AudioProcess();
 #define LED 4
 
 int loops = 0;
-SemaphoreHandle_t xMutex;
+// SemaphoreHandle_t xMutex;
 
 void setup() {
     //WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0);
@@ -50,44 +43,31 @@ void setup() {
     Serial.begin(115200);
     delay(100);
 
-    configuration_repository->load();
     configuration_repository->injectBusinessState(business_state);
+    configuration_repository->load();
 
     device_system->injectBusinesState(business_state);
     device_system->configureTimeTask();
 
+    wifi_networking->injectBusinessState(business_state);
     wifi_networking->startAP();
     wifi_networking->scan();
-    wifi_networking->injectBusinessState(business_state);
     
-
-
     network_credential_repository->load();
     stream_repository->load();
 
-    server->init();
-    server->begin();
     server->injectWifiNetworking(wifi_networking);
     server->injectNetworkCredentialRepository(network_credential_repository);
     server->injectStreamRepository(stream_repository);
     server->injectBusinessState(business_state);
+    server->init();
+    server->begin();
     
-
-    bmp_180_probe->init();
     bmp_180_probe->injectBusinesState(business_state);
+    bmp_180_probe->init();
 
-    display_screen->init();
     display_screen->injectBusinesState(business_state);
-
-    display_screen->demoScreen();
-    delay(1000);
-    display_screen->infoTestScreen();
-
-    xMutex = xSemaphoreCreateMutex();
-    if (xMutex == NULL) {
-        Serial.println("[FATAL Error] Mutex creation failed");
-        while (1);
-    }
+    display_screen->init();
 
     xTaskCreate(temperatureTask, "Task Temperature", 2000, NULL, 1, NULL); // 2000
     xTaskCreate(deviceSystemTask, "Task deviceSystem", 2000, NULL, 1, NULL); // 2000 -
@@ -100,23 +80,12 @@ void setup() {
 }
 
 
-bool isStationChanged = true;
-
-
 void loop() {
     loops++;
-
-    if (loops % 100 == 0) {
+    if (loops % 100000 == 0) {
         Serial.print("loops " );
         Serial.println(loops);
     }
-    
-    if (loops % 100 == 0) {
-        display_screen->standbyScreen();
-        //display_screen->infoScreen();
-    }
-
-    delay(10);
 }
 
 
@@ -125,7 +94,7 @@ void temperatureTask(void *pvParameters) {
     while (1) {
         bmp_180_probe->update();
         bmp_180_probe->updateBusinessState();
-        vTaskDelay(pdMS_TO_TICKS(5000));
+        vTaskDelay(pdMS_TO_TICKS(10000));
     }
 }
 
@@ -180,7 +149,7 @@ void networkConnectionTask(void *pvParameters) {
                     break;
                 }
             }
-            xSemaphoreGive(xMutex);
+            // xSemaphoreGive(xMutex);
         }
         vTaskDelay(pdMS_TO_TICKS(5000));
     }
