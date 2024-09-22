@@ -28,6 +28,7 @@ class DisplayScreen {
 
         void standbyScreen();
         void volumeScreen();
+        void connectingScreen();
 
 };
 

@@ -12,14 +12,19 @@ void DisplayScreen::init() {
         [](void *arg){
             DisplayScreen * display_screen = (DisplayScreen *)arg;
             while(1) {
+                vTaskDelay(pdMS_TO_TICKS(100));
+
+                if (display_screen->business_state->getIsConnectingToWifi()) {
+                    display_screen->connectingScreen();
+                    continue;
+                }
 
                 if (millis() - display_screen->business_state->getVolumeChangedAtMillis() < 4000) {
                     display_screen->volumeScreen();
                 } else {
                     display_screen->standbyScreen();
                 }
-                
-                vTaskDelay(pdMS_TO_TICKS(100));
+   
             }
         },
         "displayTask",
@@ -162,3 +167,44 @@ void DisplayScreen::volumeScreen() {
     }
     this->display();
 }
+
+void DisplayScreen::connectingScreen() {
+    this->clear();
+
+    String text = "connecting";
+    this->u8g2->setFont(u8g2_font_7x13B_tf);
+    int text_width = this->u8g2->getUTF8Width(text.c_str());
+    int text_height = this->u8g2->getAscent() - this->u8g2->getDescent();
+
+    int x = this->u8g2->getDisplayWidth() / 2 - text_width / 2;
+    int y = this->u8g2->getDisplayHeight() / 2 + text_height / 2;
+
+    this->u8g2->drawUTF8(x, y, text.c_str());
+
+    int width = 128;
+    int height = 64;
+
+    int position = millis() / 1000 % 3;
+
+    this->u8g2->drawCircle(80, 48, 5, U8G2_DRAW_ALL);
+    this->u8g2->drawCircle(48, 48, 5, U8G2_DRAW_ALL);
+    this->u8g2->drawCircle(64, 48, 5, U8G2_DRAW_ALL);
+
+    switch (position) {
+        case 0:
+            this->u8g2->drawDisc(48, 48, 5, U8G2_DRAW_ALL);
+            break;
+        case 1:
+            this->u8g2->drawDisc(64, 48, 5, U8G2_DRAW_ALL);
+            break;
+        case 2:
+            this->u8g2->drawDisc(80, 48, 5, U8G2_DRAW_ALL);
+            break;    
+        default:
+            break;
+    }
+
+    
+    this->display();
+}
+
