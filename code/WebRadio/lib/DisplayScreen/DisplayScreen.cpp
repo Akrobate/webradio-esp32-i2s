@@ -7,6 +7,27 @@ void DisplayScreen::init() {
     this->u8g2 = new U8G2_SH1106_128X64_NONAME_F_HW_I2C(U8G2_R0, /* reset=*/ U8X8_PIN_NONE);
     this->u8g2->begin();
     this->u8g2->enableUTF8Print();
+
+    xTaskCreate(
+        [](void *arg){
+            DisplayScreen * display_screen = (DisplayScreen *)arg;
+            while(1) {
+
+                if (millis() - display_screen->business_state->getVolumeChangedAtMillis() < 4000) {
+                    display_screen->volumeScreen();
+                } else {
+                    display_screen->standbyScreen();
+                }
+                
+                vTaskDelay(pdMS_TO_TICKS(100));
+            }
+        },
+        "displayTask",
+        2000,
+        this,
+        1,
+        NULL
+    );
 }
 
 void DisplayScreen::clear() {
@@ -75,17 +96,7 @@ void DisplayScreen::infoTestScreen() {
 }
 
 
-void DisplayScreen::temperatureScreen() {
-    this->clear();
-
-    this->u8g2->setFont(u8g2_font_osr26_tn);
-    this->u8g2->setCursor(2, 45);
-    this->u8g2->print(this->business_state->getTemperature());
-    this->u8g2->print("°C");
-    this->display();
-}
-
-
+// Production screen
 void DisplayScreen::standbyScreen() {
     this->clear();
 
@@ -122,3 +133,32 @@ void DisplayScreen::standbyScreen() {
     this->display();
 }
 
+
+void DisplayScreen::volumeScreen() {
+
+    int volume = this->business_state->getPlayingVolume();
+    if (this->displayed_volume == volume) {
+        return;
+    }
+
+    this->clear();
+
+    this->displayed_volume = volume;
+    int width = 128;
+    int height = 64;
+
+    int max_volume = 21;
+    int bar_width = width / max_volume;
+
+    for (int i = 0; i < max_volume; i++) {
+        int x = i * bar_width;
+        int y = 0;
+        int bar_height = (height / max_volume) * i;
+        if (i < volume) {
+            this->u8g2->drawRBox(x, y + (height - bar_height), bar_width, bar_height, 1);
+        } else {
+            this->u8g2->drawRFrame(x, y + (height - bar_height), bar_width, bar_height, 1);
+        }
+    }
+    this->display();
+}
