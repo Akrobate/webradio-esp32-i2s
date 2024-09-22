@@ -12,6 +12,8 @@ class DisplayScreen {
         U8G2_SH1106_128X64_NONAME_F_HW_I2C * u8g2;
         BusinessState * business_state = nullptr;
 
+        int displayed_volume = 0;
+
     public:
         DisplayScreen();
         void injectBusinesState(BusinessState * business_state);
@@ -21,12 +23,11 @@ class DisplayScreen {
         void display();
 
         void demoScreen();
-
         void infoScreen();
-        void temperatureScreen();
         void infoTestScreen();
 
         void standbyScreen();
+        void volumeScreen();
 
 };
 
