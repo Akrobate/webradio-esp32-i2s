@@ -46,6 +46,9 @@ void AudioProcess::init(){
                 // if (audio_process->playing_stream_index >= 0) {
                     audio_process->audio->loop();
                 //}
+                //vTaskDelay(pdMS_TO_TICKS(1));
+                vTaskDelay(1);
+
             }
         },
         "audioTask", /* Name of the task */
