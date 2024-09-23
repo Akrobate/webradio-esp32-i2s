@@ -16,6 +16,7 @@ boolean StreamRepository::load() {
     delete this->stream_list;
     this->stream_list = new DynamicJsonDocument(1024);
     DeserializationError error = deserializeJson(*this->stream_list, file);
+    this->stream_count = this->stream_list->size();
 
     if (error) {
         Serial.println("Failed to parse file");

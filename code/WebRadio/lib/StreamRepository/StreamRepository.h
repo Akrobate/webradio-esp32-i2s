@@ -19,6 +19,7 @@ class StreamRepository {
         StreamRepository();
 
         DynamicJsonDocument * stream_list = nullptr;
+        int stream_count = 0;
 
         boolean load();
         boolean save();
