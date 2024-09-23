@@ -180,3 +180,11 @@ void BusinessState::setVolumeChangedAtMillis(unsigned long volume_changed_at_mil
 unsigned long BusinessState::getVolumeChangedAtMillis() {
     return this->volume_changed_at_millis;
 }
+
+void BusinessState::setInitingDevice(bool initing_device) {
+    this->initing_device = initing_device;
+}
+
+bool BusinessState::getInitingDevice() {
+    return this->initing_device;
+}

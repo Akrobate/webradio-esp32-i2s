@@ -18,6 +18,7 @@ class BusinessState {
         String access_point_ssid = "";
 
         // System
+        bool initing_device = false;
         int total_free_bytes = 0;
         int minimum_free_bytes = 0;
 
@@ -110,6 +111,8 @@ class BusinessState {
         void setVolumeChangedAtMillis(unsigned long volume_changed_at_millis);
         unsigned long getVolumeChangedAtMillis();
 
+        void setInitingDevice(bool initing_device);
+        bool getInitingDevice();
 };
 
 #endif
