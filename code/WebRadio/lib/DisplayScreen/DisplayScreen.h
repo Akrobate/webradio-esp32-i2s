@@ -28,7 +28,6 @@ class DisplayScreen {
         void displayStack();
 
         void infoScreen();
-        void infoTestScreen();
 
         void splashScreen();
         void standbyScreen();

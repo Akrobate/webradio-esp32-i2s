@@ -36,7 +36,6 @@ void DisplayScreen::init() {
 
 void DisplayScreen::displayStack() {
 
-
     if (
         this->business_state->getInitingDevice() 
         && !this->business_state->getIsConnectingToWifi()
@@ -66,13 +65,14 @@ void DisplayScreen::displayStack() {
         return;
     }
 
+    // @todo: implement real trigger (current condition is debug stuff)
     if (this->business_state->getPlayingVolume() == 1) {
         this->streamSelectionScreen();
         return;
     }
 
     this->standbyScreen();
-    
+
 }
 
 
@@ -121,22 +121,6 @@ void DisplayScreen::infoScreen() {
     this->u8g2->drawUTF8(x, 50, text.c_str());    
 
 
-    this->display();
-}
-
-
-void DisplayScreen::infoTestScreen() {
-    this->clear();
-
-    String text = "Texte centré";
-    this->u8g2->setFont(u8g2_font_7x13B_tf);
-    int text_width = this->u8g2->getUTF8Width(text.c_str());
-    int text_height = this->u8g2->getAscent() - this->u8g2->getDescent();
-
-    int x = this->u8g2->getDisplayWidth() / 2 - text_width / 2;
-    int y = this->u8g2->getDisplayHeight() / 2 + text_height / 2;
-
-    this->u8g2->drawUTF8(x, y, text.c_str());    
     this->display();
 }
 
@@ -316,8 +300,8 @@ void DisplayScreen::volumeScreen() {
     this->clear();
 
     this->displayed_volume = volume;
-    int width = 128;
-    int height = 64;
+    int width = 128;    // @todo: get from display
+    int height = 64;    // @todo: get from display
 
     int max_volume = 21;
     int bar_width = width / max_volume;
@@ -349,8 +333,8 @@ void DisplayScreen::connectingScreen() {
 
     this->u8g2->drawUTF8(x, y, text.c_str());
 
-    int width = 128;
-    int height = 64;
+    int width = 128;    // @todo: get from display
+    int height = 64;    // @todo: get from display
 
     int position = millis() / 1000 % 3;
 
@@ -380,12 +364,14 @@ void DisplayScreen::connectingScreen() {
 void DisplayScreen::streamSelectionScreen() {
     this->clear();
 
-    // @todo: implement repository streams count
+    // @todo: implement getter repository streams count
     int streams_count = this->stream_repository->stream_count;
     int x = 10;
     this->u8g2->setFontMode(1);
     this->u8g2->setFont(u8g2_font_6x12_tf);
     this->u8g2->setDrawColor(1);
+
+    // @todo: 128 should be not hardcoded
     this->u8g2->drawBox(0, 26, 128, 12);
 
     for (int i = 0; i < streams_count; i++) {
