@@ -16,7 +16,6 @@
 #include "soc/soc.h" //disable brownour problems
 #include "soc/rtc_cntl_reg.h" //disable brownour problems
 
-void temperatureTask(void *pvParameters);
 void deviceSystemTask(void *pvParameters);
 void networkConnectionTask(void *pvParameters);
 void audioTask(void *pvParameters);
@@ -33,18 +32,17 @@ ConfigurationRepository * configuration_repository = new ConfigurationRepository
 AudioProcess * audio_process = new AudioProcess();
 
 #define LED 4
-
 int loops = 0;
-// SemaphoreHandle_t xMutex;
 
 void setup() {
     //WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0);
 
+    business_state->setInitingDevice(true);
     Serial.begin(115200);
 
     display_screen->injectBusinesState(business_state);
+    display_screen->injectStreamRepository(stream_repository);
     display_screen->init();
-    delay(100);
 
     // Why configuration repository do need busuness state?? 
     configuration_repository->injectBusinessState(business_state);
@@ -70,7 +68,6 @@ void setup() {
     bmp_180_probe->injectBusinesState(business_state);
     bmp_180_probe->init();
 
-    xTaskCreate(temperatureTask, "Task Temperature", 2000, NULL, 1, NULL); // 2000
     xTaskCreate(deviceSystemTask, "Task deviceSystem", 2000, NULL, 1, NULL); // 2000 -
     xTaskCreate(networkConnectionTask, "Task NetworkConnection", 2000, NULL, 1, NULL); // 5000
     
@@ -78,6 +75,7 @@ void setup() {
     audio_process->injectStreamRepository(stream_repository);
     audio_process->init();
 
+    business_state->setInitingDevice(false);
 }
 
 
@@ -89,15 +87,6 @@ void loop() {
     }
 }
 
-// @todo: move to a task in the class
-void temperatureTask(void *pvParameters) {
-    (void) pvParameters;
-    while (1) {
-        bmp_180_probe->update();
-        bmp_180_probe->updateBusinessState();
-        vTaskDelay(pdMS_TO_TICKS(10000));
-    }
-}
 
 // @todo: move to a task in the class
 void deviceSystemTask(void *pvParameters) {

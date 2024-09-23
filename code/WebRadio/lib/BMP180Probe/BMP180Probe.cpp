@@ -12,6 +12,22 @@ void BMP180Probe::init() {
     } else {
         this->is_initialized = true;
     }
+
+    xTaskCreate(
+        [](void *arg){
+            BMP180Probe * bmp_180_probe = (BMP180Probe *)arg;
+            while (1) {
+                bmp_180_probe->update();
+                bmp_180_probe->updateBusinessState();
+                vTaskDelay(pdMS_TO_TICKS(10000));
+            }
+        },
+        "Task Temperature",
+        2000,
+        this,
+        1,
+        NULL
+    );
 }
 
 
