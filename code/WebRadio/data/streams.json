@@ -9,7 +9,7 @@
     },
     {
         "name": "France Culture",
-        "host": "http://icecast.radiofrance.fr/franceinter-midfi.mp3"
+        "host": "http://icecast.radiofrance.fr/franceculture-midfi.mp3"
     },
     {
         "name": "France Info",
@@ -17,6 +17,14 @@
     },
     {
         "name": "Jazz Radio",
-        "host": "http://broadcast.infomaniak.net/jazzradio-high.mp3"
+        "host": "http://jazzradio.ice.infomaniak.ch/jazzradio-high.mp3"
+    },
+    {
+        "name": "TSF Jazz",
+        "host": "http://tsfjazz.ice.infomaniak.ch/tsfjazz-high.mp3"
+    },
+    {
+        "name": "FIP",
+        "host": "http://icecast.radiofrance.fr/fip-midfi.mp3"
     }
 ]
