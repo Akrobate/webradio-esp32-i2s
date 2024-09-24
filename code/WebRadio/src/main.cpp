@@ -11,6 +11,7 @@
 #include <BMP180Probe.h>
 #include <DeviceSystem.h>
 #include <AudioProcess.h>
+#include <InputInterface.h>
 #include <ConfigurationRepository.h>
 
 #include "soc/soc.h" //disable brownour problems
@@ -30,6 +31,7 @@ BMP180Probe * bmp_180_probe = new BMP180Probe();
 DeviceSystem * device_system = new DeviceSystem();
 ConfigurationRepository * configuration_repository = new ConfigurationRepository();
 AudioProcess * audio_process = new AudioProcess();
+InputInterface * input_interface = new InputInterface();
 
 #define LED 4
 int loops = 0;
@@ -75,16 +77,23 @@ void setup() {
     audio_process->injectStreamRepository(stream_repository);
     audio_process->init();
 
+    input_interface->init();
+
+
     business_state->setInitingDevice(false);
 }
 
 
 void loop() {
     loops++;
-    if (loops % 100000 == 0) {
+    if (loops % 1000 == 0) {
         Serial.print("loops " );
         Serial.println(loops);
+
+        Serial.print("analog 1 value:  " );
+        Serial.println(input_interface->analog_1_value);
     }
+    input_interface->update();
 }
 
 
