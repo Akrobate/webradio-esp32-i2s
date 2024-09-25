@@ -14,6 +14,11 @@
 #include <InputInterface.h>
 #include <ConfigurationRepository.h>
 
+#include <SimpleKalmanFilter.h>
+
+
+#include <driver/adc.h>
+
 #include "soc/soc.h" //disable brownour problems
 #include "soc/rtc_cntl_reg.h" //disable brownour problems
 
@@ -79,21 +84,49 @@ void setup() {
 
     input_interface->init();
 
-
+    analogReadResolution(10);
     business_state->setInitingDevice(false);
+
 }
+
+int calculerMoyenne(const int* tableau, int taille) {
+    int somme = 0;
+    for (int i = 0; i < taille; i++) {
+        somme += tableau[i];
+    }
+    return somme / taille;  // Retourne la moyenne
+}
+
+
+const int TAILLE_FILTRE = 1000;
+int lectures[TAILLE_FILTRE] = {0};
+int _index = 0; 
+SimpleKalmanFilter simpleKalmanFilter( 2, 2, 0.01);
+SimpleKalmanFilter simpleKalmanFilter2( 2, 2, 0.01);
+
+float estimated_value = 0;
+float estimated_value2 = 0;
 
 
 void loop() {
     loops++;
-    if (loops % 1000 == 0) {
+    if (loops % 10000 == 0) {
         Serial.print("loops " );
         Serial.println(loops);
 
         Serial.print("analog 1 value:  " );
+        Serial.println(calculerMoyenne(lectures, TAILLE_FILTRE));
         Serial.println(input_interface->analog_1_value);
+        Serial.println(estimated_value);
+        estimated_value2 = simpleKalmanFilter2.updateEstimate(estimated_value);
+        Serial.println(estimated_value2);
     }
+
     input_interface->update();
+
+    estimated_value = simpleKalmanFilter.updateEstimate(input_interface->analog_1_value);
+    lectures[_index] = input_interface->analog_1_value;
+    _index = (_index + 1) % TAILLE_FILTRE;  
 }
 
 
