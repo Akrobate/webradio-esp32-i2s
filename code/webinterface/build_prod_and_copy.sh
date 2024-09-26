@@ -1,5 +1,5 @@
 DIST_DIR="dist"
-ESP_DATA_DIR="../WebRadio/data/webinterface/"
+ESP_DATA_DIR="../WebRadio/data/webinterface"
 
 
 if [ -d "$DIST_DIR" ]; then
@@ -21,5 +21,10 @@ ESCAPED_REPLACE_STRING=$(printf '%s\n' "$REPLACE_STRING" | sed -e 's/[\/&]/\\&/g
 
 sed -i "s/$ESCAPED_SEARCH_STRING/$ESCAPED_REPLACE_STRING/g" $DIST_DIR/index.html
 
-cp $DIST_DIR/* $ESP_DATA_DIR
+cp $DIST_DIR/* $ESP_DATA_DIR/
 
+# Gzip files
+gzip $ESP_DATA_DIR/index.html
+gzip $ESP_DATA_DIR/style.css
+gzip $ESP_DATA_DIR/repository.js
+gzip $ESP_DATA_DIR/index.js
