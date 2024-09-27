@@ -24,7 +24,7 @@ sed -i "s/$ESCAPED_SEARCH_STRING/$ESCAPED_REPLACE_STRING/g" $DIST_DIR/index.html
 cp $DIST_DIR/* $ESP_DATA_DIR/
 
 # Gzip files
-gzip $ESP_DATA_DIR/index.html
-gzip $ESP_DATA_DIR/style.css
-gzip $ESP_DATA_DIR/repository.js
-gzip $ESP_DATA_DIR/index.js
+gzip -f $ESP_DATA_DIR/index.html
+gzip -f $ESP_DATA_DIR/style.css
+gzip -f $ESP_DATA_DIR/repository.js
+gzip -f $ESP_DATA_DIR/index.js
