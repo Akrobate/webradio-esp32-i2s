@@ -86,9 +86,8 @@ void setup() {
 
 void loop() {
     loops++;
-    if (loops % 10000 == 0) {
-        Serial.print("loops " );
-        Serial.println(loops);
+    if (loops % 100000 == 0) {
+        Serial.println("loops " + String(loops));
     }
 }
 
