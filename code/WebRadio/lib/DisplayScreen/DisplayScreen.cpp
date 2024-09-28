@@ -207,9 +207,6 @@ void DisplayScreen::configuringTimeScreen() {
         default:
             break;
     }
-
-
-
     this->display();
 }
 
@@ -364,19 +361,27 @@ void DisplayScreen::connectingScreen() {
 void DisplayScreen::streamSelectionScreen() {
     this->clear();
 
-    // @todo: implement getter repository streams count
-    int streams_count = this->stream_repository->stream_count;
+
+    int streams_count = this->stream_repository->countStream();
+    int displayed_lines_count = 5;
+    int playing_stream_index = this->business_state->getPlayingStream();
+
     int x = 10;
     this->u8g2->setFontMode(1);
     this->u8g2->setFont(u8g2_font_6x12_tf);
+
+    // int text_height = this->u8g2->getAscent() - this->u8g2->getDescent();
+
     this->u8g2->setDrawColor(1);
 
     // @todo: 128 should be not hardcoded
-    this->u8g2->drawBox(0, 26, 128, 12);
+    this->u8g2->drawBox(0, 27, 128, 12);
 
-    for (int i = 0; i < streams_count; i++) {
+    for (int i = 0; i < displayed_lines_count; i++) {
+
         JsonObject stream = this->stream_repository->getStreamByIndex(i);
         String stream_name = stream["name"];
+
         int y = (i + 1) * 12;
         this->u8g2->setDrawColor(2);
         this->u8g2->drawUTF8(x, y, stream_name.c_str());
