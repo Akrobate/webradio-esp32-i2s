@@ -19,7 +19,6 @@ class StreamRepository {
         StreamRepository();
 
         DynamicJsonDocument * stream_list = nullptr;
-        int stream_count = 0;
 
         boolean load();
         boolean save();
@@ -27,6 +26,7 @@ class StreamRepository {
         void addStream(String name, String host);
         void updateStream(int index, String name, String host);
         void removeStream(int index);
+        int countStream();
 
         JsonObject getStreamByIndex(int index);
 
