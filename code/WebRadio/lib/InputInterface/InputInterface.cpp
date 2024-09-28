@@ -14,6 +14,5 @@ void InputInterface::init() {
 
 
 void InputInterface::update() {
-    this->analog_1_value = analogRead(this->PIN_ANALOG_1);
 }
 
