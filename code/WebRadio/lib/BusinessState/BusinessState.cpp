@@ -142,11 +142,22 @@ bool BusinessState::getDateTimeConfigured() {
 // Streams
 void BusinessState::setPlayingStream(int playing_stream) {
     this->playing_stream = playing_stream;
+    this->setStreamChangedAtMillis(millis());
 }
 
 int BusinessState::getPlayingStream() {
     return this->playing_stream;
 }
+
+void BusinessState::setStreamChangedAtMillis(unsigned long stream_changed_at_millis) {
+    this->stream_changed_at_millis = stream_changed_at_millis;
+}
+
+unsigned long BusinessState::getStreamChangedAtMillis() {
+    return this->stream_changed_at_millis;
+}
+
+
 
 void BusinessState::setPlayingVolume(int playing_volume) {
     this->playing_volume = playing_volume;

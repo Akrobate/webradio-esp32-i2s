@@ -43,6 +43,7 @@ class BusinessState {
         int playing_stream = -1;
         int playing_volume = 0;
         unsigned long volume_changed_at_millis = 0;
+        unsigned long stream_changed_at_millis = 0;
 
 
 
@@ -98,6 +99,9 @@ class BusinessState {
 
         void setPlayingStream(int playing_stream);
         int getPlayingStream();
+
+        void setStreamChangedAtMillis(unsigned long stream_changed_at_millis);
+        unsigned long getStreamChangedAtMillis();
 
         void setPlayingVolume(int playing_volume);
         int getPlayingVolume();
