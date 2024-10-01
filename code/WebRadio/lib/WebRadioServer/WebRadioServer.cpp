@@ -199,6 +199,8 @@ void WebRadioServer::init() {
 
       int index = -1;
 
+      // @todo: Should check if index is in range of streams_count 
+
       if (request->pathArg(0) != NULL) {
         String index_str = request->pathArg(0);
         index = index_str.toInt();

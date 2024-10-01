@@ -16,7 +16,7 @@ class AudioProcess {
 
         Audio * audio;
         unsigned int I2S_DOUT = 25;
-        unsigned int I2S_LRC =  26;
+        unsigned int I2S_LRC = 26;
         unsigned int I2S_BCLK = 27;
 
 
