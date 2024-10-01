@@ -79,14 +79,19 @@ void setup() {
     audio_process->injectStreamRepository(stream_repository);
     audio_process->init();
 
+    input_interface->injectBusinesState(business_state);
     input_interface->init();
+
     business_state->setInitingDevice(false);
 }
 
 
 void loop() {
     loops++;
-    if (loops % 100000 == 0) {
+
+    input_interface->update();
+
+    if (loops % 10000 == 0) {
         Serial.println("loops " + String(loops));
     }
 }
@@ -127,7 +132,7 @@ void networkConnectionTask(void *pvParameters) {
                     int tries_count = 0;
                     while (!wifi_networking->isConnected()) {
                         vTaskDelay(pdMS_TO_TICKS(500));
-                        if (tries_count > 10) {
+                        if (tries_count > 20) {
                             break;
                         }
                         tries_count++;
@@ -145,7 +150,7 @@ void networkConnectionTask(void *pvParameters) {
                 }
             }
         }
-        vTaskDelay(pdMS_TO_TICKS(5000));
+        vTaskDelay(pdMS_TO_TICKS(10000));
     }
 }
 
