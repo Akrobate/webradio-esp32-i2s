@@ -60,19 +60,17 @@ void DisplayScreen::displayStack() {
         return;
     }
 
+    if (millis() - this->business_state->getStreamChangedAtMillis() < 2000) {
+        this->streamSelectionScreen();
+        return;
+    }
+
     if (this->business_state->getPlayingStream() >= 0) {
         this->playingStreamScreen();
         return;
     }
 
-    // @todo: implement real trigger (current condition is debug stuff)
-    if (this->business_state->getPlayingVolume() == 1) {
-        this->streamSelectionScreen();
-        return;
-    }
-
     this->standbyScreen();
-
 }
 
 
@@ -295,6 +293,7 @@ void DisplayScreen::volumeScreen() {
     }
 
     this->clear();
+    this->u8g2->setDrawColor(1);
 
     this->displayed_volume = volume;
     int width = 128;    // @todo: get from display
@@ -378,9 +377,11 @@ void DisplayScreen::streamSelectionScreen() {
     this->u8g2->drawBox(0, 27, 128, 12);
 
     for (int i = 0; i < displayed_lines_count; i++) {
-
-        JsonObject stream = this->stream_repository->getStreamByIndex(i);
-        String stream_name = stream["name"];
+        String stream_name = "";
+        if (playing_stream_index - 2 + i >= 0 && playing_stream_index - 2 + i < streams_count) {
+            JsonObject stream = this->stream_repository->getStreamByIndex(playing_stream_index - 2 + i);
+            stream_name = stream["name"].as<String>();
+        }
 
         int y = (i + 1) * 12;
         this->u8g2->setDrawColor(2);
