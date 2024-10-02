@@ -176,3 +176,70 @@ bool WifiNetworking::isNetworkAvailable(String ssid) {
     }
     return is_available;
 }
+
+
+
+void WifiNetworking::networkConnectionTask() {
+    if (!this->isConnected()) {
+
+        if (business_state->lock()) {
+            business_state->setIsConnectedToWifi(false);
+            business_state->setIsConnectingToWifi(true);
+            business_state->unlock();
+        }
+
+        JsonArray credential_list = this->network_credential_repository->network_credential_list->as<JsonArray>();
+        for (JsonObject credential : credential_list) {
+            String ssid = credential["ssid"];
+            String password = credential["password"];
+
+            if (this->isNetworkAvailable(ssid)) {
+                Serial.print("Whould try to connect to ");
+                Serial.print(ssid);
+                this->begin(ssid, password);
+                int tries_count = 0;
+                while (!this->isConnected()) {
+                    vTaskDelay(pdMS_TO_TICKS(500));
+                    Serial.println("Trying to connect");
+                    if (tries_count > 20) {
+                        Serial.println("MAX Count of connection attempts");
+                        break;
+                    }
+                    tries_count++;
+                }
+            }
+
+            if (this->isConnected()) {
+                if (business_state->lock()) {
+                    business_state->setIsConnectedToWifi(true);
+                    business_state->setLocalIP(this->getLocalIP());
+                    business_state->setIsConnectingToWifi(false);
+                    business_state->unlock();
+                }
+                break;
+            }
+        }
+    }
+}
+
+
+void WifiNetworking::init() {
+    xTaskCreate(
+        [](void *arg) {
+            WifiNetworking * wifi_networking = (WifiNetworking *)arg;
+            while (1) {
+                wifi_networking->networkConnectionTask();
+                vTaskDelay(pdMS_TO_TICKS(10000));
+            }
+        },
+        "Task NetworkConnection",
+        2000,
+        this,
+        1,
+        NULL
+    );
+}
+
+void WifiNetworking::injectNetworkCredentialRepository(NetworkCredentialRepository * network_credential_repository) {
+    this->network_credential_repository = network_credential_repository;
+}
