@@ -14,14 +14,8 @@
 #include <InputInterface.h>
 #include <ConfigurationRepository.h>
 
-#include <driver/adc.h>
-
 #include "soc/soc.h" //disable brownour problems
 #include "soc/rtc_cntl_reg.h" //disable brownour problems
-
-void deviceSystemTask(void *pvParameters);
-void networkConnectionTask(void *pvParameters);
-void audioTask(void *pvParameters);
 
 BusinessState * business_state = new BusinessState();
 WebRadioServer * server = new WebRadioServer();
@@ -35,12 +29,10 @@ ConfigurationRepository * configuration_repository = new ConfigurationRepository
 AudioProcess * audio_process = new AudioProcess();
 InputInterface * input_interface = new InputInterface();
 
-#define LED 4
 int loops = 0;
 
 void setup() {
     //WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0);
-
     business_state->setInitingDevice(true);
     Serial.begin(115200);
 
@@ -54,14 +46,17 @@ void setup() {
 
     device_system->injectBusinesState(business_state);
     device_system->configureTimeTask();
+    device_system->init();
 
-    wifi_networking->injectBusinessState(business_state);
-    wifi_networking->startAP();
-    wifi_networking->scan();
-    
     network_credential_repository->load();
     stream_repository->load();
 
+    wifi_networking->injectNetworkCredentialRepository(network_credential_repository);
+    wifi_networking->injectBusinessState(business_state);
+    wifi_networking->startAP();
+    wifi_networking->scan();
+    wifi_networking->init();
+    
     server->injectWifiNetworking(wifi_networking);
     server->injectNetworkCredentialRepository(network_credential_repository);
     server->injectStreamRepository(stream_repository);
@@ -72,9 +67,6 @@ void setup() {
     bmp_180_probe->injectBusinesState(business_state);
     bmp_180_probe->init();
 
-    xTaskCreate(deviceSystemTask, "Task deviceSystem", 2000, NULL, 1, NULL); // 2000 -
-    xTaskCreate(networkConnectionTask, "Task NetworkConnection", 2000, NULL, 1, NULL); // 5000
-    
     audio_process->injectBusinesState(business_state);
     audio_process->injectStreamRepository(stream_repository);
     audio_process->init();
@@ -88,69 +80,8 @@ void setup() {
 
 void loop() {
     loops++;
-
     input_interface->update();
-
     if (loops % 10000 == 0) {
         Serial.println("loops " + String(loops));
     }
 }
-
-
-// @todo: move to a task in the class
-void deviceSystemTask(void *pvParameters) {
-    (void) pvParameters;
-    while (1) {
-        device_system->update();
-        device_system->updateBusinessState();
-        vTaskDelay(pdMS_TO_TICKS(1000));
-    }
-}
-
-
-void networkConnectionTask(void *pvParameters) {
-    (void) pvParameters;
-
-    while (1) {
-        if (!wifi_networking->isConnected()) {
-
-            if (business_state->lock()) {
-                business_state->setIsConnectedToWifi(false);
-                business_state->setIsConnectingToWifi(true);
-                business_state->unlock();
-            }
-
-            JsonArray credential_list = network_credential_repository->network_credential_list->as<JsonArray>();
-            for (JsonObject credential : credential_list) {
-                String ssid = credential["ssid"];
-                String password = credential["password"];
-
-                if (wifi_networking->isNetworkAvailable(ssid)) {
-                    Serial.print("Whould try to connect to ");
-                    Serial.print(ssid);
-                    wifi_networking->begin(ssid, password);
-                    int tries_count = 0;
-                    while (!wifi_networking->isConnected()) {
-                        vTaskDelay(pdMS_TO_TICKS(500));
-                        if (tries_count > 20) {
-                            break;
-                        }
-                        tries_count++;
-                    }
-                }
-
-                if (wifi_networking->isConnected()) {
-                    if (business_state->lock()) {
-                        business_state->setIsConnectedToWifi(true);
-                        business_state->setLocalIP(wifi_networking->getLocalIP());
-                        business_state->setIsConnectingToWifi(false);
-                        business_state->unlock();
-                    }
-                    break;
-                }
-            }
-        }
-        vTaskDelay(pdMS_TO_TICKS(10000));
-    }
-}
-
