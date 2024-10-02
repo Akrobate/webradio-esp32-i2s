@@ -27,19 +27,17 @@ class DeviceSystem {
         int daylight_offset_sec = 3600 * 1;
         String ntp_server_host = "pool.ntp.org";
 
+        DeviceSystem();
 
         void injectBusinesState(BusinessState * business_state);
 
-        DeviceSystem();
-
+        void init();
         void update();
         void configureTimeTask();
-
 
         int getTotalFreeBytes();
         int getMinimumFreeBytes();
         int getLargestFreeBlock();
-
         void showMemoryUsage();
 
         void updateBusinessState();

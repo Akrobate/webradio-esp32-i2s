@@ -4,6 +4,25 @@
 DeviceSystem::DeviceSystem() {
 }
 
+void DeviceSystem::init() {
+    xTaskCreate(
+        [](void *arg){
+            DeviceSystem * device_system = (DeviceSystem *)arg;
+            while (1) {
+                device_system->update();
+                device_system->updateBusinessState();
+                vTaskDelay(pdMS_TO_TICKS(1000));
+            }
+        },
+        "Task DeviceSystem",
+        2000,
+        this,
+        1,
+        NULL
+    );
+}
+
+
 void DeviceSystem::update() {
     multi_heap_info_t info;
 
