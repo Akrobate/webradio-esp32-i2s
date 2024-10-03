@@ -40,7 +40,6 @@ void setup() {
     display_screen->injectStreamRepository(stream_repository);
     display_screen->init();
 
-    // Why configuration repository do need busuness state?? 
     configuration_repository->injectBusinessState(business_state);
     configuration_repository->load();
 
@@ -80,7 +79,6 @@ void setup() {
 
 void loop() {
     loops++;
-    input_interface->update();
     if (loops % 10000 == 0) {
         Serial.println("loops " + String(loops));
     }

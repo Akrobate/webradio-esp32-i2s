@@ -24,6 +24,22 @@ void InputInterface::init() {
     this->button_b_up = new Toggle(this->PIN_BTN_4);
     this->button_b_down = new Toggle(this->PIN_BTN_5);
     this->button_b_validate = new Toggle(this->PIN_BTN_6);
+
+
+    xTaskCreate(
+        [](void *arg){
+            InputInterface * input_interface = (InputInterface *)arg;
+            while (1) {
+                input_interface->update();
+                vTaskDelay(pdMS_TO_TICKS(1));
+            }
+        },
+        "Task DeviceSystem",
+        2000,
+        this,
+        1,
+        NULL
+    );
 }
 
 
@@ -38,6 +54,7 @@ void InputInterface::update() {
 
 
     /*
+    // DEBUG code
     if (this->button_a_up->onPress()) {
         Serial.println("Button A UP pressed");
     }
