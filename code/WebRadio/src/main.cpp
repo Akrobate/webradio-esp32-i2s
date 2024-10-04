@@ -2,6 +2,8 @@
 #include <WiFi.h>
 #include <LittleFS.h>
 
+#include "./configuration.h"
+
 #include <WebRadioServer.h>
 #include <WifiNetworking.h>
 #include <NetworkCredentialRepository.h>
