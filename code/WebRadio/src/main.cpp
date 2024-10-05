@@ -42,13 +42,13 @@ void setup() {
     display_screen->injectStreamRepository(stream_repository);
     display_screen->init();
 
-    configuration_repository->injectBusinessState(business_state);
-    configuration_repository->load();
-
     device_system->injectBusinesState(business_state);
     device_system->configureTimeTask();
     device_system->init();
 
+    // Repositorories loads
+    configuration_repository->injectBusinessState(business_state);
+    configuration_repository->load();
     network_credential_repository->load();
     stream_repository->load();
 
