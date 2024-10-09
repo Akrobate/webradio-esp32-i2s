@@ -60,11 +60,12 @@ void setup() {
     device_system->configureTimeTask();
     device_system->init();
 
-    // Repositorories loads
-    configuration_repository->load();
+    configuration_repository->init();
+    // @todo add init method
     network_credential_repository->load();
     stream_repository->load();
 
+    // @todo check if this 3 methods could me grouped in the init method
     wifi_networking->startAP();
     wifi_networking->scan();
     wifi_networking->init();
