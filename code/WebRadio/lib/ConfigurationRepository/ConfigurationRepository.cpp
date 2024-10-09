@@ -2,6 +2,12 @@
 
 ConfigurationRepository::ConfigurationRepository(){}
 
+void ConfigurationRepository::init() {
+    if (!this->load()) {
+        Serial.println("Failed to load configuration file");
+    }
+}
+
 bool ConfigurationRepository::load() {
     LittleFS.begin();
     File file = LittleFS.open(CONFIGURATION_FILE, "r");

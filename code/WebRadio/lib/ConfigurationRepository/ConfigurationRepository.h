@@ -26,6 +26,7 @@ class ConfigurationRepository {
 
         ConfigurationRepository();
 
+        void init();
         bool load();
         bool save();
 
