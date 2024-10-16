@@ -4,6 +4,11 @@ NetworkCredentialRepository::NetworkCredentialRepository() {
 }
 
 
+void NetworkCredentialRepository::init() {
+    this->load();
+}
+
+
 boolean NetworkCredentialRepository::load() {
     LittleFS.begin();
     File file = LittleFS.open(NETWORK_CREDENTIAL_FILE, "r");

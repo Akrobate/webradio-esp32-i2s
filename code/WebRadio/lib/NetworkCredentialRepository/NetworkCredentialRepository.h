@@ -5,8 +5,6 @@
 #include <LittleFS.h>
 
 /**
- * 
- * 
  * {
  *   ssid: "ssid",
  *   quality: 100,
@@ -22,6 +20,8 @@ class NetworkCredentialRepository {
         NetworkCredentialRepository();
 
         DynamicJsonDocument * network_credential_list = nullptr;
+
+        void init();
 
         boolean load();
         boolean save();

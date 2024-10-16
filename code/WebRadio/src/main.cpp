@@ -61,8 +61,8 @@ void setup() {
     device_system->init();
 
     configuration_repository->init();
+    network_credential_repository->init();
     // @todo add init method
-    network_credential_repository->load();
     stream_repository->load();
 
     // @todo check if this 3 methods could me grouped in the init method
