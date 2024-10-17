@@ -3,6 +3,10 @@
 StreamRepository::StreamRepository() {
 }
 
+void StreamRepository::init() {
+    this->load();
+}
+
 
 boolean StreamRepository::load() {
     LittleFS.begin();

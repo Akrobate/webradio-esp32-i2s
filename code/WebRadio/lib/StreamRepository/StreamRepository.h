@@ -23,6 +23,8 @@ class StreamRepository {
         boolean load();
         boolean save();
 
+        void init();
+
         void addStream(String name, String host);
         void updateStream(int index, String name, String host);
         void removeStream(int index);
