@@ -37,7 +37,7 @@ void setup() {
     //WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0);
     business_state->setInitingDevice(true);
 
-    // @todo: inject all dependencies should be done in a single place
+    // @todo: inject all dependencies should be done in a single place?
     display_screen->injectBusinesState(business_state);
     display_screen->injectStreamRepository(stream_repository);
     device_system->injectBusinesState(business_state);
@@ -62,8 +62,7 @@ void setup() {
 
     configuration_repository->init();
     network_credential_repository->init();
-    // @todo add init method
-    stream_repository->load();
+    stream_repository->init();
 
     // @todo check if this 3 methods could me grouped in the init method
     wifi_networking->startAP();
@@ -74,9 +73,7 @@ void setup() {
     server->begin();
 
     bmp_180_probe->init();
-
     audio_process->init();
-
     input_interface->init();
 
     business_state->setInitingDevice(false);
