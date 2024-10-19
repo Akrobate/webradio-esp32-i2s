@@ -23,6 +23,7 @@ class WifiNetworking {
         DynamicJsonDocument * getAvailableNetworks();
 
         void startAP();
+        void startAP(char * ssid, char * password);
         bool connect(char * ssid, char * password);
         bool isConnected();
         void disconnect();

@@ -18,6 +18,11 @@ void WifiNetworking::startAP() {
 }
 
 
+void WifiNetworking::startAP(char * ssid, char * password) {
+    this->wifi->softAP(ssid, password);
+}
+
+
 bool WifiNetworking::connect(String ssid, String password) {
     this->business_state->setConnectedToSSID(ssid);
     this->wifi->begin(ssid, password);
@@ -224,6 +229,9 @@ void WifiNetworking::networkConnectionTask() {
 
 
 void WifiNetworking::init() {
+    
+    this->scan();
+    
     xTaskCreate(
         [](void *arg) {
             WifiNetworking * wifi_networking = (WifiNetworking *)arg;
