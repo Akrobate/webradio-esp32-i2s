@@ -19,6 +19,10 @@
 #include "soc/soc.h" //disable brownour problems
 #include "soc/rtc_cntl_reg.h" //disable brownour problems
 
+
+String access_point_ssid     = "ESP32-Access-Point";
+String access_poinrt_password = "123456789";
+
 BusinessState * business_state = new BusinessState();
 WebRadioServer * server = new WebRadioServer();
 WifiNetworking * wifi_networking = new WifiNetworking();
@@ -64,9 +68,7 @@ void setup() {
     network_credential_repository->init();
     stream_repository->init();
 
-    // @todo check if this 3 methods could me grouped in the init method
-    wifi_networking->startAP();
-    wifi_networking->scan();
+    wifi_networking->startAP(access_point_ssid.c_str(), access_poinrt_password.c_str());
     wifi_networking->init();
     
     server->init();
