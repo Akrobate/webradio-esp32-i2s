@@ -8,10 +8,10 @@ fi
 
 mkdir -p "$DIST_DIR"
 
-cp index.html dist/index.html
-cp style.css dist/style.css
-cp repository.js dist/repository.js
-cp index.js dist/index.js
+cp index.html $DIST_DIR/index.html
+cp style.css $DIST_DIR/style.css
+cp repository.js $DIST_DIR/repository.js
+cp index.js $DIST_DIR/index.js
 
 SEARCH_STRING='<script src="mock-server.js"></script>'
 REPLACE_STRING='<script src="repository.js"></script>'
