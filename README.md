@@ -18,11 +18,10 @@ This project includes:
 * CNC Models
 
 
+## 3D Models
+
+For more information, refer to the [3D Models Documentation](3D-models/README.md).
+
 ## Routes
 
-### Streams
-
-GET /api/streams
-Returns all the recorded radio stations
-
-
+For more information, refer to the [API Documentation](code/WebRadio/api-documentation.md).
