@@ -44,3 +44,10 @@ gzip -f $ESP_DATA_DIR/index.js
 ## Compressing the files
 
 All the source files have to be compressed to serve smaller chunks
+
+
+## WebInterface previews
+
+![WebInterface Preview 1](documentations/png_previews/webinterface-preview-1.png)
+
+![WebInterface Preview 2](documentations/png_previews/webinterface-preview-2.png)
