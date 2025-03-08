@@ -4,8 +4,8 @@ const axios = require('axios');
 
 // Configurations:
 const API_URL = 'http://192.168.1.25';
-const REQUEST_COUNT = 10000;
-
+const TOTAL_REQUEST_COUNT = 10000;
+const PARALLEL_REQUESTS = 10;
 
 const url_list = [
     `${API_URL}`,
@@ -26,17 +26,19 @@ async function sendRequest(url) {
 }
 
 async function runLoadTest() {
-    for (let i = 0; i < REQUEST_COUNT; i++) {
+    for (let i = 0; i < TOTAL_REQUEST_COUNT; i++) {
         const promises = [];
-        for (let url of url_list) {
-            promises.push(sendRequest(url));
+        for (let j = 0; j < PARALLEL_REQUESTS; j++) {    
+            for (let url of url_list) {
+                promises.push(sendRequest(url));
+            }
         }
         const startTime = Date.now();
         await Promise.all(promises);
         const endTime = Date.now();
         console.log(`==========> Request ${i} - Time: ${endTime - startTime} ms`);
     }
-    console.log(`Finished sending ${REQUEST_COUNT} requests.`);
+    console.log(`Finished sending ${TOTAL_REQUEST_COUNT} requests.`);
 }
 
 runLoadTest();
