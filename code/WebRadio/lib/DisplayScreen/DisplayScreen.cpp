@@ -296,8 +296,8 @@ void DisplayScreen::volumeScreen() {
     this->u8g2->setDrawColor(1);
 
     this->displayed_volume = volume;
-    int width = 128;    // @todo: get from display
-    int height = 64;    // @todo: get from display
+    int width = this->u8g2->getDisplayWidth();
+    int height = this->u8g2->getDisplayHeight();
 
     int max_volume = 21;
     int bar_width = width / max_volume;
@@ -329,8 +329,8 @@ void DisplayScreen::connectingScreen() {
 
     this->u8g2->drawUTF8(x, y, text.c_str());
 
-    int width = 128;    // @todo: get from display
-    int height = 64;    // @todo: get from display
+    int width = this->u8g2->getDisplayWidth();
+    int height = this->u8g2->getDisplayHeight();
 
     int position = millis() / 1000 % 3;
 
@@ -369,12 +369,9 @@ void DisplayScreen::streamSelectionScreen() {
     this->u8g2->setFontMode(1);
     this->u8g2->setFont(u8g2_font_6x12_tf);
 
-    // int text_height = this->u8g2->getAscent() - this->u8g2->getDescent();
-
     this->u8g2->setDrawColor(1);
-
-    // @todo: 128 should be not hardcoded
-    this->u8g2->drawBox(0, 27, 128, 12);
+    int width = this->u8g2->getDisplayWidth();
+    this->u8g2->drawBox(0, 27, width, 12);
 
     for (int i = 0; i < displayed_lines_count; i++) {
         String stream_name = "";
