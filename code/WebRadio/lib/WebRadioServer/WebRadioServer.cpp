@@ -5,6 +5,7 @@ struct TaskTwoParameters {
   void * param_2;
 };
 
+// @todo: check when resulting 400 should return from method
 
 WebRadioServer::WebRadioServer() {
 }
@@ -199,13 +200,18 @@ void WebRadioServer::init() {
 
       int index = -1;
 
-      // @todo: Should check if index is in range of streams_count 
-
       if (request->pathArg(0) != NULL) {
         String index_str = request->pathArg(0);
         index = index_str.toInt();
       } else {
         request->send(400, "text/html", "Bad index");
+        return;
+      }
+
+      int total_streams = this->stream_repository->countStream();
+      if (index < 0 || index >= total_streams) {
+        request->send(400, "text/html", "Bad index");
+        return;
       }
 
       Serial.print("Play ");
