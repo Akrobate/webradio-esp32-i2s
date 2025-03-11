@@ -31,8 +31,10 @@ void AudioProcess::init(){
                         }
                         if (audio_process->business_state->getPlayingStream() != audio_process->playing_stream_index) {
                             audio_process->playing_stream_index = audio_process->business_state->getPlayingStream();
-                            if (audio_process->playing_stream_index >= 0) {
-                                // @todo: check index exists
+                            if (
+                                audio_process->playing_stream_index >= 0
+                                && audio_process->playing_stream_index < audio_process->stream_repository->countStream()
+                            ) {
                                 JsonObject stream = audio_process->stream_repository->getStreamByIndex(audio_process->playing_stream_index);
                                 Serial.println("Playing stream: " + (String)audio_process->playing_stream_index);
                                 Serial.println((const char *)stream["host"]);
@@ -43,12 +45,8 @@ void AudioProcess::init(){
                         }
                 }
 
-                // if (audio_process->playing_stream_index >= 0) {
-                    audio_process->audio->loop();
-                //}
-                //vTaskDelay(pdMS_TO_TICKS(1));
+                audio_process->audio->loop();
                 vTaskDelay(1);
-
             }
         },
         "audioTask", /* Name of the task */
