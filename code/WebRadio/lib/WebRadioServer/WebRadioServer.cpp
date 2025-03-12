@@ -5,8 +5,6 @@ struct TaskTwoParameters {
   void * param_2;
 };
 
-// @todo: check when resulting 400 should return from method
-
 WebRadioServer::WebRadioServer() {
 }
 
@@ -90,6 +88,7 @@ void WebRadioServer::init() {
         index = index_str.toInt();
       } else {
         request->send(400, "text/html", "Bad index");
+        return;
       }
 
       if (request->hasParam("name", true)) {
@@ -131,6 +130,7 @@ void WebRadioServer::init() {
         index = index_str.toInt();
       } else {
         request->send(400, "text/html", "Bad index");
+        return;
       }
 
       Serial.print("DELETE - index: ");
@@ -157,6 +157,7 @@ void WebRadioServer::init() {
         index = index_str.toInt();
       } else {
         request->send(400, "text/html", "Bad index");
+        return;
       }
 
       Serial.print("POSITION UP - index: ");
@@ -181,6 +182,7 @@ void WebRadioServer::init() {
         index = index_str.toInt();
       } else {
         request->send(400, "text/html", "Bad index");
+        return;
       }
 
       Serial.print("POSITION DOWN - index: ");
