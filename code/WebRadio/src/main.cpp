@@ -37,11 +37,8 @@ InputInterface * input_interface = new InputInterface();
 
 int loops = 0;
 
-void setup() {
-    //WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0);
-    business_state->setInitingDevice(true);
 
-    // @todo: inject all dependencies should be done in a single place?
+void buildInjections() {
     display_screen->injectBusinesState(business_state);
     display_screen->injectStreamRepository(stream_repository);
     device_system->injectBusinesState(business_state);
@@ -56,6 +53,15 @@ void setup() {
     audio_process->injectBusinesState(business_state);
     audio_process->injectStreamRepository(stream_repository);
     input_interface->injectBusinesState(business_state);
+}
+
+
+
+void setup() {
+    //WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0);
+    business_state->setInitingDevice(true);
+
+    buildInjections();
 
     Serial.begin(115200);
 
