@@ -56,34 +56,29 @@ void buildInjections() {
 }
 
 
+void initDependencies() {
+    display_screen->init();
+    device_system->configureTimeTask();
+    device_system->init();
+    configuration_repository->init();
+    network_credential_repository->init();
+    stream_repository->init();
+    wifi_networking->startAP(access_point_ssid.c_str(), access_poinrt_password.c_str());
+    wifi_networking->init();
+    server->init();
+    server->begin();
+    bmp_180_probe->init();
+    audio_process->init();
+    input_interface->init();
+}
+
 
 void setup() {
     //WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0);
     business_state->setInitingDevice(true);
-
     buildInjections();
-
     Serial.begin(115200);
-
-    display_screen->init();
-
-    device_system->configureTimeTask();
-    device_system->init();
-
-    configuration_repository->init();
-    network_credential_repository->init();
-    stream_repository->init();
-
-    wifi_networking->startAP(access_point_ssid.c_str(), access_poinrt_password.c_str());
-    wifi_networking->init();
-    
-    server->init();
-    server->begin();
-
-    bmp_180_probe->init();
-    audio_process->init();
-    input_interface->init();
-
+    initDependencies();
     business_state->setInitingDevice(false);
 }
 
