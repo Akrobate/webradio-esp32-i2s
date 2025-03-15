@@ -19,7 +19,7 @@
 #include "soc/soc.h" //disable brownour problems
 #include "soc/rtc_cntl_reg.h" //disable brownour problems
 
-
+// @todo move to configuration
 String access_point_ssid     = "ESP32-Access-Point";
 String access_poinrt_password = "123456789";
 
@@ -63,7 +63,7 @@ void initDependencies() {
     configuration_repository->init();
     network_credential_repository->init();
     stream_repository->init();
-    wifi_networking->startAP(access_point_ssid.c_str(), access_poinrt_password.c_str());
+    wifi_networking->startAP(access_point_ssid, access_poinrt_password);
     wifi_networking->init();
     server->init();
     server->begin();

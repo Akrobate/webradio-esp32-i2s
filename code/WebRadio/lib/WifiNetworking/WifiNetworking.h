@@ -31,6 +31,7 @@ class WifiNetworking {
         void scan();
 
         void startAP();
+        void startAP(String ssid, String password);
         bool connect(String ssid, String password);
         void begin(String ssid, String password);
         bool isConnected();
