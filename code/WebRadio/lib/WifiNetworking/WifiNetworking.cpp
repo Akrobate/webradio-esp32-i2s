@@ -13,8 +13,6 @@ WifiNetworking::WifiNetworking() {
 void WifiNetworking::startAP() {
     // Todo move to configuration
     const char * ssid     = "ESP32-Access-Point";
-    // const char * password = "123456789";
-
     this->wifi->softAP(ssid);
 }
 

@@ -19,10 +19,6 @@
 #include "soc/soc.h" //disable brownour problems
 #include "soc/rtc_cntl_reg.h" //disable brownour problems
 
-// @todo move to configuration
-String access_point_ssid     = "ESP32-Access-Point";
-String access_poinrt_password = "123456789";
-
 BusinessState * business_state = new BusinessState();
 WebRadioServer * server = new WebRadioServer();
 WifiNetworking * wifi_networking = new WifiNetworking();
@@ -34,8 +30,6 @@ DeviceSystem * device_system = new DeviceSystem();
 ConfigurationRepository * configuration_repository = new ConfigurationRepository();
 AudioProcess * audio_process = new AudioProcess();
 InputInterface * input_interface = new InputInterface();
-
-int loops = 0;
 
 
 void buildInjections() {
@@ -63,7 +57,10 @@ void initDependencies() {
     configuration_repository->init();
     network_credential_repository->init();
     stream_repository->init();
-    wifi_networking->startAP(access_point_ssid, access_poinrt_password);
+    wifi_networking->startAP(
+        configuration_repository->access_point_ssid, 
+        configuration_repository->access_poinrt_password
+    );
     wifi_networking->init();
     server->init();
     server->begin();
@@ -82,6 +79,7 @@ void setup() {
     business_state->setInitingDevice(false);
 }
 
+int loops = 0;
 
 void loop() {
     loops++;

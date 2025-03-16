@@ -23,6 +23,9 @@ class ConfigurationRepository {
         long gmt_offset_sec = 3600 * 1;
         int daylight_offset_sec = 3600 * 1;
         String ntp_server_host = "pool.ntp.org";
+        String access_point_ssid = "ESP32-Access-Point";
+        String access_poinrt_password = "123456789"; 
+
 
         ConfigurationRepository();
 
