@@ -20,6 +20,7 @@ void DeviceSystem::init() {
         1,
         NULL
     );
+    this->configureTimeTask();
 }
 
 

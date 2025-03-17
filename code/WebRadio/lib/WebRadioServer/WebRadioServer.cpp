@@ -73,7 +73,6 @@ void WebRadioServer::init() {
   );
 
 
-
   this->server->on(
     "^\\/api\\/streams\\/([0-9]+)$",
     HTTP_PATCH,
@@ -141,8 +140,6 @@ void WebRadioServer::init() {
       request->send(201, "text/html", "OK");
     }
   );
-
-
 
 
   this->server->on(
@@ -225,8 +222,6 @@ void WebRadioServer::init() {
   );
 
 
-
-
   this->server->on(
     "/api/streams",
     HTTP_POST,
@@ -258,9 +253,6 @@ void WebRadioServer::init() {
       request->send(201, "text/html", "OK");
     }
   );
-
-
-
 
 
   this->server->on(
@@ -439,6 +431,10 @@ void WebRadioServer::init() {
   
   // Debug routes
   this->server->serveStatic("/api/streams.json", LittleFS, "/streams.json");
+
+  // Start server
+  this->begin();
+
 }
 
 void WebRadioServer::injectWifiNetworking(WifiNetworking * wifi_networking) {

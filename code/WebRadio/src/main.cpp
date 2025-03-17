@@ -52,7 +52,6 @@ void buildInjections() {
 
 void initDependencies() {
     display_screen->init();
-    device_system->configureTimeTask();
     device_system->init();
     configuration_repository->init();
     network_credential_repository->init();
@@ -63,7 +62,6 @@ void initDependencies() {
     );
     wifi_networking->init();
     server->init();
-    server->begin();
     bmp_180_probe->init();
     audio_process->init();
     input_interface->init();
