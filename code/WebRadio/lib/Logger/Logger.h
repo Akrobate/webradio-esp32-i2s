@@ -6,10 +6,14 @@
 // @todo use logger library
 
 class Logger {
+
+    private:
+        bool enabled = true;
+
     public:
-        void info(String message) {
-            Serial.println(message);
-        }
+        void info(String message);
+        void enable();
+        void disable();
 };
 
 #endif
