@@ -22,7 +22,7 @@ void WebRadioServer::init() {
 
   this->server->onNotFound(
     [](AsyncWebServerRequest *request){
-      request->send(404, "text/html", "Not found");
+      request->send(HTTP_CODE_NOT_FOUND, "text/html", "Not found");
     }
   );
 
@@ -30,7 +30,7 @@ void WebRadioServer::init() {
     "/api/ping",
     HTTP_GET,
     [](AsyncWebServerRequest *request) {
-      request->send_P(200, "text/html", "Ok");
+      request->send_P(HTTP_CODE_OK, "text/html", "Ok");
     }
   );
 
@@ -56,7 +56,7 @@ void WebRadioServer::init() {
       response_object["date_time_configured"] = this->business_state->getDateTimeConfigured();
 
       serializeJson(info, response);
-      request->send(200, "application/json", response);
+      request->send(HTTP_CODE_OK, "application/json", response);
     }
   );
 
@@ -68,7 +68,7 @@ void WebRadioServer::init() {
       String response;
       DynamicJsonDocument * stream_list = this->stream_repository->stream_list;
       serializeJson(*stream_list, response);
-      request->send(200, "application/json", response);
+      request->send(HTTP_CODE_OK, "application/json", response);
     }
   );
 
@@ -86,21 +86,21 @@ void WebRadioServer::init() {
         String index_str = request->pathArg(0);
         index = index_str.toInt();
       } else {
-        request->send(400, "text/html", "Bad index");
+        request->send(HTTP_CODE_BAD_REQUEST, "text/html", "Bad index");
         return;
       }
 
       if (request->hasParam("name", true)) {
         name = request->getParam("name", true)->value();
       } else {
-        request->send(400, "text/html", "Missing name");
+        request->send(HTTP_CODE_BAD_REQUEST, "text/html", "Missing name");
         return;
       }
 
       if (request->hasParam("host", true)) {
         host = request->getParam("host", true)->value();
       } else {
-        request->send(400, "text/html", "Missing host");
+        request->send(HTTP_CODE_BAD_REQUEST, "text/html", "Missing host");
         return;
       }
       Serial.print("EDIT - index: ");
@@ -112,7 +112,7 @@ void WebRadioServer::init() {
 
       this->stream_repository->updateStream(index, name, host);
 
-      request->send(201, "text/html", "OK");
+      request->send(HTTP_CODE_CREATED, "text/html", "OK");
     }
   );
 
@@ -128,7 +128,7 @@ void WebRadioServer::init() {
         String index_str = request->pathArg(0);
         index = index_str.toInt();
       } else {
-        request->send(400, "text/html", "Bad index");
+        request->send(HTTP_CODE_BAD_REQUEST, "text/html", "Bad index");
         return;
       }
 
@@ -137,7 +137,7 @@ void WebRadioServer::init() {
 
       this->stream_repository->removeStream(index);
 
-      request->send(201, "text/html", "OK");
+      request->send(HTTP_CODE_CREATED, "text/html", "OK");
     }
   );
 
@@ -153,7 +153,7 @@ void WebRadioServer::init() {
         String index_str = request->pathArg(0);
         index = index_str.toInt();
       } else {
-        request->send(400, "text/html", "Bad index");
+        request->send(HTTP_CODE_BAD_REQUEST, "text/html", "Bad index");
         return;
       }
 
@@ -162,7 +162,7 @@ void WebRadioServer::init() {
 
       // this->stream_repository->updateStream(index, name, host);
 
-      request->send(201, "text/html", "OK");
+      request->send(HTTP_CODE_CREATED, "text/html", "OK");
     }
   );
 
@@ -178,7 +178,7 @@ void WebRadioServer::init() {
         String index_str = request->pathArg(0);
         index = index_str.toInt();
       } else {
-        request->send(400, "text/html", "Bad index");
+        request->send(HTTP_CODE_BAD_REQUEST, "text/html", "Bad index");
         return;
       }
 
@@ -187,7 +187,7 @@ void WebRadioServer::init() {
 
       // this->stream_repository->updateStream(index, name, host);
 
-      request->send(201, "text/html", "OK");
+      request->send(HTTP_CODE_CREATED, "text/html", "OK");
     }
   );
 
@@ -203,13 +203,13 @@ void WebRadioServer::init() {
         String index_str = request->pathArg(0);
         index = index_str.toInt();
       } else {
-        request->send(400, "text/html", "Bad index");
+        request->send(HTTP_CODE_BAD_REQUEST, "text/html", "Bad index");
         return;
       }
 
       int total_streams = this->stream_repository->countStream();
       if (index < 0 || index >= total_streams) {
-        request->send(400, "text/html", "Bad index");
+        request->send(HTTP_CODE_BAD_REQUEST, "text/html", "Bad index");
         return;
       }
 
@@ -217,7 +217,7 @@ void WebRadioServer::init() {
       Serial.println(index);
 
       this->business_state->setPlayingStream(index);
-      request->send(201, "text/html", "OK");
+      request->send(HTTP_CODE_CREATED, "text/html", "OK");
     }
   );
 
@@ -233,14 +233,14 @@ void WebRadioServer::init() {
       if (request->hasParam("name", true)) {
         name = request->getParam("name", true)->value();
       } else {
-        request->send(400, "text/html", "/api/streams Missing name");
+        request->send(HTTP_CODE_BAD_REQUEST, "text/html", "/api/streams Missing name");
         return;
       }
 
       if (request->hasParam("host", true)) {
         host = request->getParam("host", true)->value();
       } else {
-        request->send(400, "text/html", "Missing host");
+        request->send(HTTP_CODE_BAD_REQUEST, "text/html", "Missing host");
         return;
       }
 
@@ -250,7 +250,7 @@ void WebRadioServer::init() {
       Serial.println(host);
       this->stream_repository->addStream(name, host);
 
-      request->send(201, "text/html", "OK");
+      request->send(HTTP_CODE_CREATED, "text/html", "OK");
     }
   );
 
@@ -265,7 +265,7 @@ void WebRadioServer::init() {
       if (request->hasParam("value", true)) {
         value = request->getParam("value", true)->value().toInt();
       } else {
-        request->send(400, "text/html", "Missing value");
+        request->send(HTTP_CODE_BAD_REQUEST, "text/html", "Missing value");
         return;
       }
 
@@ -273,7 +273,7 @@ void WebRadioServer::init() {
       Serial.println(value);
 
       this->business_state->setPlayingVolume(value);
-      request->send(201, "text/html", "OK");
+      request->send(HTTP_CODE_CREATED, "text/html", "OK");
     }
   );
 
@@ -290,21 +290,21 @@ void WebRadioServer::init() {
       if (request->hasParam("ntp_server_host", true)) {
         ntp_server_host = request->getParam("ntp_server_host", true)->value();
       } else {
-        request->send(400, "text/html", "Missing ntp_server_host");
+        request->send(HTTP_CODE_BAD_REQUEST, "text/html", "Missing ntp_server_host");
         return;
       }
 
       if (request->hasParam("gmt_offset_sec", true)) {
         gmt_offset_sec = request->getParam("gmt_offset_sec", true)->value().toInt();
       } else {
-        request->send(400, "text/html", "Missing gmt_offset_sec");
+        request->send(HTTP_CODE_BAD_REQUEST, "text/html", "Missing gmt_offset_sec");
         return;
       }
 
       if (request->hasParam("daylight_offset_sec", true)) {
         daylight_offset_sec = request->getParam("daylight_offset_sec", true)->value().toInt();
       } else {
-        request->send(400, "text/html", "Missing daylight_offset_sec");
+        request->send(HTTP_CODE_BAD_REQUEST, "text/html", "Missing daylight_offset_sec");
         return;
       }
 
@@ -317,7 +317,7 @@ void WebRadioServer::init() {
 
       // this->network_credential->upsertCredential(ssid, password);
 
-      request->send(201, "text/html", "OK");
+      request->send(HTTP_CODE_CREATED, "text/html", "OK");
     }
   );
 
@@ -344,7 +344,7 @@ void WebRadioServer::init() {
             DynamicJsonDocument * available_networks = web_radio_server->wifi_networking->getAvailableNetworks();
             serializeJson(*available_networks, response);
 
-            request->send(200, "application/json", response);
+            request->send(HTTP_CODE_OK, "application/json", response);
 
             delete params;
           }
@@ -367,7 +367,7 @@ void WebRadioServer::init() {
       String response;
       DynamicJsonDocument * network_credential_list = this->network_credential->network_credential_list;
       serializeJson(*network_credential_list, response);
-      request->send(200, "application/json", response);
+      request->send(HTTP_CODE_OK, "application/json", response);
     }
   );
 
@@ -382,14 +382,14 @@ void WebRadioServer::init() {
       if (request->hasParam("ssid", true)) {
         ssid = request->getParam("ssid", true)->value();
       } else {
-        request->send(400, "text/html", "Missing ssid");
+        request->send(HTTP_CODE_BAD_REQUEST, "text/html", "Missing ssid");
         return;
       }
 
       if (request->hasParam("password", true)) {
         password = request->getParam("password", true)->value();
       } else {
-        request->send(400, "text/html", "Missing password");
+        request->send(HTTP_CODE_BAD_REQUEST, "text/html", "Missing password");
         return;
       }
 
@@ -399,7 +399,7 @@ void WebRadioServer::init() {
       Serial.println(password);
 
       this->network_credential->upsertCredential(ssid, password);
-      request->send(201, "text/html", "OK");
+      request->send(HTTP_CODE_CREATED, "text/html", "OK");
     }
   );
 
@@ -413,7 +413,7 @@ void WebRadioServer::init() {
       if (request->hasParam("ssid", true)) {
         ssid = request->getParam("ssid", true)->value();
       } else {
-        request->send(400, "text/html", "Missing ssid");
+        request->send(HTTP_CODE_BAD_REQUEST, "text/html", "Missing ssid");
         return;
       }
 
@@ -422,7 +422,7 @@ void WebRadioServer::init() {
 
       this->network_credential->removeCredentialBySSID(ssid);
 
-      request->send(200, "text/html", "OK");
+      request->send(HTTP_CODE_OK, "text/html", "OK");
     }
   );
 
