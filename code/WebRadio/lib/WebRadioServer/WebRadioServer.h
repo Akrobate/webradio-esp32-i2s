@@ -13,13 +13,11 @@
 #include <BusinessState.h>
 
 // #include "AsyncJson.h"
-
-#define HTTP_CODE_OK 200
-#define HTTP_CODE_CREATED 201
-#define HTTP_CODE_BAD_REQUEST 400
-#define HTTP_CODE_NOT_FOUND 404
-#define HTTP_CODE_ERROR 500
-
+// #define HTTP_CODE_OK 200
+// #define HTTP_CODE_CREATED 201
+// #define HTTP_CODE_BAD_REQUEST 400
+// #define HTTP_CODE_NOT_FOUND 404
+// #define HTTP_CODE_ERROR 500
 class WebRadioServer {
 
     private:
@@ -32,6 +30,13 @@ class WebRadioServer {
     public:
         AsyncWebServer * server;
         WebRadioServer();
+
+        static constexpr int HTTP_CODE_OK = 200;
+        static constexpr int HTTP_CODE_CREATED = 201;
+        static constexpr int HTTP_CODE_BAD_REQUEST = 400;
+        static constexpr int HTTP_CODE_NOT_FOUND = 404;
+        static constexpr int HTTP_CODE_ERROR = 500;
+
         void injectWifiNetworking(WifiNetworking * wifi_networking);
         void injectNetworkCredentialRepository(NetworkCredentialRepository * network_credential);
         void injectStreamRepository(StreamRepository * stream_repository);
