@@ -2,7 +2,8 @@
 
 ## Endpoints
 
-### 1. `GET /api/volume`
+### `GET /api/volume`
+
 **Description:**
 Returns the current volume level.
 
@@ -16,9 +17,7 @@ Returns the current volume level.
 }
 ```
 
----
-
-### 2. `POST /api/volume`
+### `POST /api/volume`
 **Description:**
 Sets the volume to a specified level.
 
@@ -43,9 +42,8 @@ Sets the volume to a specified level.
 }
 ```
 
----
 
-### 3. `GET /api/available-networks`
+### `GET /api/available-networks`
 **Description:**
 Returns a list of available Wi-Fi networks.
 
@@ -60,9 +58,7 @@ Returns a list of available Wi-Fi networks.
 ]
 ```
 
----
-
-### 4. `PATCH /api/streams/{index}`
+### `PATCH /api/streams/{index}`
 **Description:**
 Updates a specific stream.
 
@@ -94,9 +90,8 @@ Updates a specific stream.
 }
 ```
 
----
+### `DELETE /api/streams/{index}`
 
-### 5. `DELETE /api/streams/{index}`
 **Description:**
 Deletes a specific stream.
 
@@ -114,9 +109,8 @@ Deletes a specific stream.
 }
 ```
 
----
+### `GET /api/streams`
 
-### 6. `GET /api/streams`
 **Description:**
 Returns a list of all streams.
 
@@ -130,4 +124,3 @@ Returns a list of all streams.
   { "index": 1, "name": "Stream2", "url": "http://example.com/2" }
 ]
 ```
-
