@@ -2,6 +2,32 @@
 
 ## Endpoints
 
+### `GET /api/info`
+
+**Description:**
+Returns the current volume level.
+
+**Response:**
+- `200 OK`: JSON object containing the information.
+
+**Example Response:**
+```json
+{
+  "access_point_ssid": "",
+  "temperature": "",
+  "pressure": "",
+  "total_free_bytes": "",
+  "minimum_free_bytes": "",
+  "is_connected_to_wifi": "",
+  "is_connecting_to_wifi": "",
+  "connected_to_ssid": "",
+  "local_ip": "",
+  "date_time": "",
+  "date_time_configured": "",
+}
+```
+
+
 ### `GET /api/volume`
 
 **Description:**
@@ -17,7 +43,9 @@ Returns the current volume level.
 }
 ```
 
+
 ### `POST /api/volume`
+
 **Description:**
 Sets the volume to a specified level.
 
@@ -35,15 +63,9 @@ Sets the volume to a specified level.
 }
 ```
 
-**Example Response:**
-```json
-{
-  "volume": 75
-}
-```
-
 
 ### `GET /api/available-networks`
+
 **Description:**
 Returns a list of available Wi-Fi networks.
 
@@ -58,7 +80,9 @@ Returns a list of available Wi-Fi networks.
 ]
 ```
 
+
 ### `PATCH /api/streams/{index}`
+
 **Description:**
 Updates a specific stream.
 
@@ -80,8 +104,8 @@ Updates a specific stream.
   "url": "http://example.com/stream"
 }
 ```
-
 **Example Response:**
+
 ```json
 {
   "index": 1,
@@ -89,6 +113,7 @@ Updates a specific stream.
   "url": "http://example.com/stream"
 }
 ```
+
 
 ### `DELETE /api/streams/{index}`
 
@@ -108,6 +133,7 @@ Deletes a specific stream.
   "message": "Stream deleted successfully"
 }
 ```
+
 
 ### `GET /api/streams`
 
