@@ -150,3 +150,20 @@ Returns a list of all streams.
   { "index": 1, "name": "Stream2", "url": "http://example.com/2" }
 ]
 ```
+
+
+### `POST /api/credentials`
+
+**Description:**
+Returns a list of all streams.
+
+**Request Parameters:**
+- `ssid` (string, required)
+- `password` (string, required)
+
+**Response:**
+- `201 OK`
+- `400 Bad Request`: Missing ssid
+- `400 Bad Request`: Missing password
+
+**Example Response:**
