@@ -152,10 +152,27 @@ Returns a list of all streams.
 ```
 
 
+### `GET /api/credentials`
+
+**Description:**
+List all available credentials
+
+**Response:**
+- `200 OK`
+
+**Example Response:**
+```json
+[
+  { "ssid": "ssid1", "password": ""},
+  { "ssid": "ssid1", "password": ""}
+]
+```
+
+
 ### `POST /api/credentials`
 
 **Description:**
-Returns a list of all streams.
+Creates ssid and password connection
 
 **Request Parameters:**
 - `ssid` (string, required)
@@ -167,3 +184,24 @@ Returns a list of all streams.
 - `400 Bad Request`: Missing password
 
 **Example Response:**
+```
+OK
+```
+
+
+### `DELETE /api/credentials`
+
+**Description:**
+Delete credential by ssid
+
+**Request Parameters:**
+- `ssid` (string, required)
+
+**Response:**
+- `200 OK`
+- `400 Bad Request`: Missing ssid
+
+**Example Response:**
+```
+OK
+```
