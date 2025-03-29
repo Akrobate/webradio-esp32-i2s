@@ -205,3 +205,24 @@ Delete credential by ssid
 ```
 OK
 ```
+
+
+### `POST /api/configurations`
+
+**Description:**
+Sets the configurations
+
+**Request Parameters:**
+
+- `ntp_server_host` (String, required): The new volume level (0-100).
+- `gmt_offset_sec` (integer, required): The new volume level (0-100).
+- `daylight_offset_sec` (integer, required): The new volume level (0-100).
+
+**Response:**
+- `201 Created`: Configuration successfully updated.
+- `400 Bad Request`: Missing ntp_server_host
+- `400 Bad Request`: Missing gmt_offset_sec
+- `400 Bad Request`: Missing daylight_offset_sec
+
+**Example Response:**
+OK

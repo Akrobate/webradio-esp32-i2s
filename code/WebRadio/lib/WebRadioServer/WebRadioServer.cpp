@@ -315,8 +315,7 @@ void WebRadioServer::init() {
       Serial.print("daylight_offset_sec : ");
       Serial.println(daylight_offset_sec);
 
-      // this->network_credential->upsertCredential(ssid, password);
-
+      // @todo: save data
       request->send(HTTP_CODE_CREATED, "text/html", "OK");
     }
   );
