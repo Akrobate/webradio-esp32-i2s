@@ -26,6 +26,9 @@ class ConfigurationRepository {
         String access_point_ssid = "ESP32-Access-Point";
         String access_poinrt_password = "123456789"; 
 
+        void setNTPServerHost(String ntp_server_host);
+        void setGMTOffsetSec(long gmt_offset_sec);
+        void setDaylightOffsetSec(int daylight_offset_sec);
 
         ConfigurationRepository();
 
