@@ -41,6 +41,7 @@ class WebRadioServer {
         void injectNetworkCredentialRepository(NetworkCredentialRepository * network_credential);
         void injectStreamRepository(StreamRepository * stream_repository);
         void injectBusinessState(BusinessState * business_state);
+        void injectConfigurationRepository(StreamRepository * configuration_repository);
 
         void init();
         void begin();

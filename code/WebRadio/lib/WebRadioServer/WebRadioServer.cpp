@@ -315,7 +315,11 @@ void WebRadioServer::init() {
       Serial.print("daylight_offset_sec : ");
       Serial.println(daylight_offset_sec);
 
-      // @todo: save data
+      this->configuration_repository->setNTPServerHost(ntp_server_host);
+      this->configuration_repository->setGMTOffsetSec(gmt_offset_sec);
+      this->configuration_repository->setDaylightOffsetSec(daylight_offset_sec);
+
+      // Save data and update business state
       request->send(HTTP_CODE_CREATED, "text/html", "OK");
     }
   );
@@ -450,4 +454,8 @@ void WebRadioServer::injectStreamRepository(StreamRepository * stream_repository
 
 void WebRadioServer::injectBusinessState(BusinessState * business_state) {
     this->business_state = business_state;
+}
+
+void WebRadioServer::injectConfigurationRepository(StreamRepository * configuration_repository) {
+  this->configuration_repository = configuration_repository;
 }
