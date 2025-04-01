@@ -7,9 +7,11 @@
 
 /**
  * {
+ *  "ntp_server_host": "pool.ntp.org",
+ *  "gmt_offset_sec": 3600,
+ *  "daylight_offset_sec": 3600,
  * }
  */
-
 
 #define CONFIGURATION_FILE "/configurations.json"
 

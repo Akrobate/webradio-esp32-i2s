@@ -43,6 +43,7 @@ void buildInjections() {
     server->injectNetworkCredentialRepository(network_credential_repository);
     server->injectStreamRepository(stream_repository);
     server->injectBusinessState(business_state);
+    server->injectConfigurationRepository(configuration_repository);
     bmp_180_probe->injectBusinesState(business_state);
     audio_process->injectBusinesState(business_state);
     audio_process->injectStreamRepository(stream_repository);
