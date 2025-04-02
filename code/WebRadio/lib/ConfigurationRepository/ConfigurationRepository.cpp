@@ -84,3 +84,15 @@ void ConfigurationRepository::setDaylightOffsetSec(int daylight_offset_sec) {
     this->daylight_offset_sec= daylight_offset_sec
 }
 
+
+void ConfigurationRepository::setAccessPointSSID(String access_point_ssid) {
+    this->access_point_ssid = access_point_ssid;
+}
+
+
+void ConfigurationRepository::setAccessPointPassword(String access_point_password) {
+    this->access_point_password = access_point_password;
+}
+
+
+// @todo add access point ssid and password getter
