@@ -36,6 +36,8 @@ class ConfigurationRepository {
         void setAccessPointPassword(String access_point_password);
 
         // @todo add access point ssid and password getter
+        String getAccessPointSSID();
+        String getAccessPointPassword();
 
 
         ConfigurationRepository();

@@ -95,4 +95,11 @@ void ConfigurationRepository::setAccessPointPassword(String access_point_passwor
 }
 
 
-// @todo add access point ssid and password getter
+String ConfigurationRepository::getAccessPointSSID() {
+    return this->access_point_ssid;
+}
+
+
+String ConfigurationRepository::getAccessPointPassword() {
+    return this->access_point_password;
+}
