@@ -59,8 +59,8 @@ void initDependencies() {
     stream_repository->init();
     // @todo add access point ssid and password getter
     wifi_networking->startAP(
-        configuration_repository->access_point_ssid, 
-        configuration_repository->access_point_password
+        configuration_repository->getAccessPointSSID(), 
+        configuration_repository->getAccessPointPassword()
     );
     wifi_networking->init();
     server->init();
