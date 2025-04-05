@@ -31,11 +31,12 @@ class ConfigurationRepository {
         void setNTPServerHost(String ntp_server_host);
         void setGMTOffsetSec(long gmt_offset_sec);
         void setDaylightOffsetSec(int daylight_offset_sec);
-
         void setAccessPointSSID(String access_point_ssid);
         void setAccessPointPassword(String access_point_password);
 
-        // @todo add access point ssid and password getter
+        String getNTPServerHost();
+        long getGMTOffsetSec();
+        int getDaylightOffsetSec();
         String getAccessPointSSID();
         String getAccessPointPassword();
 

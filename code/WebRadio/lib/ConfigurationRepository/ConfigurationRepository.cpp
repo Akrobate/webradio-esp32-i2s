@@ -109,3 +109,15 @@ String ConfigurationRepository::getAccessPointSSID() {
 String ConfigurationRepository::getAccessPointPassword() {
     return this->access_point_password;
 }
+
+String ConfigurationRepository::getNTPServerHost() {
+    return this->ntp_server_host;
+}
+
+long ConfigurationRepository::getGMTOffsetSec() {
+    return this->gmt_offset_sec;
+}
+
+int ConfigurationRepository::getDaylightOffsetSec() {
+    return this->daylight_offset_sec;
+}
