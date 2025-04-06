@@ -61,16 +61,9 @@ void ConfigurationRepository::injectBusinessState(BusinessState * business_state
 
 void ConfigurationRepository::updateBusinessState() {
     if (this->business_state->lock()) {
-        this->business_state->setGMTOffsetSec(
-            this->gmt_offset_sec
-        );
-        this->business_state->setDaylightOffsetSec(
-            this->daylight_offset_sec
-        );
-        this->business_state->setNTPServerHost(
-            this->ntp_server_host
-        );
-
+        this->business_state->setGMTOffsetSec(this->getGMTOffsetSec());
+        this->business_state->setDaylightOffsetSec(this->getDaylightOffsetSec());
+        this->business_state->setNTPServerHost(this->getNTPServerHost());
         this->business_state->unlock();
     }
 }
