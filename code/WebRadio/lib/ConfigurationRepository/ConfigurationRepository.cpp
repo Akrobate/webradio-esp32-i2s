@@ -68,7 +68,6 @@ void ConfigurationRepository::updateBusinessState() {
     }
 }
 
-
 void ConfigurationRepository::setNTPServerHost(String ntp_server_host) {
     this->ntp_server_host= ntp_server_host
 }

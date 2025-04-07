@@ -11,11 +11,24 @@ void Logger::print(String message) {
 
     switch(this->type) {
         case 0:
-            Serial.print(message);
+            this->serialPrint(message);
+            break;
+        case 1:
+            this->telnetPrint(message);
             break;
         default:
           // code block
     }
+}
+
+
+void Logger::serialPrint(String message) {
+    Serial.print(message);
+}
+
+// @todo implement telnetPrint
+void Logger::telnetPrint(String message) {
+    Serial.print(message);
 }
 
 

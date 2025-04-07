@@ -9,9 +9,11 @@ class Logger {
     private:
         bool enabled = true;
         int type = 0;   // 0: Serial.print
+        int type = 1;   // 0: Telnet print
 
         void print(String message);
-
+        telnetPrint(String message);
+        serialPrint(String message);
     public:
         void info(String message);
         void debug(String message);
