@@ -12,8 +12,8 @@ class Logger {
         int type = 1;   // 0: Telnet print
 
         void print(String message);
-        telnetPrint(String message);
-        serialPrint(String message);
+        void telnetPrint(String message);
+        void serialPrint(String message);
     public:
         void info(String message);
         void debug(String message);
