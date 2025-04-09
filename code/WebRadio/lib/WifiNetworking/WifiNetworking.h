@@ -27,7 +27,6 @@ class WifiNetworking {
         void injectNetworkCredentialRepository(NetworkCredentialRepository * network_credential_repository);
 
         void init();
-        void scanDebug();
         void scan();
 
         void startAP();

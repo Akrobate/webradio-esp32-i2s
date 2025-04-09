@@ -61,34 +61,6 @@ void WifiNetworking::disconnect() {
 }
 
 
-void WifiNetworking::scanDebug() {
-    int n = this->wifi->scanNetworks();
-    Serial.println("Scan done");
-    if (n == 0) {
-        Serial.println("no networks found");
-    } else {
-        Serial.print(n);
-        Serial.println(" networks found");
-        Serial.println("Nr | SSID                             | RSSI | CH | Encryption");
-        for (int i = 0; i < n; ++i) {
-            Serial.printf("%2d",i + 1);
-            Serial.print(" | ");
-            Serial.printf("%-32.32s", this->wifi->SSID(i).c_str());
-            Serial.print(" | ");
-            Serial.printf("%4d", this->wifi->RSSI(i) * -1);
-            Serial.print(" | ");
-            Serial.printf("%2d", this->wifi->channel(i));
-            Serial.print(" | ");
-            Serial.print(this->encryptionTypeToString(this->wifi->encryptionType(i)));
-            Serial.println();
-            delay(10);
-        }
-    }
-    Serial.println("");
-    this->wifi->scanDelete();
-}
-
-
 void WifiNetworking::scan() {
     if (xSemaphoreTake(this->scanningNetworksMutex, portMAX_DELAY) == pdTRUE) {
         int n = this->wifi->scanNetworks();
