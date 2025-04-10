@@ -139,6 +139,50 @@ String WifiNetworking::encryptionTypeToString(wifi_auth_mode_t encryption_type) 
     return encryption_type_string;
 }
 
+
+
+// Prototyping with memory mapping
+// @todo
+String WifiNetworking::encryptionTypeToString2(wifi_auth_mode_t encryption_type) {
+    String encryption_type_string = "";
+
+    switch (encryption_type) {
+        case WIFI_AUTH_OPEN:
+            encryption_type_string = "open";
+            break;
+        case WIFI_AUTH_WEP:
+            encryption_type_string = "WEP";
+            break;
+        case WIFI_AUTH_WPA_PSK:
+            encryption_type_string = "WPA";
+            break;
+        case WIFI_AUTH_WPA2_PSK:
+            encryption_type_string = "WPA2";
+            break;
+        case WIFI_AUTH_WPA_WPA2_PSK:
+            encryption_type_string = "WPA+WPA2";
+            break;
+        case WIFI_AUTH_WPA2_ENTERPRISE:
+            encryption_type_string = "WPA2-EAP";
+            break;
+        case WIFI_AUTH_WPA3_PSK:
+            encryption_type_string = "WPA3";
+            break;
+        case WIFI_AUTH_WPA2_WPA3_PSK:
+            encryption_type_string = "WPA2+WPA3";
+            break;
+        case WIFI_AUTH_WAPI_PSK:
+            encryption_type_string = "WAPI";
+            break;
+        default:
+            encryption_type_string = "unknown";
+    }
+    return encryption_type_string;
+}
+
+
+
+
 bool WifiNetworking::isNetworkAvailable(String ssid) {
     bool is_available = false;
     JsonArray available_networks_list = this->getAvailableNetworks()->as<JsonArray>();
