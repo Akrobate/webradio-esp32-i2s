@@ -145,7 +145,16 @@ void DisplayScreen::standbyScreen() {
     text_height = this->u8g2->getAscent() - this->u8g2->getDescent();
     x = 0;
     y = text_height;
-    this->u8g2->drawUTF8(x, y, formated_date.c_str()); 
+    this->u8g2->drawUTF8(x, y, formated_date.c_str());
+
+
+    // String formated_date = this->business_state->getFormatedDate();
+    // this->u8g2->setFont(u8g2_font_6x12_tf);
+    // text_height = this->u8g2->getAscent() - this->u8g2->getDescent();
+    // x = 0;
+    // y = text_height;
+    // this->u8g2->drawUTF8(x, y, formated_date.c_str());
+
 
     float temperature = this->business_state->getTemperature();
     String formated_temperature = String(temperature) + " C";
