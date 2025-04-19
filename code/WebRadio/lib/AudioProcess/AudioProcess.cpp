@@ -18,7 +18,7 @@ void AudioProcess::init(){
     this->audio->setPinout(this->I2S_BCLK, this->I2S_LRC, this->I2S_DOUT);
     this->audio->setVolume(this->volume);
 
-    disableCore0WDT();
+    // disableCore0WDT();
     xTaskCreatePinnedToCore(
         [](void *arg){
             AudioProcess * audio_process = (AudioProcess *)arg;
@@ -54,7 +54,7 @@ void AudioProcess::init(){
         this,       /* Task input parameter */
         15,          /* Priority of the task */ //15
         NULL,       /* Task handle. */
-        0           /* Core where the task should run */
+        1           /* Core where the task should run */
     );  
 
 }

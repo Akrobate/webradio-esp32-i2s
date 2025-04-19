@@ -4,13 +4,17 @@
 // #define ASYNCWEBSERVER_REGEX
 
 #include <ESPAsyncWebServer.h>
+#include "FS.h"
 #include <LittleFS.h>
+
 #include <ArduinoJson.h>
 
+#include <Logger.h>
 #include <WifiNetworking.h>
 #include <NetworkCredentialRepository.h>
 #include <StreamRepository.h>
 #include <BusinessState.h>
+#include <ConfigurationRepository.h>
 
 // #include "AsyncJson.h"
 // #define HTTP_CODE_OK 200
@@ -25,6 +29,7 @@ class WebRadioServer {
         WifiNetworking * wifi_networking = nullptr;
         BusinessState * business_state = nullptr;
         NetworkCredentialRepository * network_credential = nullptr;
+        ConfigurationRepository * configuration_repository = nullptr;
         StreamRepository * stream_repository = nullptr;
 
     public:
@@ -41,7 +46,7 @@ class WebRadioServer {
         void injectNetworkCredentialRepository(NetworkCredentialRepository * network_credential);
         void injectStreamRepository(StreamRepository * stream_repository);
         void injectBusinessState(BusinessState * business_state);
-        void injectConfigurationRepository(StreamRepository * configuration_repository);
+        void injectConfigurationRepository(ConfigurationRepository * configuration_repository);
 
         void init();
         void begin();

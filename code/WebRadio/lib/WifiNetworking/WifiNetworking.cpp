@@ -34,6 +34,14 @@ bool WifiNetworking::connect(String ssid, String password) {
         }
         timeout++;
     }
+
+    IPAddress ip = WiFi.localIP();
+    IPAddress gw = WiFi.gatewayIP();
+    IPAddress sn = WiFi.subnetMask();
+    IPAddress dns(8, 8, 8, 8);  // ou 1.1.1.1 (Cloudflare)
+
+    this->wifi->config(ip, gw, sn, dns);
+
     this->business_state->setIsConnectedToWifi(true);
     return true;
 }
@@ -143,6 +151,7 @@ String WifiNetworking::encryptionTypeToString(wifi_auth_mode_t encryption_type) 
 
 // Prototyping with memory mapping
 // @todo
+/*
 String WifiNetworking::encryptionTypeToString2(wifi_auth_mode_t encryption_type) {
     String encryption_type_string = "";
 
@@ -179,7 +188,7 @@ String WifiNetworking::encryptionTypeToString2(wifi_auth_mode_t encryption_type)
     }
     return encryption_type_string;
 }
-
+*/
 
 
 

@@ -4,6 +4,7 @@
 
 #include "./configuration.h"
 
+#include <Logger.h>
 #include <WebRadioServer.h>
 #include <WifiNetworking.h>
 #include <NetworkCredentialRepository.h>
@@ -83,7 +84,9 @@ int loops = 0;
 
 void loop() {
     loops++;
-    if (loops % 10000 == 0) {
-        Serial.println("loops " + String(loops));
+    if (loops % 1000000 == 0) {
+        // Serial.println("loops " + String(loops));
+        Logger::getInstance().log("Application still alive");
     }
+
 }

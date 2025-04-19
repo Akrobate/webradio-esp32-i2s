@@ -69,17 +69,17 @@ void ConfigurationRepository::updateBusinessState() {
 }
 
 void ConfigurationRepository::setNTPServerHost(String ntp_server_host) {
-    this->ntp_server_host= ntp_server_host
+    this->ntp_server_host = ntp_server_host;
 }
 
 
 void ConfigurationRepository::setGMTOffsetSec(long gmt_offset_sec) {
-    this->gmt_offset_sec= gmt_offset_sec
+    this->gmt_offset_sec = gmt_offset_sec;
 }
 
 
 void ConfigurationRepository::setDaylightOffsetSec(int daylight_offset_sec) {
-    this->daylight_offset_sec= daylight_offset_sec
+    this->daylight_offset_sec = daylight_offset_sec;
 }
 
 

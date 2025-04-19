@@ -1,44 +1,39 @@
 #include "Logger.h"
 
 Logger::Logger() {
+    // Exmpty
 }
 
-
 void Logger::print(String message) {
-    if (!this->enabled) {
+    if (this->enabled == false) {
         return;
     }
-
-    switch(this->type) {
-        case 0:
-            this->serialPrint(message);
-            break;
-        case 1:
-            this->telnetPrint(message);
-            break;
-        default:
-          // code block
-    }
+    this->serialPrint(message);
 }
 
 
 void Logger::serialPrint(String message) {
-    Serial.print(message);
+    Serial.println(message);
 }
 
 // @todo implement telnetPrint
 void Logger::telnetPrint(String message) {
-    Serial.print(message);
+    Serial.println(message);
 }
 
 
 void Logger::info(String message) {
-    print(message);
+    this->print(message);
+}
+
+
+void Logger::log(String message) {
+    this->print(message);
 }
 
 
 void Logger::debug(String message) {
-    print(message);
+    this->print(message);
 }
 
 void Logger::enable() {
@@ -49,3 +44,10 @@ void Logger::enable() {
 void Logger::disable() {
     this->enabled = false;
 }
+
+
+Logger& Logger::getInstance() {
+    static Logger instance;  // Initialisation thread-safe garantie en C++11+
+    return instance;
+}
+

@@ -15,10 +15,12 @@ void WebRadioServer::begin() {
 
 void WebRadioServer::init() {
 
-  this->server = new AsyncWebServer(port);
+  while(!LittleFS.begin()) {
+    Logger::getInstance().log("WebRadioServer: LittleFS mount failed, retrying...");
+    delay(100);
+  }
 
-  LittleFS.begin();
-  
+  this->server = new AsyncWebServer(port);
 
   this->server->onNotFound(
     [](AsyncWebServerRequest *request){
@@ -30,7 +32,7 @@ void WebRadioServer::init() {
     "/api/ping",
     HTTP_GET,
     [](AsyncWebServerRequest *request) {
-      request->send_P(HTTP_CODE_OK, "text/html", "Ok");
+      request->send(HTTP_CODE_OK, "text/html", "Ok");
     }
   );
 
@@ -39,9 +41,9 @@ void WebRadioServer::init() {
     "/api/info",
     HTTP_GET,
     [&](AsyncWebServerRequest *request) {
+      Logger::getInstance().log("/api/info GET request");
       String response;
       DynamicJsonDocument info(500);
-
       JsonObject response_object = info.to<JsonObject>();
       response_object["access_point_ssid"] = this->business_state->getAccessPointSSID();
       response_object["temperature"] = this->business_state->getTemperature();
@@ -54,7 +56,6 @@ void WebRadioServer::init() {
       response_object["local_ip"] = this->business_state->getLocalIP();
       response_object["date_time"] = this->business_state->getDateTime();
       response_object["date_time_configured"] = this->business_state->getDateTimeConfigured();
-
       serializeJson(info, response);
       request->send(HTTP_CODE_OK, "application/json", response);
     }
@@ -429,7 +430,6 @@ void WebRadioServer::init() {
     }
   );
 
-
   this->server->serveStatic("/", LittleFS, "/webinterface").setDefaultFile("index.html");
   
   // Debug routes
@@ -456,6 +456,6 @@ void WebRadioServer::injectBusinessState(BusinessState * business_state) {
     this->business_state = business_state;
 }
 
-void WebRadioServer::injectConfigurationRepository(StreamRepository * configuration_repository) {
+void WebRadioServer::injectConfigurationRepository(ConfigurationRepository * configuration_repository) {
   this->configuration_repository = configuration_repository;
 }
