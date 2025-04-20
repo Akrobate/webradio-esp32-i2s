@@ -3,9 +3,9 @@
 const axios = require('axios');
 
 // Configurations:
-const API_URL = 'http://192.168.1.25';
+const API_URL = 'http://192.168.1.20';
 const TOTAL_REQUEST_COUNT = 10000;
-const PARALLEL_REQUESTS = 10;
+const PARALLEL_REQUESTS = 1;
 
 const url_list = [
     `${API_URL}`,
