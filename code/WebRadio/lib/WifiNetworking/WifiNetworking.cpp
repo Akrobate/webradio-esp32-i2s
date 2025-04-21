@@ -35,11 +35,10 @@ bool WifiNetworking::connect(String ssid, String password) {
         timeout++;
     }
 
-    IPAddress ip = WiFi.localIP();
-    IPAddress gw = WiFi.gatewayIP();
-    IPAddress sn = WiFi.subnetMask();
+    IPAddress ip = this->wifi->localIP();
+    IPAddress gw = this->wifi->gatewayIP();
+    IPAddress sn = this->wifi->subnetMask();
     IPAddress dns(8, 8, 8, 8);  // ou 1.1.1.1 (Cloudflare)
-
     this->wifi->config(ip, gw, sn, dns);
 
     this->business_state->setIsConnectedToWifi(true);
@@ -207,7 +206,10 @@ bool WifiNetworking::isNetworkAvailable(String ssid) {
 
 
 void WifiNetworking::networkConnectionTask() {
-    if (!this->isConnected()) {
+    if (this->isConnected()) {
+        
+
+    } else {
 
         if (business_state->lock()) {
             business_state->setIsConnectedToWifi(false);
@@ -235,6 +237,12 @@ void WifiNetworking::networkConnectionTask() {
                     tries_count++;
                 }
             }
+
+            IPAddress ip = this->wifi->localIP();
+            IPAddress gw = this->wifi->gatewayIP();
+            IPAddress sn = this->wifi->subnetMask();
+            IPAddress dns(8, 8, 8, 8);  // ou 1.1.1.1 (Cloudflare)
+            this->wifi->config(ip, gw, sn, dns);
 
             if (this->isConnected()) {
                 if (business_state->lock()) {

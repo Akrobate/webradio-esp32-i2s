@@ -199,3 +199,11 @@ void BusinessState::setInitingDevice(bool initing_device) {
 bool BusinessState::getInitingDevice() {
     return this->initing_device;
 }
+
+void BusinessState::setDnsHost(String dns_host) {
+    this->dns_host = dns_host;
+}
+
+String BusinessState::getDnsHost() {
+    return this->dns_host;
+}

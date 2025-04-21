@@ -15,6 +15,7 @@ class BusinessState {
 
         String connected_to_ssid = "";
         String local_ip = "";
+        String dns_host = "";
         String access_point_ssid = "";
 
         // System
@@ -117,6 +118,9 @@ class BusinessState {
 
         void setInitingDevice(bool initing_device);
         bool getInitingDevice();
+
+        void setDnsHost(String dns_host);
+        String getDnsHost();
 };
 
 #endif
