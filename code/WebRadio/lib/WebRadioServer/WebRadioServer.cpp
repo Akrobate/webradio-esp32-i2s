@@ -52,6 +52,7 @@ void WebRadioServer::init() {
       response_object["minimum_free_bytes"] = this->business_state->getMinimumFreeBytes();
       response_object["is_connected_to_wifi"] = this->business_state->getIsConnectedToWifi();
       response_object["is_connecting_to_wifi"] = this->business_state->getIsConnectingToWifi();
+      response_object["wifi_rssi"] = this->business_state->getWifiRSSI();
       response_object["connected_to_ssid"] = this->business_state->getConnectedToSSID();
       response_object["local_ip"] = this->business_state->getLocalIP();
       response_object["date_time"] = this->business_state->getDateTime();
