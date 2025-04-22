@@ -207,3 +207,11 @@ void BusinessState::setDnsHost(String dns_host) {
 String BusinessState::getDnsHost() {
     return this->dns_host;
 }
+
+void BusinessState::setWifiRSSI(int wifi_rssi) {
+    this->wifi_rssi = wifi_rssi;
+}
+
+int BusinessState::getWifiRSSI() {
+    return this->wifi_rssi;
+}

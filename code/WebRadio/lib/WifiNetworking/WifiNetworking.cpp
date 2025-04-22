@@ -204,13 +204,16 @@ bool WifiNetworking::isNetworkAvailable(String ssid) {
 }
 
 
-
 void WifiNetworking::networkConnectionTask() {
+    int rssi = 0;
+
     if (this->isConnected()) {
-        
-
+        rssi = this->wifi->RSSI();
+        if (business_state->lock()) {
+            business_state->setWifiRSSI(rssi);
+            business_state->unlock();
+        }
     } else {
-
         if (business_state->lock()) {
             business_state->setIsConnectedToWifi(false);
             business_state->setIsConnectingToWifi(true);

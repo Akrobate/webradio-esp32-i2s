@@ -17,6 +17,7 @@ class BusinessState {
         String local_ip = "";
         String dns_host = "";
         String access_point_ssid = "";
+        int wifi_rssi = 0;
 
         // System
         bool initing_device = false;
@@ -121,6 +122,9 @@ class BusinessState {
 
         void setDnsHost(String dns_host);
         String getDnsHost();
+
+        void setWifiRSSI(int wifi_rssi);
+        int getWifiRSSI();
 };
 
 #endif
