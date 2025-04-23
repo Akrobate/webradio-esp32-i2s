@@ -8,6 +8,7 @@ class BusinessState {
     private:
 
         SemaphoreHandle_t business_state_mutex;
+        SemaphoreHandle_t business_state_i2c_usage_mutex;
 
         // WiFi
         bool is_connected_to_wifi = false;
@@ -54,6 +55,9 @@ class BusinessState {
 
         bool lock();
         void unlock();
+
+        bool lockI2CUsageMutex();
+        void unlockI2CUsageMutex();
 
         void setTemperature(float temperature);
         float getTemperature();

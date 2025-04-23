@@ -16,6 +16,13 @@ void BusinessState::unlock() {
     xSemaphoreGive(this->business_state_mutex);
 }
 
+bool BusinessState::lockI2CUsageMutex() {
+    return (xSemaphoreTake(this->business_state_i2c_usage_mutex, portMAX_DELAY) == pdTRUE);
+}
+
+void BusinessState::unlockI2CUsageMutex() {
+    xSemaphoreGive(this->business_state_i2c_usage_mutex);
+}
 
 void BusinessState::setTemperature(float temperature) {
     this->temperature = temperature;
