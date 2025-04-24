@@ -47,6 +47,10 @@ void DeviceSystem::update() {
             
             strftime(buffer, sizeof(buffer), "%d/%m", &timeinfo);
             this->formated_date = String(buffer);
+
+            if (this->device_started_at_date_time == "") {
+                this->device_started_at_date_time = this->date_time;
+            }
         }
     }
 }

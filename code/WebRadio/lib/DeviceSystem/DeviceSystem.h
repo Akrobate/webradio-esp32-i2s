@@ -19,6 +19,7 @@ class DeviceSystem {
         int largest_free_block = 0;
 
         String date_time = "";
+        String device_started_at_date_time = "";
         String formated_date = "";
         String formated_time = "";
         bool date_time_configured = false;
