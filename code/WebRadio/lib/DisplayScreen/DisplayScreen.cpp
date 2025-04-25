@@ -21,7 +21,7 @@ void DisplayScreen::init() {
         [](void *arg){
             DisplayScreen * display_screen = (DisplayScreen *)arg;
             while(1) {
-                display_screen->displayStack();
+                display_screen->lockIC2AndDisplayStack();
                 vTaskDelay(pdMS_TO_TICKS(100));
             }
         },
@@ -31,6 +31,14 @@ void DisplayScreen::init() {
         1,
         NULL
     );
+}
+
+
+void DisplayScreen::lockIC2AndDisplayStack() {
+    if (this->business_state->lockI2CUsageMutex()) {
+        this->displayStack();
+        this->business_state->unlockI2CUsageMutex();
+    }
 }
 
 

@@ -47,8 +47,11 @@ void BMP180Probe::injectBusinesState(BusinessState * business_state) {
 
 void BMP180Probe::update() {
     if (this->is_initialized) {
-        this->temperature = this->getTemperature();
-        this->pressure = this->getPressure();
+        if (this->business_state->lockI2CUsageMutex()) {
+            this->temperature = this->getTemperature();
+            this->pressure = this->getPressure();
+            this->business_state->unlockI2CUsageMutex();
+        }
     }
 }
 

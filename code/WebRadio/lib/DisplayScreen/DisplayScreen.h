@@ -25,6 +25,7 @@ class DisplayScreen {
         void clear();
         void display();
 
+        void lockIC2AndDisplayStack();
         void displayStack();
 
         void infoScreen();
