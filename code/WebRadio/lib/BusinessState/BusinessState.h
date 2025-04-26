@@ -30,6 +30,7 @@ class BusinessState {
         float pressure = 0;
 
         // time
+        String device_started_at_date_time = "";
         String date_time = "";
         String formated_date = "...";
         String formated_time = "...";
@@ -129,6 +130,10 @@ class BusinessState {
 
         void setWifiRSSI(int wifi_rssi);
         int getWifiRSSI();
+
+
+        void setDeviceStartedAtDateTime(String device_started_at_date_time);
+        String getDeviceStartedAtDateTime();
 };
 
 #endif

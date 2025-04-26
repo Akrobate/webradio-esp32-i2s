@@ -57,6 +57,8 @@ void WebRadioServer::init() {
       response_object["local_ip"] = this->business_state->getLocalIP();
       response_object["date_time"] = this->business_state->getDateTime();
       response_object["date_time_configured"] = this->business_state->getDateTimeConfigured();
+      response_object["device_started_at_date_time"] = this->business_state->getDeviceStartedAtDateTime();
+      
       serializeJson(info, response);
       request->send(HTTP_CODE_OK, "application/json", response);
     }

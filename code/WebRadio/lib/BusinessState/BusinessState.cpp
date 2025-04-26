@@ -222,3 +222,11 @@ void BusinessState::setWifiRSSI(int wifi_rssi) {
 int BusinessState::getWifiRSSI() {
     return this->wifi_rssi;
 }
+
+void BusinessState::setDeviceStartedAtDateTime(String device_started_at_date_time) {
+    this->device_started_at_date_time = device_started_at_date_time;
+}
+
+String BusinessState::getDeviceStartedAtDateTime() {
+    return this->device_started_at_date_time;
+}

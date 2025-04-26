@@ -134,7 +134,8 @@ void DeviceSystem::updateBusinessState() {
 
         this->business_state->setFormatedTime(this->formated_time);
         this->business_state->setFormatedDate(this->formated_date);
-        
+        this->business_state->setDeviceStartedAtDateTime(this->device_started_at_date_time);
+
         this->business_state->unlock();
     }
 }
