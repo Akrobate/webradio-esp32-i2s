@@ -148,20 +148,21 @@ void DisplayScreen::standbyScreen() {
     this->u8g2->drawUTF8(x, y, formated_time.c_str());  
     
 
-    String formated_date = this->business_state->getFormatedDate();
+    String wifi_rssi_string = String(this->business_state->getWifiRSSI()) + " dBm";
     this->u8g2->setFont(u8g2_font_6x12_tf);
     text_height = this->u8g2->getAscent() - this->u8g2->getDescent();
     x = 0;
     y = text_height;
-    this->u8g2->drawUTF8(x, y, formated_date.c_str());
+    this->u8g2->drawUTF8(x, y, wifi_rssi_string.c_str());
 
 
-    // String formated_date = this->business_state->getFormatedDate();
-    // this->u8g2->setFont(u8g2_font_6x12_tf);
-    // text_height = this->u8g2->getAscent() - this->u8g2->getDescent();
-    // x = 0;
-    // y = text_height;
-    // this->u8g2->drawUTF8(x, y, formated_date.c_str());
+    String formated_date_2 = this->business_state->getFormatedDate();
+    this->u8g2->setFont(u8g2_font_6x12_tf);
+    text_width = this->u8g2->getUTF8Width(formated_date_2.c_str());
+    text_height = this->u8g2->getAscent() - this->u8g2->getDescent();
+    x = this->u8g2->getDisplayWidth() / 2 - text_width / 2;
+    y = u8g2->getDisplayHeight();
+    this->u8g2->drawUTF8(x, y, formated_date_2.c_str());
 
 
     float temperature = this->business_state->getTemperature();

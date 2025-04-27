@@ -3,7 +3,13 @@
 BusinessState::BusinessState() {
     this->business_state_mutex = xSemaphoreCreateMutex();
     if (this->business_state_mutex == NULL) {
-        Serial.println("Mutex creation failed");
+        Serial.println("Mutex business_state_mutex creation failed");
+        while (1);
+    }
+
+    this->business_state_i2c_usage_mutex = xSemaphoreCreateMutex();
+    if (this->business_state_i2c_usage_mutex == NULL) {
+        Serial.println("Mutex business_state_i2c_usage_mutex creation failed");
         while (1);
     }
 }
