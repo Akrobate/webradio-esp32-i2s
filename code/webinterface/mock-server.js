@@ -199,9 +199,11 @@ async function serverGetInfo() {
         minimum_free_bytes: 122000,
         is_connected_to_wifi: false,
         is_connecting_to_wifi: true,
+        wifi_rssi: -50,
         connected_to_ssid: 'SSID X',
         local_ip: '192.168.1.176',
         date_time: '2023-07-16T12:30:00',
+        device_started_at_date_time: '2023-07-16T12:30:00',
         date_time_configured: false,
         ..._saved_configurations,
     })
