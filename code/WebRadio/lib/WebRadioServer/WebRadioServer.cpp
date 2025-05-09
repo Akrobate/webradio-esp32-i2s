@@ -20,7 +20,7 @@ void WebRadioServer::init() {
     delay(100);
   }
 
-  this->server = new AsyncWebServer(port);
+  this->server = new AsyncWebServer(this->port);
 
   this->server->onNotFound(
     [](AsyncWebServerRequest *request){
@@ -438,9 +438,7 @@ void WebRadioServer::init() {
   // Debug routes
   this->server->serveStatic("/api/streams.json", LittleFS, "/streams.json");
 
-  // Start server
   this->begin();
-
 }
 
 void WebRadioServer::injectWifiNetworking(WifiNetworking * wifi_networking) {
