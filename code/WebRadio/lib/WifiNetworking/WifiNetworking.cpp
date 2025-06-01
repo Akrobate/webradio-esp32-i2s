@@ -205,59 +205,60 @@ bool WifiNetworking::isNetworkAvailable(String ssid) {
 
 
 void WifiNetworking::networkConnectionTask() {
-    int rssi = 0;
 
     if (this->isConnected()) {
-        rssi = this->wifi->RSSI();
+        int rssi = this->wifi->RSSI();
         if (business_state->lock()) {
             business_state->setWifiRSSI(rssi);
             business_state->unlock();
         }
-    } else {
-        if (business_state->lock()) {
-            business_state->setIsConnectedToWifi(false);
-            business_state->setIsConnectingToWifi(true);
-            business_state->unlock();
+        return;
+    }
+
+    if (business_state->lock()) {
+        business_state->setIsConnectedToWifi(false);
+        business_state->setIsConnectingToWifi(true);
+        business_state->unlock();
+    }
+
+    JsonArray credential_list = this->network_credential_repository->network_credential_list->as<JsonArray>();
+    for (JsonObject credential : credential_list) {
+        String ssid = credential["ssid"];
+        String password = credential["password"];
+
+        if (this->isNetworkAvailable(ssid)) {
+            Serial.print("Whould try to connect to ");
+            Serial.print(ssid);
+            this->begin(ssid, password);
+            int tries_count = 0;
+            while (!this->isConnected()) {
+                vTaskDelay(pdMS_TO_TICKS(500));
+                Serial.println("Trying to connect");
+                if (tries_count > 20) {
+                    Serial.println("MAX Count of connection attempts");
+                    break;
+                }
+                tries_count++;
+            }
         }
 
-        JsonArray credential_list = this->network_credential_repository->network_credential_list->as<JsonArray>();
-        for (JsonObject credential : credential_list) {
-            String ssid = credential["ssid"];
-            String password = credential["password"];
+        IPAddress ip = this->wifi->localIP();
+        IPAddress gw = this->wifi->gatewayIP();
+        IPAddress sn = this->wifi->subnetMask();
+        IPAddress dns(8, 8, 8, 8);  // ou 1.1.1.1 (Cloudflare)
+        this->wifi->config(ip, gw, sn, dns);
 
-            if (this->isNetworkAvailable(ssid)) {
-                Serial.print("Whould try to connect to ");
-                Serial.print(ssid);
-                this->begin(ssid, password);
-                int tries_count = 0;
-                while (!this->isConnected()) {
-                    vTaskDelay(pdMS_TO_TICKS(500));
-                    Serial.println("Trying to connect");
-                    if (tries_count > 20) {
-                        Serial.println("MAX Count of connection attempts");
-                        break;
-                    }
-                    tries_count++;
-                }
+        if (this->isConnected()) {
+            if (business_state->lock()) {
+                business_state->setIsConnectedToWifi(true);
+                business_state->setLocalIP(this->getLocalIP());
+                business_state->setIsConnectingToWifi(false);
+                business_state->unlock();
             }
-
-            IPAddress ip = this->wifi->localIP();
-            IPAddress gw = this->wifi->gatewayIP();
-            IPAddress sn = this->wifi->subnetMask();
-            IPAddress dns(8, 8, 8, 8);  // ou 1.1.1.1 (Cloudflare)
-            this->wifi->config(ip, gw, sn, dns);
-
-            if (this->isConnected()) {
-                if (business_state->lock()) {
-                    business_state->setIsConnectedToWifi(true);
-                    business_state->setLocalIP(this->getLocalIP());
-                    business_state->setIsConnectingToWifi(false);
-                    business_state->unlock();
-                }
-                break;
-            }
+            break;
         }
     }
+
 }
 
 
