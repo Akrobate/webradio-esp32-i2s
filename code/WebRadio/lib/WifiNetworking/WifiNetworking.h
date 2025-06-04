@@ -11,6 +11,13 @@
 // #include "ArduinoJson.h"
 // #include <LittleFS.h>
 
+/**
+ * IMPORTANT IMPROVEMENTS @todo
+ * - Using wifimulti instead of Wifi
+ * - Using Stop using DynamicJsonDocument * available_networks as save for the available networks
+ *     Should be generated on the fly
+ */
+
 class WifiNetworking {
 
     public:
