@@ -368,6 +368,56 @@ void WebRadioServer::init() {
 
 
   this->server->on(
+    "/api/wait",
+    HTTP_GET,
+    [&](AsyncWebServerRequest *request) {
+
+      TaskTwoParameters * task_two_parameters = new TaskTwoParameters();
+      task_two_parameters->param_1 = (void*)request;
+      task_two_parameters->param_2 = (void*)this;
+
+      xTaskCreate(
+        [](void *arg){
+          {
+            TaskTwoParameters* params = (TaskTwoParameters*)arg;
+            AsyncWebServerRequest * request = (AsyncWebServerRequest *)params->param_1;
+            WebRadioServer * web_radio_server = (WebRadioServer *)params->param_2;
+
+            request->client()->setRxTimeout(50);
+            vTaskDelay(pdMS_TO_TICKS(1000));
+
+            vTaskDelay(pdMS_TO_TICKS(1000));
+
+            vTaskDelay(pdMS_TO_TICKS(1000));
+
+            vTaskDelay(pdMS_TO_TICKS(1000));
+
+            vTaskDelay(pdMS_TO_TICKS(1000));
+
+            vTaskDelay(pdMS_TO_TICKS(1000));
+
+            vTaskDelay(pdMS_TO_TICKS(1000));
+
+            String response = "{waited: true}";
+            request->send(HTTP_CODE_OK, "application/json", response);
+
+            delete params;
+          }
+          vTaskDelete(NULL);
+        },
+        "handler",
+        5000,
+        (void*)task_two_parameters,
+        1,
+        NULL
+      );
+    }
+  );
+
+
+
+
+  this->server->on(
     "/api/credentials",
     HTTP_GET,
     [&](AsyncWebServerRequest *request) {
