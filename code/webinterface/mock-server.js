@@ -1,7 +1,5 @@
 /******************************************************************************************
-  
  *                                       MOCK SERVER
-  
 ******************************************************************************************/
 const _stations_list = [
     {
@@ -112,31 +110,6 @@ const _available_networks_list = [
         quality: 30,
         has_password: true,
     },
-    {
-        ssid: "SSID 9",
-        quality: 40,
-        has_password: false,
-    },
-    {
-        ssid: "SSID 10",
-        quality: 90,
-        has_password: true,
-    },
-    {
-        ssid: "SSID 11",
-        quality: 100,
-        has_password: false,
-    },
-    {
-        ssid: "SSID 12",
-        quality: 50,
-        has_password: true,
-    },
-    {
-        ssid: "SSID 13",
-        quality: 20,
-        has_password: false,
-    }
 ]
 
 
