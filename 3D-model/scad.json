@@ -1,0 +1,10 @@
+{
+  "name": "3D-model",
+  "version": "1.0.0",
+  "description": "",
+  "author": "",
+  "repository": "",
+  "dependencies": {
+    "speaker": "https://gitlab.com/openscad-modules/speaker.git#0.0.1"
+  }
+}
